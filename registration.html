@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ExamVerse | Registration Portal</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="registration.css">
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="registration-container">
+    <div class="form-card text-white">
+      <!-- Brand Logo -->
+      <div class="text-center mb-3">
+        <img src="images/logo.png" alt="ExamVerse Logo" height="70" class="mb-2">
+        <h2 class="mb-2">ExamVerse Registration Portal</h2>
+        <p class="text-muted mb-4">Please fill in your biodata accurately</p>
+      </div>
+
+      <form id="registrationForm" novalidate>
+        <!-- Profile Image -->
+        <div class="text-center mb-4">
+          <img id="previewImage" src="images/empty.png" alt="Profile" height="100" class="rounded mb-2 border">
+          <input type="file" id="fileInput" class="form-control-file text-center mt-2" accept="image/*">
+        </div>
+
+        <!-- Personal Info -->
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Surname</label>
+            <input type="text" id="surname" class="form-control" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>First Name</label>
+            <input type="text" id="firstName" class="form-control" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Other Name</label>
+            <input type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Sex</label>
+            <select class="form-control" required>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Date of Birth</label>
+            <input type="text" id="dob" class="form-control" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Email Address</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Password</label>
+            <input type="password" id="password" class="form-control" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword" class="form-control" required>
+          </div>
+        </div>
+
+        <!-- Guardian -->
+        <h5 class="mt-4">Parent / Guardian Details</h5>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Parent Name</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Phone Number</label>
+            <input type="tel" class="form-control" required>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-warning px-4">Submit</button>
+        </div>
+
+        <!-- Divider -->
+        <div class="text-center text-muted my-3">or</div>
+
+        <!-- Google Login -->
+        <div class="text-center">
+          <button type="button" class="btn btn-light border d-flex align-items-center justify-content-center mx-auto" id="googleLoginBtn" style="width: 250px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="22" class="mr-2">
+            Continue with Google
+          </button>
+        </div>
+
+        <!-- Already have account -->
+        <div class="text-center mt-3">
+          <p>Already have an account?
+            <a href="login.html" class="text-warning font-weight-bold">Log in here</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer text-center text-white mt-5">
+    <div class="footer-content py-4">
+      <img src="logo.png" alt="ExamVerse Logo" height="60" class="mb-3">
+      <h5 class="mb-3">Join the ExamVerse Community</h5>
+      <p class="text-light mb-3 px-3">Empowering students with smart exam solutions and seamless testing experience. Follow us on our social channels:</p>
+      
+      <div class="social-icons mb-3">
+        <a href="https://wa.me/2340000000000" target="_blank" class="social-link whatsapp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://facebook.com" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://x.com" target="_blank" class="social-link twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="mailto:info@examverse.com" target="_blank" class="social-link gmail"><i class="fas fa-envelope"></i></a>
+      </div>
+
+      <p class="small text-muted mb-0">&copy; 2025 ExamVerse. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="registration.js"></script>
+
+  <script>
+    // Google login simulation
+    document.getElementById('googleLoginBtn').addEventListener('click', () => {
+      alert("Redirecting to Google Sign-In...");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

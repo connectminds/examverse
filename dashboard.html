@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ExamVerse | Dashboard</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html">ExamVerse</a>
+
+            <button id="navToggle" class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-box"><span class="hamburger-inner"></span></span>
+      </button>
+
+            <nav id="mainNav" class="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="subjects.html">Subjects</a></li>
+                    <li><a href="year.html">Years</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="exam.html">Exam</a></li>
+                    <li><a id="navLogout" href="#" class="danger">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="user-card">
+            <img id="userPhoto" src="images/empty.png" alt="User photo" class="profile" />
+            <h1 id="welcomeMessage">Welcome back!</h1>
+            <p class="sub">You're logged in to ExamVerse. Continue to explore past questions and resources.</p>
+
+            <div class="actions">
+                <a href="subjects.html" class="btn">Browse Subjects</a>
+                <a href="year.html" class="btn outline">Past Years</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© ConnectMinds IT Tech |  ExamVerse 2025. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
