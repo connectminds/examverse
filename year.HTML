@@ -4,37 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Year | examverse</title>
-    <link rel="stylesheet" href="project.CSS">
+    <title>Select Year | ExamVerse</title>
+    
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <!-- Animated Background Bubbles -->
+    <div class="area">
+        <ul class="circles">
+            <li></li><li></li><li></li><li></li><li></li>
+            <li></li><li></li><li></li><li></li><li></li>
+        </ul>
+    </div>
+
     <!-- Navigation Menu -->
     <nav class="menu">
-        <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">About</a></li>
-            <li><a href="">Career</a></li>
-            <li><a href="#">Contact</a></li>
+        <!-- Brand / Logo Section -->
+        <a href="index.html" class="brand">
+            <!-- Replace 'logo.png' with your actual logo file -->
+            <img src="examverse_logo.png" alt="Logo" class="logo-img"> 
+            <span class="brand-name">ExamVerse</span>
+        </a>
+
+        <!-- Menu Links -->
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
 
     <!-- Main Content -->
-    <main class="year-selection">
-        <h2><a href="subjects.HTML" class="btnn">2024</a></h2>
-        <h2><a href="#" class="btnn">2023</a></h2>
-        <h2><a href="#" class="btnn">2022</a></h2>
-        <h2><a href="#" class="btnn">2021</a></h2>
-        <h2><a href="#" class="btnn">2020</a></h2>
-    </main>
+    <div class="container">
+        
+        <!-- Back Button -->
+        <div class="top-bar">
+            <button onclick="history.back()" class="back-btn">
+                <span>&#8592;</span> Back
+            </button>
+        </div>
+        
+        <!-- Hero Section -->
+        <div class="hero-text">
+            <h1>Past Questions</h1>
+            <p>Select an examination year to practice</p>
+        </div>
+
+        <!-- Dynamic Year Grid (Filled by year.js) -->
+        <div class="year-grid" id="year-grid">
+            <!-- JavaScript will inject the buttons here -->
+        </div>
+
+    </div>
 
     <!-- Footer -->
     <footer>
         &copy; ConnectMindsITTech | ExamVerse 2025. All rights reserved.
     </footer>
 
-    <script src="script.js" defer></script>
-</body>
+    <!-- Logic Script -->
+    <script src="year.js" defer></script>
 
+</body>
 </html>

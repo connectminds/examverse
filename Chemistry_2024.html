@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<body>
+  <!-- PASTE THIS PART HERE -->
+  <div class="background-animation">
+      <ul class="circles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+      </ul>
+  </div>
+  <!-- END OF PASTE -->
+
+  <div class="app">
+    <!-- ... rest of your code ... -->
+     
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExamVerse Pro | Chemistry 2024</title>
+  <link rel="stylesheet" href="Chemistry_2024.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <div class="app">
+    <header>
+      <h1>Chemistry 2024</h1>
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+    </header>
+
+    <div class="quiz">
+      <h2 id="question">Question text</h2>
+
+      <!-- Question Image placeholder-->
+      <img id="question-image" class="question-image hidden" src="" alt="Question Image">
+      
+      <div id="answer-buttons" class="btn-container"></div>
+      <button id="next-btn">Next</button>
+    </div>
+
+    <div id="result" class="result hidden">
+      <h2>🎉 Your Results</h2>
+      <div class="result-stats">
+        <p><strong>Correct:</strong> <span id="correct-count">0</span></p>
+        <p><strong>Missed:</strong> <span id="missed-count">0</span></p>
+        <p><strong>Total:</strong> <span id="total-count">0</span></p>
+      </div>
+      <canvas id="resultChart"></canvas>
+      <button id="restart-btn">Start Again</button>
+      <button id="theory-btn">Theory</button>
+    </div>
+  </div>
+
+
+
+
+
+  <footer>
+    &copy; 2025  ExamVerse Pro. | ConnectMinds IT Tech. All rights reserved.
+  </footer>
+
+  <script src="Chemistry_2024.js"></script>
+</body>
+</html>

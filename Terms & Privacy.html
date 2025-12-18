@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & Privacy — ExamVerse</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background: #f9f9f9;
+    color: #333;
+  }
+
+  header {
+    background-color: #004aad;
+    color: #fff;
+    padding: 20px 10px;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 28px;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    color: #004aad;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  .section {
+    margin-bottom: 15px;
+  }
+
+  .content {
+    display: none;
+    padding: 10px 15px;
+    border-left: 3px solid #004aad;
+    background: #f4f6f9;
+    border-radius: 5px;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  a {
+    color: #004aad;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* 🔵 ROUND BLUE CLOSE BUTTON (TOP RIGHT) */
+  .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      background: #004aad;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 28px;
+      text-align: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .close-btn:hover {
+      background: #00347a;
+      transform: scale(1.1) rotate(10deg);
+  }
+
+  @media(max-width: 600px) {
+    main {
+      padding: 15px;
+      margin: 10px;
+    }
+  }
+
+  /* ================================
+        ⭐ PREMIUM EXAMVERSE FOOTER
+     ================================ */
+  .ev-footer-pro {
+      background: #004aad;
+      color: #fff;
+      padding: 40px 15px 15px;
+      margin-top: 50px;
+      border-top: 5px solid #00347a;
+      font-size: 15px;
+  }
+
+  .ev-footer-container {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+  }
+
+  .ev-foot-box h3,
+  .ev-foot-box h4 {
+      margin-bottom: 12px;
+      color: #fff;
+  }
+
+  .ev-foot-box p {
+      margin-top: 0;
+      line-height: 1.5;
+  }
+
+  .ev-foot-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .ev-foot-links li {
+      margin-bottom: 8px;
+  }
+
+  .ev-foot-links a {
+      color: #e9f1ff;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+  }
+
+  .ev-foot-links a:hover {
+      opacity: 0.75;
+  }
+
+  /* Social Icons */
+  .ev-social-icons {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+  }
+
+  .ev-icon {
+      width: 38px;
+      height: 38px;
+      background: #ffffff22;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 18px;
+      transition: transform 0.25s ease, background 0.25s ease;
+  }
+
+  .ev-icon:hover {
+      transform: scale(1.15);
+      background: #ffffff55;
+  }
+
+  .ev-footer-bottom {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 10px;
+      border-top: 1px solid #ffffff33;
+      font-size: 14px;
+      opacity: 0.9;
+  }
+
+  @media(max-width: 600px) {
+      .ev-social-icons {
+          justify-content: center;
+      }
+  }
+
+  /* ================================
+       ⭐ CONTACT BUTTON STYLES
+     ================================ */
+  .contact-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 10px;
+  }
+
+  .contact-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #004aad;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .contact-btn:hover {
+      background: #00347a;
+      transform: translateY(-2px);
+      text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ExamVerse Terms of Service & Privacy Policy</h1>
+</header>
+
+<main>
+  <p>Welcome to <strong>ExamVerse</strong>. Click the headings below to read each section. By using our platform, you agree to these terms.</p>
+
+  <!-- Table of Contents -->
+  <div class="section">
+    <h2>📌 Table of Contents</h2>
+    <div class="content" style="display:block;">
+      <button class="close-btn">✕</button>
+      <ol>
+        <li><a href="#terms">Terms of Service</a></li>
+        <li><a href="#privacy">Privacy Policy</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Terms of Service -->
+  <div class="section">
+    <h2 id="terms">📝 Terms of Service</h2>
+    <div class="content">
+      <button class="close-btn">✕</button>
+      <p><strong>Effective Date:</strong> 9th December 2025</p>
+      <p>By using ExamVerse, including quizzes, registration, and content, you agree to comply with these Terms of Service.</p>
+      <h3>1. Eligibility</h3>
+      <p>Users must be at least 13 years old or have parental consent. Students and teachers may only use the platform for educational purposes.</p>
+      <h3>2. User Accounts</h3>
+      <p>Provide accurate information. You are responsible for account confidentiality. ExamVerse is not liable for unauthorized access.</p>
+      <h3>3. User Conduct</h3>
+      <p>Do not cheat, hack, harass, or upload harmful content. Illegal use is strictly prohibited.</p>
+      <h3>4. Intellectual Property</h3>
+      <p>All content belongs to ExamVerse or licensors. Reproduction without permission is prohibited.</p>
+      <h3>5. Limitation of Liability</h3>
+      <p>ExamVerse is provided "as is" without guarantees. We are not liable for indirect or consequential damages.</p>
+      <h3>6. Termination</h3>
+      <p>Accounts may be suspended or terminated for violations. Users can terminate accounts anytime.</p>
+      <h3>7. Changes to Terms</h3>
+      <p>Terms may be updated. Continued use constitutes acceptance.</p>
+    </div>
+  </div>
+
+  <!-- Privacy Policy -->
+  <div class="section">
+    <h2 id="privacy">🔒 Privacy Policy</h2>
+    <div class="content">
+      <button class="close-btn">✕</button>
+      <p><strong>Effective Date:</strong> 9th December 2025</p>
+      <h3>1. Information We Collect</h3>
+      <p>We collect personal info (name, email, school, class), account data, usage info, and device info.</p>
+      <h3>2. How We Use Your Information</h3>
+      <p>We use data to provide and improve services, communicate updates, prevent fraud, and comply with legal obligations.</p>
+      <h3>3. Information Sharing</h3>
+      <p>We do not sell data. Sharing occurs only with schools, service providers, or legal authorities as required.</p>
+      <h3>4. Data Security</h3>
+      <p>We use reasonable measures to protect your data. Users must safeguard login credentials.</p>
+      <h3>5. Cookies & Tracking</h3>
+      <p>We use cookies and analytics. Disabling cookies may limit functionality.</p>
+      <h3>6. User Rights</h3>
+      <p>You can access, correct, or delete your data.</p>
+      <h3>7. Children’s Privacy</h3>
+      <p>We do not knowingly collect info from children under 13 without parental consent.</p>
+      <h3>8. Changes to Privacy Policy</h3>
+      <p>Policy updates will be communicated via platform notifications or email.</p>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="section">
+    <h2 id="contact">📬 Contact Us</h2>
+    <div class="content">
+      <button class="close-btn">✕</button>
+
+      <div class="contact-row">
+        <a href="mailto:support@examverse.com" target="_blank" class="contact-btn">📧 Email</a>
+        <a href="tel:+234XXXXXXXXXX" class="contact-btn">📱 Call</a>
+        <a href="https://wa.me/234XXXXXXXXXX" target="_blank" class="contact-btn">💬 WhatsApp</a>
+        <a href="https://facebook.com/YourPage" target="_blank" class="contact-btn">🔵 Facebook</a>
+        <a href="https://twitter.com/YourProfile" target="_blank" class="contact-btn">⚫ Twitter</a>
+        <a href="https://instagram.com/YourProfile" target="_blank" class="contact-btn">🟣 Instagram</a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ⭐ PREMIUM FOOTER -->
+<footer class="ev-footer-pro">
+  <div class="ev-footer-container">
+
+    <div class="ev-foot-box">
+      <h3 class="ev-foot-title">ExamVerse</h3>
+      <p>Your trusted partner for smart learning, testing and academic excellence.</p>
+    </div>
+
+    <div class="ev-foot-box">
+      <h4>Quick Links</h4>
+      <ul class="ev-foot-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="Terms & Privacy.html">Terms</a></li>
+        <li><a href="Terms & Privacy.html">Privacy</a></li>
+        <li><a href="Terms & Privacy.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="ev-foot-box">
+      <h4>Connect With Us</h4>
+      <div class="ev-social-icons">
+        <a href="https://www.facebook.com/YourPage" target="_blank" class="ev-icon facebook">🔵</a>
+        <a href="https://twitter.com/YourProfile" target="_blank" class="ev-icon twitter">⚫</a>
+        <a href="https://instagram.com/YourProfile" target="_blank" class="ev-icon instagram">🟣</a>
+        <a href="https://wa.me/YourProfile" target="_blank" class="ev-icon whatsapp">🟢</a>
+        <a href="mailto:YourProfile" target="_blank" class="ev-icon gmail">✉️</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ev-footer-bottom">
+    © 2025 ExamVerse | ConnectmindsITTech — All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+  // Existing collapsible logic (untouched)
+  document.querySelectorAll('h2').forEach(header => {
+    header.addEventListener('click', () => {
+      const content = header.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  });
+
+  // Close button logic
+  document.querySelectorAll('.close-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btn.parentElement.style.display = "none";
+    });
+  });
+</script>
+
+</body>
+</html>

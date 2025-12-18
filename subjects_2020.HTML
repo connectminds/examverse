@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamVerse | Premium Subject Selection</title>
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+    /* --- 1. CORE VARIABLES & RESET --- */
+    :root {
+        --glass-surface: rgba(20, 20, 25, 0.4); 
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --primary-accent: #06b6d4; /* Cyan */
+        --secondary-accent: #8b5cf6; /* Violet */
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* FIX: Body background is transparent so we can see the bubbles behind it */
+    body {
+        font-family: 'Outfit', sans-serif;
+        background: transparent; 
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* --- 2. FLOATING BUBBLES (Background Layer) --- */
+    .bubble-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -5; /* Deep in the background */
+        overflow: hidden;
+        background: #050505; /* The dark background lives here now */
+    }
+
+    .bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.6; /* Made slightly brighter */
+        filter: blur(40px);
+        animation: floatAround 25s infinite linear; 
+    }
+
+    /* Individual Bubble Settings */
+    .b1 { width: 600px; height: 600px; background: radial-gradient(circle, #7000ff, transparent 60%); top: -10%; left: -10%; animation-duration: 35s; }
+    .b2 { width: 500px; height: 500px; background: radial-gradient(circle, #00f2ff, transparent 60%); bottom: -10%; right: -10%; animation-duration: 40s; animation-direction: reverse; }
+    .b3 { width: 300px; height: 300px; background: radial-gradient(circle, #ff0055, transparent 60%); top: 40%; left: 40%; animation-duration: 30s; opacity: 0.4; }
+    .b4 { width: 350px; height: 350px; background: radial-gradient(circle, #ffa600, transparent 60%); bottom: 10%; left: 10%; animation-duration: 45s; opacity: 0.3; }
+    .b5 { width: 400px; height: 400px; background: radial-gradient(circle, #00ff88, transparent 60%); top: 10%; right: 20%; animation-duration: 38s; opacity: 0.4; }
+    .b6 { width: 250px; height: 250px; background: radial-gradient(circle, #2d55ff, transparent 60%); bottom: 50%; right: 5%; animation-duration: 28s; }
+
+    @keyframes floatAround {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(100px, -50px) rotate(120deg); }
+        66% { transform: translate(-50px, 100px) rotate(240deg); }
+        100% { transform: translate(0, 0) rotate(360deg); }
+    }
+
+    /* --- 3. CONTENT LAYERING (Important!) --- */
+    /* These ensure the content sits ON TOP of the bubbles */
+    nav, .control-bar, main, footer {
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Navigation */
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        background: rgba(5, 5, 5, 0.3);
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky;
+        top: 0;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+   .brand-logo {
+    width: 45px;      /* Matches the previous icon size */
+    height: 45px;
+    object-fit: contain; /* Ensures the logo isn't squashed */
+    border-radius: 8px;  /* smooth corners */
+    /* Optional: Add a subtle glow behind the logo */
+    filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.3)); 
+}    .brand-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: white; letter-spacing: -1px; }
+
+    .menu-links { display: flex; gap: 2rem; list-style: none; }
+    .menu-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; }
+    .menu-links a:hover { color: #fff; }
+
+    /* Control Bar */
+    .control-bar { padding: 2rem 5% 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .btn-back { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--glass-surface); border: 1px solid var(--glass-border); border-radius: 50px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; cursor: pointer; backdrop-filter: blur(10px); }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(-5px); }
+
+    /* Search */
+    .search-wrapper { position: relative; width: 100%; max-width: 400px; }
+    .search-input { width: 100%; padding: 14px 45px 14px 45px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.3s, box-shadow 0.3s; backdrop-filter: blur(5px); }
+    .search-input:focus { border-color: var(--secondary-accent); box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    .clear-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 0.9rem; background: rgba(255,255,255,0.1); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; transition: all 0.2s; }
+    .clear-btn:hover { background: rgba(255,255,255,0.3); color: #fff; }
+
+    /* Main Grid */
+    main { flex: 1; padding: 3rem 5%; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .grid-header { margin-bottom: 2rem; text-align: center; }
+    .grid-header h2 { font-size: 2.5rem; font-weight: 700; background: linear-gradient(to right, #fff, #b4c6ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .grid-header p { color: var(--text-muted); margin-top: 10px; font-size: 1.1rem; }
+    .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; perspective: 1000px; }
+
+    /* Cards */
+    .card { background: var(--glass-surface); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; text-decoration: none; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; transform-style: preserve-3d; transition: transform 0.1s ease, background 0.3s; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+    .card-top { display: flex; justify-content: space-between; align-items: start; }
+    .card-icon { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; display: grid; place-items: center; font-size: 1.4rem; color: var(--primary-accent); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .card h3 { font-size: 1.5rem; color: #fff; margin-top: 1.5rem; font-weight: 600; line-height: 1.2; z-index: 2; }
+    .card span.year { font-size: 0.75rem; color: var(--text-muted); border: 1px solid var(--glass-border); padding: 4px 10px; border-radius: 20px; background: rgba(0,0,0,0.2); }
+    .card:hover { background: rgba(255, 255, 255, 0.07); }
+
+    footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--glass-border); margin-top: 4rem; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
+
+    @media (max-width: 768px) {
+        .menu-links { display: none; }
+        .control-bar { flex-direction: column-reverse; align-items: stretch; }
+        .search-wrapper { max-width: 100%; }
+        /* Animation is now enabled on mobile too */
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- 0. BACKGROUND BUBBLES (Floating Everywhere) -->
+    <div class="bubble-container">
+        <div class="bubble b1"></div> <!-- Purple -->
+        <div class="bubble b2"></div> <!-- Cyan -->
+        <div class="bubble b3"></div> <!-- Pink -->
+        <div class="bubble b4"></div> <!-- Orange -->
+        <div class="bubble b5"></div> <!-- Green -->
+        <div class="bubble b6"></div> <!-- Blue -->
+    </div>
+
+    <!-- 1. NAVIGATION -->
+    <nav>
+        <a href="index.html" class="brand">
+            <!-- PUT YOUR IMAGE NAME HERE -->
+            <img src="examverse_logo.png" alt="ExamVerse" class="brand-logo"> 
+            <span class="brand-text">ExamVerse</span>
+        </a>
+        <ul class="menu-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="#">Resources</a></li>
+            <li><a href="#">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- 2. CONTROL BAR -->
+    <div class="control-bar">
+        <button onclick="goBack()" class="btn-back">
+            <span>&larr;</span> Back
+        </button>
+
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search subjects...">
+            <!-- The Clear (X) Button -->
+            <span id="clearBtn" class="clear-btn">✕</span>
+        </div>
+    </div>
+
+    <!-- 3. MAIN GRID -->
+    <main>
+        <div class="grid-header">
+            <h2>Select Subject</h2>
+            <p>Access your 2020 examination resources</p>
+        </div>
+
+        <div class="subjects-grid" id="subjectsGrid">
+            
+            <a href="#" class="card" data-name="General Mathematics">
+                <div class="card-top">
+                    <div class="card-icon">∑</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>General Mathematics</h3>
+            </a>
+
+            <a href="English_Langauge_2020.html" class="card" data-name="English Language">
+                <div class="card-top">
+                    <div class="card-icon">Aa</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>English Language</h3>
+            </a>
+
+            <a href="Civic_Education_2020.html" class="card" data-name="Civic Education">
+                <div class="card-top">
+                    <div class="card-icon">⚖️</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Civic Education</h3>
+            </a>
+
+            <a href="Data_Processing_2020.html" class="card" data-name="Data Processing">
+                <div class="card-top">
+                    <div class="card-icon">💻</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Data Processing</h3>
+            </a>
+
+            <a href="Chemistry_2020.html" class="card" data-name="Chemistry">
+                <div class="card-top">
+                    <div class="card-icon">🧪</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Chemistry</h3>
+            </a>
+
+            <a href="#" class="card" data-name="Economics">
+                <div class="card-top">
+                    <div class="card-icon">📈</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Economics</h3>
+            </a>
+
+            <a href="#" class="card" data-name="Physics">
+                <div class="card-top">
+                    <!-- SVG Icon: Atom -->
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.1 1.1 0 0 0 .33-1.7a13.3 13.3 0 0 0-3.2-3.2a4.2 4.2 0 0 0-5-1a1.5 1.5 0 0 1-1.8 0a4.2 4.2 0 0 0-5 1a13.3 13.3 0 0 0-3.2 3.2A1.1 1.1 0 0 0 2 14c.2-.3.7-.3 1 .1a11.3 11.3 0 0 1 2.8 2.8c.2.3.2.8-.1 1a1.1 1.1 0 0 0-.33 1.7c.3.5.7.4 1 .1a11.3 11.3 0 0 1 2.8-2.8c.3-.2.8-.2 1 .1a1.1 1.1 0 0 0 1.7-.33c.5-.3.4-.7.1-1a11.3 11.3 0 0 1-2.8-2.8c-.2-.3-.2-.8.1-1a1.1 1.1 0 0 0 .33-1.7c-.3-.5-.7-.4-1-.1a11.3 11.3 0 0 1-2.8 2.8c-.3.2-.8.2-1-.1z" opacity="0"></path>
+                            <!-- Simple Electron orbits -->
+                            <ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(0 12 12)"></ellipse>
+                            <ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(60 12 12)"></ellipse>
+                            <ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(120 12 12)"></ellipse>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Physics</h3>
+            </a>
+
+           <a href="#" class="card" data-name="Biology">
+                <div class="card-top">
+                    <!-- SVG Icon: DNA Helix -->
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 15c6.667-6 13.333 0 20-6"></path>
+                            <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"></path>
+                            <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"></path>
+                            <path d="M17 12a5 5 0 0 0-10 0"></path>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Biology</h3>
+            </a>
+
+
+            <a href="#" class="card" data-name="Government">
+                <div class="card-top">
+                    <div class="card-icon">🧬</div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Government (Coming Soon)</h3>
+            </a>
+
+            <!-- Agricultural Science Card -->
+            <a href="#" class="card" data-name="Agricultural Science">
+                <div class="card-top">
+                    <!-- SVG Icon: Sprouting Plant -->
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Soil Line -->
+                            <path d="M7 20h10"></path>
+                            <!-- Main Stem -->
+                            <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
+                            <!-- Left Leaf -->
+                            <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path>
+                            <!-- Top Leaf -->
+                            <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1.7-1.3 2.9-3.8 3-6-2.3.1-5.2 1.9-6.2 3.4z"></path>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Agricultural Science</h3>
+            </a>
+
+            
+                        <!-- Geography Card -->
+            <a href="#" class="card" data-name="Geography">
+                <div class="card-top">
+                    <!-- SVG Icon: The Globe -->
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Outer Circle -->
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <!-- Equator Line -->
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <!-- Meridians (Curved Vertical Lines) -->
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Geography</h3>
+            </a>
+
+                        <!-- Commerce Card -->
+            <a href="#" class="card" data-name="Commerce">
+                <div class="card-top">
+                    <!-- SVG Icon: The Globe -->
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet-cards-icon lucide-wallet-cards">
+                            <rect width="18" height="18" x="3" y="3" rx="2"/>
+                            <path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/>
+                            <path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Commerce</h3>
+            </a>
+
+            <a href="#" class="card" data-name="Literature">
+                <div class="card-top">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+                            <line x1="16" y1="8" x2="2" y2="22"></line>
+                            <line x1="17.5" y1="15" x2="9" y2="15"></line>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Literature</h3>
+            </a>
+
+             <a href="#" class="card" data-name="Financial Accounting">
+                <div class="card-top">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins-icon lucide-hand-coins">
+                            <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/>
+                            <path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/>
+                            <path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/>
+                            <circle cx="6" cy="5" r="3"/>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Financial Accounting</h3>
+            </a>
+
+            <a href="#" class="card" data-name="Further Mathematics">
+                <div class="card-top">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-function-icon lucide-square-function">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                            <path d="M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3"/>
+                            <path d="M9 11.2h5.7"/>
+                        </svg>
+                    </div>
+                    <span class="year">2020</span>
+                </div>
+                <h3>Further Mathematics</h3>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 ConnectMindsITTech | ExamVerse.
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. Back Button Logic
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 2. Search & Clear Functionality
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const cards = document.querySelectorAll('.card');
+
+        // Logic to filter cards
+        function filterCards(searchTerm) {
+            cards.forEach(card => {
+                const title = card.getAttribute('data-name').toLowerCase();
+                if(title.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    // Re-trigger animation
+                    card.style.animation = 'none';
+                    card.offsetHeight; 
+                    card.style.animation = 'fadeUp 0.5s ease-out forwards';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Event: Typing
+        searchInput.addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            
+            // Show/Hide Clear Button
+            if (term.length > 0) {
+                clearBtn.style.display = 'flex';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+
+            filterCards(term);
+        });
+
+        // Event: Click X Button
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = ''; // Clear text
+            clearBtn.style.display = 'none'; // Hide button
+            filterCards(''); // Reset grid to show all
+            searchInput.focus(); // Keep focus
+        });
+
+        // 3. 3D Tilt & Entry Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.animation = `fadeUp 0.6s ease-out forwards ${index * 0.05}s`;
+            });
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', handleHover);
+                card.addEventListener('mouseleave', resetHover);
+            });
+        });
+
+        function handleHover(e) {
+            const card = this;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const xRot = -((y - rect.height / 2) / 20);
+            const yRot = (x - rect.width / 2) / 20;
+
+            card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
+            card.style.zIndex = '10';
+            card.style.borderColor = 'rgba(255,255,255,0.4)';
+        }
+
+        function resetHover() {
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            this.style.zIndex = '1';
+            this.style.borderColor = 'rgba(255,255,255,0.08)';
+        }
+
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes fadeUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

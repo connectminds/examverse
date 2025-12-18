@@ -1,177 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>ExamVerse | Registration Portal</title>
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — ExamVerse</title>
   <link rel="stylesheet" href="registration.css">
 
-  <!-- Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Flatpickr CSS for Date of Birth -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
+<body class="dark-mode">
 
-<body>
-  <div class="registration-container">
-    <div class="form-card text-white">
-      <!-- Brand Logo -->
-      <div class="text-center mb-3">
-        <img src="images/logo.png" alt="ExamVerse Logo" height="70" class="mb-2">
-        <h2 class="mb-2">ExamVerse Registration Portal</h2>
-        <p class="text-muted mb-4">Please fill in your biodata accurately</p>
-      </div>
+  <!-- Floating colorful bubbles background -->
+  <div class="blob-bg">
+    <!-- Large bubbles -->
+    <div class="bubble large" style="background: rgba(106,140,255,0.5);"></div>
+    <div class="bubble large" style="background: rgba(255,107,107,0.5);"></div>
+    <div class="bubble large" style="background: rgba(255,181,71,0.5);"></div>
 
-      <form id="registrationForm" novalidate>
-        <!-- Profile Image -->
-        <div class="text-center mb-4">
-          <img id="previewImage" src="images/empty.png" alt="Profile" height="100" class="rounded mb-2 border">
-          <input type="file" id="fileInput" class="form-control-file text-center mt-2" accept="image/*">
-        </div>
+    <!-- Medium bubbles -->
+    <div class="bubble medium" style="background: rgba(142,68,173,0.45);"></div>
+    <div class="bubble medium" style="background: rgba(24,185,129,0.45);"></div>
+    <div class="bubble medium" style="background: rgba(106,140,255,0.45);"></div>
+    <div class="bubble medium" style="background: rgba(255,107,107,0.45);"></div>
+    <div class="bubble medium" style="background: rgba(255,181,71,0.45);"></div>
 
-        <!-- Personal Info -->
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label>Surname</label>
-            <input type="text" id="surname" class="form-control" required>
-          </div>
-          <div class="form-group col-md-4">
-            <label>First Name</label>
-            <input type="text" id="firstName" class="form-control" required>
-          </div>
-          <div class="form-group col-md-4">
-            <label>Other Name</label>
-            <input type="text" class="form-control">
-          </div>
-        </div>
+    <!-- Small bubbles -->
+    <div class="bubble small" style="background: rgba(142,68,173,0.4);"></div>
+    <div class="bubble small" style="background: rgba(24,185,129,0.4);"></div>
+    <div class="bubble small" style="background: rgba(106,140,255,0.4);"></div>
+    <div class="bubble small" style="background: rgba(255,107,107,0.4);"></div>
+    <div class="bubble small" style="background: rgba(255,181,71,0.4);"></div>
+    <div class="bubble small" style="background: rgba(142,68,173,0.4);"></div>
+    <div class="bubble small" style="background: rgba(24,185,129,0.4);"></div>
+    <div class="bubble small" style="background: rgba(106,140,255,0.4);"></div>
+    <div class="bubble small" style="background: rgba(255,107,107,0.4);"></div>
+    <div class="bubble small" style="background: rgba(255,181,71,0.4);"></div>
+    <div class="bubble small" style="background: rgba(142,68,173,0.4);"></div>
+    <div class="bubble small" style="background: rgba(24,185,129,0.4);"></div>
+  </div>
 
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label>Sex</label>
-            <select class="form-control" required>
-              <option value="">Select</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-          </div>
-          <div class="form-group col-md-4">
-            <label>Date of Birth</label>
-            <input type="text" id="dob" class="form-control" required>
-          </div>
-          <div class="form-group col-md-4">
-            <label>Email Address</label>
-            <input type="email" id="email" class="form-control" required>
-          </div>
-        </div>
+  <!-- Home button -->
+  <a href="index.html" class="home-btn">🏠 Home</a>
 
-        <!-- Password -->
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label>Password</label>
-            <input type="password" id="password" class="form-control" required>
-          </div>
-          <div class="form-group col-md-6">
-            <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" class="form-control" required>
-          </div>
-        </div>
+  <!-- Light/Dark mode toggle -->
+  <button id="modeToggle" class="mode-toggle">🌙</button>
 
-        <!-- Guardian -->
-        <h5 class="mt-4">Parent / Guardian Details</h5>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label>Parent Name</label>
-            <input type="text" class="form-control" required>
-          </div>
-          <div class="form-group col-md-6">
-            <label>Phone Number</label>
-            <input type="tel" class="form-control" required>
-          </div>
-        </div>
+  <main class="container">
+    <section class="card">
+      <header class="card-header">
+        <img src="examverse_logo.png" alt="ExamVerse logo" class="logo">
+        <h1>Create Your ExamVerse Account</h1>
+        <p class="muted">Join students and teachers — secure, fast, and simple.</p>
+      </header>
 
-        <!-- Submit -->
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-warning px-4">Submit</button>
-        </div>
+   <form id="registerForm" class="form">
+<!-- Passport Upload Field -->
+<div class="field">
+  <div class="passport-preview">
+    <img id="passportPreview" src="" alt="Passport Preview">
+  </div>
+  <label for="passport">Upload Passport Photograph</label>
+  <input id="passport" name="passport" type="file" accept="image/*">
+  <small class="error" data-for="passport"></small>
+</div>
 
-        <!-- Divider -->
-        <div class="text-center text-muted my-3">or</div>
+  <div class="row">
+    <div class="field">
+      <label for="firstName">First name</label>
+      <input id="firstName" name="firstName" type="text" required>
+      <small class="error" data-for="firstName"></small>
+    </div>
 
-        <!-- Google Login -->
-        <div class="text-center">
-          <button type="button" class="btn btn-light border d-flex align-items-center justify-content-center mx-auto" id="googleLoginBtn" style="width: 250px;">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="22" class="mr-2">
-            Continue with Google
-          </button>
-        </div>
-
-        <!-- Already have account -->
-        <div class="text-center mt-3">
-          <p>Already have an account?
-            <a href="login.html" class="text-warning font-weight-bold">Log in here</a>
-          </p>
-        </div>
-      </form>
+    <div class="field">
+      <label for="lastName">Last name</label>
+      <input id="lastName" name="lastName" type="text" required>
+      <small class="error" data-for="lastName"></small>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer text-center text-white mt-5">
-    <div class="footer-content py-4">
-      <img src="logo.png" alt="ExamVerse Logo" height="60" class="mb-3">
-      <h5 class="mb-3">Join the ExamVerse Community</h5>
-      <p class="text-light mb-3 px-3">Empowering students with smart exam solutions and seamless testing experience. Follow us on our social channels:</p>
-      
-      <div class="social-icons mb-3">
-        <a href="https://wa.me/2340000000000" target="_blank" class="social-link whatsapp"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://facebook.com" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://x.com" target="_blank" class="social-link twitter"><i class="fab fa-x-twitter"></i></a>
-        <a href="mailto:info@examverse.com" target="_blank" class="social-link gmail"><i class="fas fa-envelope"></i></a>
-      </div>
+  <div class="field">
+    <label for="email">Email address</label>
+    <input id="email" name="email" type="email" required>
+    <small class="error" data-for="email"></small>
+  </div>
 
-      <p class="small text-muted mb-0">&copy; 2025 ExamVerse. All Rights Reserved.</p>
+  <div class="row">
+    <div class="field">
+      <label for="school">School (optional)</label>
+      <input id="school" name="school" type="text">
     </div>
-  </footer>
 
-  <!-- JS -->
+    <div class="field">
+      <label for="classLevel">Class/Grade</label>
+      <select id="classLevel" name="classLevel" required>
+        <option value="">Select</option>
+        <option>Primary 6</option>
+        <option>JSS1</option>
+        <option>JSS2</option>
+        <option>JSS3</option>
+        <option>SS1</option>
+        <option>SS2</option>
+        <option>SS3</option>
+        <option>Teacher</option>
+        <option>Other</option>
+      </select>
+      <small class="error" data-for="classLevel"></small>
+    </div>
+  </div>
+
+  <!-- Date of Birth and Phone Number Row -->
+  <div class="row">
+    <div class="field">
+      <label for="dob">Date of Birth</label>
+      <input id="dob" name="dob" type="text" placeholder="Select your date of birth" required>
+      <small class="error" data-for="dob"></small>
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone Number</label>
+      <input id="phone" name="phone" type="tel" placeholder="+234 800 000 0000" required>
+      <small class="error" data-for="phone"></small>
+    </div>
+  </div>
+
+
+  <div class="field">
+    <label for="password">Password</label>
+    <div class="password-wrap">
+      <input id="password" name="password" type="password" required minlength="8">
+      <button type="button" id="togglePw">Show</button>
+    </div>
+    <meter id="pwStrength" min="0" max="4" value="0"></meter>
+    <small class="error" data-for="password"></small>
+  </div>
+
+  <div class="field">
+    <label for="confirmPassword">Confirm password</label>
+    <input id="confirmPassword" name="confirmPassword" type="password" required>
+    <small class="error" data-for="confirmPassword"></small>
+  </div>
+
+  <div class="consent-row">
+    <label class="checkbox">
+      <input id="terms" name="terms" type="checkbox" required>
+      <span>I agree to the <a href="Terms & Privacy.html" target="_blank">terms & privacy</a>.</span>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn primary">Create account</button>
+    <a href="login.html" class="btn ghost">Already have an account?</a>
+  </div>
+
+  <div class="alt-signin">
+  <p class="muted">Or sign up with</p>
+  <div class="socials">
+    <a class="social-login whatsapp" href="https://wa.me/234XXXXXXXXXX" target="_blank">
+      <img alt="WhatsApp" src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+    </a>
+    <a class="social-login facebook" href="https://www.facebook.com/login" target="_blank">
+      <img alt="Facebook" src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+    </a>
+    <a class="social-login x" href="https://twitter.com/login" target="_blank">
+      <img alt="X" src="https://cdn-icons-png.flaticon.com/512/733/733635.png">
+    </a>
+    <a class="social-login google" href="https://accounts.google.com/signin" target="_blank">
+      <img alt="Google" src="https://cdn-icons-png.flaticon.com/512/300/300221.png">
+    </a>
+  </div>
+</div>
+
+
+  <div id="formMessage" class="form-message"></div>
+</form>
+
+      <footer class="card-footer">
+        <small class="muted">ExamVerse • Empowering learners</small>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Flatpickr JS -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="registration.js"></script>
-
-  <script>
-    // Google login simulation
-    document.getElementById('googleLoginBtn').addEventListener('click', () => {
-      alert("Redirecting to Google Sign-In...");
-      window.location.href = "login.html";
-    });
-  </script>
+  <script src="registration.js" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

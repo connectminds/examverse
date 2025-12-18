@@ -1,50 +1,54 @@
 const questions = [
   {
     question: "The stepped Reckoner was developed by",
+    image: "",
     answers: [
-      { text: "Gottfried Leibniz", correct: true },
-      { text: "Herman Hollerith", correct: false },
-      { text: "John Von Neumann", correct: false },
-      { text: "William Schickard", correct: false }
+      { text: "Gottfried Leibniz", img: "", correct: true },
+      { text: "Herman Hollerith", img: "images/a2.jpg", correct: false },
+      { text: "John Von Neumann", img: "images/a3.jpg", correct: false },
+      { text: "William Schickard", img: "images/a4.jpg", correct: false }
     ]
   },
   {
     question: "The binary number 100101 can be written in denary as",
+    image: "images/q2.jpg",
     answers: [
-      { text: "25", correct: false },
-      { text: "37", correct: true },
-      { text: "45", correct: false },
-      { text: "211", correct: false }
+      { text: "25", img: "images/25.jpg", correct: false },
+      { text: "37", img: "images/37.jpg", correct: true },
+      { text: "45", img: "images/45.jpg", correct: false },
+      { text: "211", img: "images/211.jpg", correct: false }
     ]
   },
   {
     question: "The first in computer data processing procedure is _________",
+    image: "images/q3.jpg",
     answers: [
-      { text: "Collection of data", correct: true },
-      { text: "Communication of information", correct: false },
-      { text: "Conversion of data", correct: false },
-      { text: "Manipulation of data", correct: false }
+      { text: "Collection of data", img: "images/op1.jpg", correct: true },
+      { text: "Communication of information", img: "images/op2.jpg", correct: false },
+      { text: "Conversion of data", img: "images/op3.jpg", correct: false },
+      { text: "Manipulation of data", img: "images/op4.jpg", correct: false }
     ]
   },
   {
     question: "One advantage of electronic data processing is that it",
+    image: "images/q4.jpg",
     answers: [
-      { text: "Involves special skills", correct: false },
-      { text: "Deals only with simple data", correct: false },
-      { text: "Is completely error-free", correct: false },
-      { text: "Handles complex data", correct: true }
+      { text: "Involves special skills", img: "images/s1.jpg", correct: false },
+      { text: "Deals only with simple data", img: "images/s2.jpg", correct: false },
+      { text: "Is completely error-free", img: "images/s3.jpg", correct: false },
+      { text: "Handles complex data", img: "images/s4.jpg", correct: true }
     ]
   },
   {
     question: "A computer cannot operate without",
+    image: "images/q5.jpg",
     answers: [
-      { text: "An operator", correct: false },
-      { text: "An instruction", correct: true },
-      { text: "A printer", correct: false },
-      { text: "A mouse", correct: false }
+      { text: "An operator", img: "images/opA.jpg", correct: false },
+      { text: "An instruction", img: "images/opB.jpg", correct: true },
+      { text: "A printer", img: "images/opC.jpg", correct: false },
+      { text: "A mouse", img: "images/opD.jpg", correct: false }
     ]
   }
-  // 🔹 Add all your remaining questions here exactly as they are
 ];
 
 const questionElement = document.getElementById("question");
@@ -55,21 +59,29 @@ const correctCount = document.getElementById("correct-count");
 const missedCount = document.getElementById("missed-count");
 const totalCount = document.getElementById("total-count");
 const restartBtn = document.getElementById("restart-btn");
+const theoryBtn = document.getElementById("theory-btn");
 const progressBar = document.getElementById("progress-bar");
 
 let currentQuestionIndex = 0;
 let score = 0;
 let missed = 0;
 let chart;
+let missedQuestions = []; // 🔹 Array to store missed questions
 
 // Start quiz
 function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
   missed = 0;
+  missedQuestions = []; // Reset missed questions
   nextButton.innerText = "Next";
   resultSection.classList.add("hidden");
   document.querySelector(".quiz").classList.remove("hidden");
+  
+  // Clean up any old review data
+  const oldReview = document.querySelector('.review-container');
+  if(oldReview) oldReview.remove();
+
   showQuestion();
   updateProgress();
 }
@@ -79,16 +91,34 @@ function showQuestion() {
   resetState();
   const currentQuestion = questions[currentQuestionIndex];
   const questionNo = currentQuestionIndex + 1;
+
+  // TEXT
   questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;
 
+  // IMAGE
+  if (currentQuestion.image) {
+    const qImg = document.createElement("img");
+    qImg.src = currentQuestion.image;
+    qImg.classList.add("question-image");
+    questionElement.appendChild(qImg);
+  }
+
+  // OPTIONS
   currentQuestion.answers.forEach(answer => {
     const button = document.createElement("button");
-    button.innerHTML = answer.text;
     button.classList.add("btn");
+
+    // TEXT + IMAGE inside option
+    button.innerHTML = `
+      <span>${answer.text}</span>
+      ${answer.img ? `<img src="${answer.img}" class="answer-img">` : ""}
+    `;
+
     if (answer.correct) button.dataset.correct = true;
-    button.addEventListener("click", selectAnswer);
+    button.addEventListener("click", (e) => selectAnswer(e, currentQuestion));
     answerButtons.appendChild(button);
   });
+
   updateProgress();
 }
 
@@ -99,12 +129,21 @@ function resetState() {
 }
 
 // Handle answer click
-function selectAnswer(e) {
-  const selectedBtn = e.target;
+function selectAnswer(e, currentQuestion) {
+  const selectedBtn = e.target.closest("button");
   const isCorrect = selectedBtn.dataset.correct === "true";
 
-  if (isCorrect) score++;
-  else missed++;
+  if (isCorrect) {
+    score++;
+  } else {
+    missed++;
+    // 🔹 Record the missed question and the correct answer
+    const correctAnswer = currentQuestion.answers.find(a => a.correct).text;
+    missedQuestions.push({
+      question: currentQuestion.question,
+      correctAnswer: correctAnswer
+    });
+  }
 
   Array.from(answerButtons.children).forEach(button => {
     button.disabled = true;
@@ -125,6 +164,7 @@ nextButton.addEventListener("click", () => {
   }
 });
 
+// Progress bar
 function updateProgress() {
   const progress = ((currentQuestionIndex) / questions.length) * 100;
   progressBar.style.width = `${progress}%`;
@@ -139,6 +179,7 @@ function showResults() {
   missedCount.textContent = missed;
   totalCount.textContent = questions.length;
 
+  // Chart Logic
   const correctPercent = ((score / questions.length) * 100).toFixed(1);
   const missedPercent = ((missed / questions.length) * 100).toFixed(1);
 
@@ -149,7 +190,7 @@ function showResults() {
       labels: ["Correct", "Missed"],
       datasets: [{
         data: [correctPercent, missedPercent],
-        backgroundColor: ["#9aeabc", "#ff9393"]
+        backgroundColor: ["#10b981", "#ef4444"]
       }]
     },
     options: {
@@ -157,8 +198,38 @@ function showResults() {
       animation: { animateScale: true }
     }
   });
+
+  // 🔹 Generate Review Section (Missed Questions)
+  generateReviewSection();
 }
 
+function generateReviewSection() {
+  // Remove existing review if any
+  const oldReview = document.querySelector('.review-container');
+  if(oldReview) oldReview.remove();
+
+  if (missedQuestions.length === 0) return; // Perfect score, nothing to show
+
+  const reviewContainer = document.createElement('div');
+  reviewContainer.classList.add('review-container');
+  reviewContainer.innerHTML = `<h3>⚠️ Review Missed Questions</h3>`;
+
+  missedQuestions.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.classList.add('review-card');
+    card.innerHTML = `
+      <p class="review-q"><strong>Q:</strong> ${item.question}</p>
+      <p class="review-a"><strong>Correct Answer:</strong> ${item.correctAnswer}</p>
+    `;
+    reviewContainer.appendChild(card);
+  });
+
+  // Insert before the Restart button
+  resultSection.insertBefore(reviewContainer, restartBtn);
+}
+
+// Restart quiz
 restartBtn.addEventListener("click", startQuiz);
+
+// Initialize app
 startQuiz();
-// Initialize Chart.js

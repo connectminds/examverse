@@ -1,45 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ExamVerse | Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — ExamVerse</title>
+<style>
+:root {
+  --accent: #004aad;
+  --glass: rgba(0,0,0,0.12);
+}
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="login.css">
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+#bubbles-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #001f4d, #003366); /* Dark blue gradient */
+  overflow: hidden;
+}
+
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  background: rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  animation: floatBubble linear infinite;
+}
+
+@keyframes floatBubble {
+  0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0.3; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(-20vh) scale(1.5) rotate(360deg); opacity: 0; }
+}
+
+.wrap {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  padding: 36px 24px 24px 24px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(2,6,23,.35);
+  color: #fff;
+  position: relative;
+  text-align: center;
+}
+
+h1 {
+  margin: 12px 0 24px 0;
+  font-size: 22px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+button.primary {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+}
+
+button.primary:hover {
+  transform: translateY(-2px);
+  background: #00347a;
+}
+
+.linkless {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+a.small {
+  color: #aaddff;
+  text-decoration: none;
+}
+
+a.small:hover {
+  text-decoration: underline;
+}
+
+/* Avatar for returning users */
+.avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  display: none;
+  border: 3px solid var(--accent);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  animation: fadeInAvatar 0.6s ease forwards;
+}
+
+@keyframes fadeInAvatar {
+  0% {opacity:0; transform:scale(0.8);}
+  100% {opacity:1; transform:scale(1);}
+}
+
+.msg {
+  display: none;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.msg.success {
+  background: rgba(0,255,150,.12);
+  color: #00ff96;
+}
+
+.msg.error {
+  background: rgba(255,80,80,.12);
+  color: #ff6b6b;
+}
+
+/* Home button */
+.home-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.25);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.home-btn:hover {
+  background: rgba(0,0,0,0.45);
+  transform: scale(1.1);
+}
+</style>
 </head>
-
 <body>
-    <div class="login-container">
-        <div class="login-card text-center text-light">
-            <h2 class="mb-3">Welcome Back to <span class="brand">ExamVerse</span></h2>
-            <img id="userImage" src="images/empty.png" alt="Profile" class="rounded-circle shadow mb-3" height="100">
 
-            <form id="loginForm" class="text-left mt-4">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="loginEmail" class="form-control" required>
-                </div>
+<div id="bubbles-bg"></div>
 
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-warning btn-block mt-3">Login</button>
-            </form>
-
-            <div class="text-center mt-4">
-                <p>Don't have an account? <a href="registration.html" class="text-warning font-weight-bold">Register</a></p>
-            </div>
-        </div>
+<div class="wrap">
+  <div class="card">
+    <button class="home-btn" onclick="window.location.href='index.html'" title="Home">🏠</button>
+    <img id="passportPreview" class="avatar" alt="Your passport">
+    <h1>Welcome back to ExamVerse</h1>
+    <form id="loginForm">
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button class="primary" type="submit">Login</button>
+    </form>
+    <div class="linkless">
+      <a href="forgot-password.html" class="small">Forgot Password?</a>
+      <a href="registration.html" class="small">Register</a>
     </div>
+    <div class="msg success" id="loginSuccess"></div>
+    <div class="msg error" id="loginError"></div>
+  </div>
+</div>
 
+<script>
+// Modern animated bubbles
+const bg = document.getElementById('bubbles-bg');
+const bubbleCount = 30;
 
+for(let i = 0; i < bubbleCount; i++) {
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  const size = 8 + Math.random()*40;
+  bubble.style.width = size + 'px';
+  bubble.style.height = size + 'px';
+  bubble.style.left = Math.random()*100 + '%';
+  const duration = 6 + Math.random()*9; // 6-15s
+  bubble.style.animationDuration = duration + 's';
+  bubble.style.animationDelay = Math.random()*5 + 's';
+  const rotate = Math.random()*360;
+  bubble.style.transform = `rotate(${rotate}deg)`;
+  bg.appendChild(bubble);
+}
 
+// Passport preview
+const passportPreview = document.getElementById('passportPreview');
+async function loadPassport(email){
+  try{
+    const res = await fetch(`/api/get-passport?email=${encodeURIComponent(email)}`);
+    if(res.ok){
+      const data = await res.json();
+      if(data.passportUrl){
+        passportPreview.src = data.passportUrl;
+        passportPreview.style.display='block';
+      } else {
+        passportPreview.style.display='none';
+      }
+    }
+  } catch(err){
+    console.error('Failed to load passport', err);
+  }
+}
 
-    <script src="login.js"></script>
+const emailInput = document.querySelector('input[name="email"]');
+emailInput.addEventListener('blur', ()=>{
+  const email = emailInput.value.trim();
+  if(email) loadPassport(email);
+});
+
+// Login form submit
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const email = emailInput.value.trim();
+  const password = loginForm.password.value.trim();
+
+  // Replace with your actual login logic:
+  // Example: validate email/password via backend API
+  try {
+    const res = await fetch('/api/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email,password})
+    });
+    const data = await res.json();
+    if(res.ok){
+      document.getElementById('loginSuccess').textContent = data.message || 'Login successful!';
+      document.getElementById('loginSuccess').style.display = 'block';
+      setTimeout(()=>window.location.href='dashboard.html',1200);
+    } else {
+      document.getElementById('loginError').textContent = data.message || 'Login failed';
+      document.getElementById('loginError').style.display='block';
+    }
+  } catch(err){
+    console.error(err);
+    document.getElementById('loginError').textContent = 'Network error. Try again later.';
+    document.getElementById('loginError').style.display='block';
+  }
+});
+</script>
+
 </body>
-
 </html>
