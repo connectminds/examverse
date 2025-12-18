@@ -81,11 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Form submit - collect user data
+  // Form submit - COLLECT DATA, WAIT 3 SECONDS, REDIRECT TO LOGIN
   form.addEventListener('submit', e => {
     e.preventDefault();
 
-    // Collect all user data
+    // 1. Sleek Button Feedback
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.classList.add('btn-loading');
+    submitBtn.innerHTML = '<span>Verifying...</span>';
+
+    // 2. Collect user data (Keeping your original logic)
     const userData = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -97,20 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
       passport: passportPreview.src || ''
     };
 
-    // Store in localStorage
+    // 3. Store in localStorage
     localStorage.setItem('examVerseUser', JSON.stringify(userData));
 
-    // Log for testing
-    console.log('User Data Collected:', userData);
-
-    // Show success message
-    msg.textContent = 'Form submitted successfully! Data collected.';
-    msg.classList.add('success');
-
-    // Optional: redirect to home page after 1.5 seconds
+    // 4. Smooth 3-second delay
     setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1500);
+      submitBtn.innerHTML = '<span>Success! Redirecting...</span>';
+      submitBtn.style.background = '#18b981';
+      
+      msg.textContent = 'Account created successfully!';
+      msg.classList.add('success-msg');
+
+      // 5. Final Redirect to Login Page
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 500); 
+    }, 2500); 
   });
 });
 
@@ -119,25 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const blobBg = document.querySelector('.blob-bg');
   const colors = ['#6a8cff','#18b981','#ff6b6b','#ffb547','#8e44ad','#ff4fcf','#4fc3ff','#f6ff00'];
 
-  // Generate 25 bubbles
   for(let i=0; i<25; i++){
     const bubble = document.createElement('div');
     bubble.classList.add('bubble');
-
-    // Random size class
     const sizeClass = ['small','medium','large'][Math.floor(Math.random()*3)];
     bubble.classList.add(sizeClass);
-
-    // Random horizontal position
     bubble.style.left = Math.random() * 100 + '%';
-
-    // Random color
     bubble.style.background = colors[Math.floor(Math.random()*colors.length)];
-
-    // Random animation duration and delay
     bubble.style.animationDuration = (15 + Math.random()*15) + 's';
     bubble.style.animationDelay = (Math.random()*5) + 's';
-
     blobBg.appendChild(bubble);
   }
 });
