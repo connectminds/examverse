@@ -1,57 +1,64 @@
-// dashboard.js - responsive nav + show user + logout
 document.addEventListener('DOMContentLoaded', () => {
-    // Load user info from localStorage
-    const firstName = localStorage.getItem('examverseFirstName');
-    const profilePic = localStorage.getItem('examverseProfilePic');
-
-    // Elements
+    // 1. Elements
     const welcomeEl = document.getElementById('welcomeMessage');
     const photoEl = document.getElementById('userPhoto');
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    const navLogout = document.getElementById('navLogout');
 
-    if (!firstName || !profilePic) {
-        // If user data missing, send to login
-        // (This is safer than showing blank dashboard)
-        try { alert('Please log in to access the dashboard.'); } catch (e) {}
+    // 2. Load the specific user object we created in Registration/Login
+    const storedData = localStorage.getItem('examVerseUser');
+
+    if (storedData) {
+        try {
+            const user = JSON.parse(storedData);
+
+            // Populate Name
+            if (user.firstName) {
+                welcomeEl.textContent = `Welcome back, ${user.firstName}!`;
+            }
+
+            // Populate Profile Pic (The passport uploaded)
+            if (user.passport && user.passport !== "") {
+                photoEl.src = user.passport;
+            }
+        } catch (e) {
+            console.error("Error parsing user data");
+        }
+    } else {
+        // SILENT PROTECTION: No alerts used. 
+        // If no user is found, jump straight to login.
         window.location.href = 'login.html';
         return;
     }
 
-    // Populate UI
-    welcomeEl.textContent = `Welcome back, ${firstName}!`;
-    photoEl.src = profilePic;
-
-    // Nav hamburger
-    const nav = document.getElementById('mainNav');
-    const navToggle = document.getElementById('navToggle');
-    const navLogout = document.getElementById('navLogout');
-
-    if (navToggle && nav) {
+    // 3. Hamburger Menu Logic
+    if (navToggle && mainNav) {
         navToggle.addEventListener('click', () => {
-            const expanded = navToggle.classList.toggle('open');
-            nav.classList.toggle('open');
-            navToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            navToggle.classList.toggle('open');
+            mainNav.classList.toggle('open');
         });
     }
 
-    // Logout handlers (nav + logout button)
-    function logout() {
-        // Clear only relevant keys (keep other localStorage values if you want)
-        localStorage.removeItem('examverseFirstName');
-        localStorage.removeItem('examverseEmail');
-        localStorage.removeItem('examversePassword');
-        localStorage.removeItem('examverseProfilePic');
-        // Redirect to login
-        window.location.href = 'login.html';
+    // 4. Professional Logout function
+    function handleLogout() {
+        // Fade out for professional feel
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s';
+        
+        // Clear local storage
+        localStorage.removeItem('examVerseUser');
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 500);
     }
 
+    // Connect Logout Links
     if (navLogout) {
-        navLogout.addEventListener('click', function(e) {
+        navLogout.addEventListener('click', (e) => {
             e.preventDefault();
-            if (confirm('Are you sure you want to log out?')) logout();
+            handleLogout();
         });
     }
-
-    // Also wire the top-right logout btn if present (old version)
-    const topLogoutBtn = document.getElementById('logoutBtn');
-    if (topLogoutBtn) topLogoutBtn.addEventListener('click', () => { if (confirm('Are you sure you want to log out?')) logout(); });
 });

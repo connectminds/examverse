@@ -1,33 +1,35 @@
 /* Reset */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
-/* Body background */
-
 body {
     width: 100vw;
     min-height: 100vh;
-    background-image: url("studentone.jpg");
+    /* Updated background: Gradient + Image Overlay for a pro look */
+    background: linear-gradient(180deg, rgba(0, 31, 77, 0.8), rgba(0, 51, 102, 0.9)), url("studentone.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
 }
 
-
 /* Navigation menu */
-
 .menu {
     width: 100%;
     height: 70px;
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Slight transparent background for readability */
+    background: rgba(2, 6, 23, 0.5);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 ul {
@@ -38,94 +40,90 @@ ul {
     list-style: none;
 }
 
-ul li {
-    margin: 0 30px;
-}
+ul li { margin: 0 25px; }
 
 ul li a {
     text-decoration: none;
     color: #fff;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    transition: color 0.4s ease-in-out;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
-ul li a:hover {
-    color: rgb(78, 10, 238);
-}
-
+ul li a:hover { color: #ffc107; }
 
 /* Text styling */
-
 p {
     color: #fff;
     text-align: center;
-    font-weight: bold;
-    font-size: 30px;
-    margin-top: 50px;
+    font-weight: 700;
+    font-size: 32px;
+    margin-top: 60px;
+    letter-spacing: 1px;
 }
 
-h1,
-h2,
-h3,
-h4 {
-    color: orange;
-    font-family: Tahoma, sans-serif;
-    font-size: 50px;
-    font-weight: bold;
-    font-style: italic;
-    text-align: center;
+/* Buttons (Now Glassmorphism Style) */
+.exam-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20px;
+    z-index: 2;
+    position: relative;
 }
-
-
-/* Fixed typo in button height ("7 0px" → "70px") */
 
 .btnn {
-    width: 360px;
-    height: 40px;
-    background: rgb(108, 85, 207);
-    border: none;
-    margin: 30px auto;
-    font-size: 25px;
-    border-radius: 10px;
+    width: 380px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 15px auto;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 12px;
     cursor: pointer;
     color: #fff;
+    text-decoration: none;
     text-align: center;
     display: block;
-    /* centers button when using margin auto */
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .btnn:hover {
-    background: #fff;
-    color: orange;
+    background: #ffc107;
+    color: #001f4d;
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.3);
 }
 
-
-/* Link inside button */
-
-.btnn a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-}
-
-.btnn:hover a {
-    color: orange;
-}
-
-
-/* Optional footer styling */
-
+/* Footer */
 footer {
     text-align: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.5);
     padding: 20px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(2, 6, 23, 0.8);
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+}
+
+/* === BUBBLE BACKGROUND === */
+.blob-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+.bubble {
+    position: absolute;
+    bottom: -100px;
+    border-radius: 50%;
+    filter: blur(10px);
+    animation: floatBubbles linear infinite;
+    opacity: 0.4;
+}
+@keyframes floatBubbles {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+    100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
 }

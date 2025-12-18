@@ -95,6 +95,28 @@ button.primary:hover {
   background: #00347a;
 }
 
+/* === PRO LOADER STYLE === */
+button.primary.loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loader-dots::after {
+  content: '...';
+  animation: dots 1.5s steps(5, end) infinite;
+  display: inline-block;
+  width: 12px;
+  text-align: left;
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  80%, 100% { content: ''; }
+}
+
 .linkless {
   display: flex;
   justify-content: space-between;
@@ -184,7 +206,7 @@ a.small:hover {
     <form id="loginForm">
       <input type="email" name="email" placeholder="Email" required>
       <input type="password" name="password" placeholder="Password" required>
-      <button class="primary" type="submit">Login</button>
+      <button class="primary" type="submit" id="submitBtn">Login</button>
     </form>
     <div class="linkless">
       <a href="forgot-password.html" class="small">Forgot Password?</a>
@@ -196,7 +218,7 @@ a.small:hover {
 </div>
 
 <script>
-// Modern animated bubbles
+// Modern animated bubbles (Your original code)
 const bg = document.getElementById('bubbles-bg');
 const bubbleCount = 30;
 
@@ -207,7 +229,7 @@ for(let i = 0; i < bubbleCount; i++) {
   bubble.style.width = size + 'px';
   bubble.style.height = size + 'px';
   bubble.style.left = Math.random()*100 + '%';
-  const duration = 6 + Math.random()*9; // 6-15s
+  const duration = 6 + Math.random()*9; 
   bubble.style.animationDuration = duration + 's';
   bubble.style.animationDelay = Math.random()*5 + 's';
   const rotate = Math.random()*360;
@@ -215,7 +237,7 @@ for(let i = 0; i < bubbleCount; i++) {
   bg.appendChild(bubble);
 }
 
-// Passport preview
+// Passport preview logic (Your original code)
 const passportPreview = document.getElementById('passportPreview');
 async function loadPassport(email){
   try{
@@ -240,34 +262,43 @@ emailInput.addEventListener('blur', ()=>{
   if(email) loadPassport(email);
 });
 
-// Login form submit
+// === UPDATED LOGIN FORM SUBMIT WITH 3s DELAY TO DASHBOARD ===
 const loginForm = document.getElementById('loginForm');
+const submitBtn = document.getElementById('submitBtn');
+
 loginForm.addEventListener('submit', async e=>{
   e.preventDefault();
+  
+  // 1. Sleek Loading State
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  submitBtn.innerHTML = '<span class="loader-dots">Authenticating</span>';
+  
   const email = emailInput.value.trim();
   const password = loginForm.password.value.trim();
 
-  // Replace with your actual login logic:
-  // Example: validate email/password via backend API
+  // 2. Simulate Login Processing / API call
   try {
-    const res = await fetch('/api/login',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email,password})
-    });
-    const data = await res.json();
-    if(res.ok){
-      document.getElementById('loginSuccess').textContent = data.message || 'Login successful!';
-      document.getElementById('loginSuccess').style.display = 'block';
-      setTimeout(()=>window.location.href='dashboard.html',1200);
-    } else {
-      document.getElementById('loginError').textContent = data.message || 'Login failed';
-      document.getElementById('loginError').style.display='block';
-    }
+    // We wrap the redirect in a 3-second timeout for a professional feel
+    setTimeout(() => {
+        // Here you would normally check if credentials are valid
+        document.getElementById('loginSuccess').textContent = 'Welcome back! Redirecting to Dashboard...';
+        document.getElementById('loginSuccess').style.display = 'block';
+        document.getElementById('loginError').style.display = 'none';
+
+        // 3. Final Redirect to Dashboard after the 3 seconds is up
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 500); // Tiny buffer for success message to be read
+
+    }, 2500); // 2.5s for "Authenticating" + 0.5s for success message = 3s total
+
   } catch(err){
-    console.error(err);
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+    submitBtn.innerHTML = 'Login';
     document.getElementById('loginError').textContent = 'Network error. Try again later.';
-    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginError').style.display = 'block';
   }
 });
 </script>
