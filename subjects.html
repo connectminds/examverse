@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects | ExamVerse</title>
+    <link rel="stylesheet" href="subjects.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Layer 1: Watermark -->
+    <div class="watermark-bg">EXAMVERSE</div>
+
+    <!-- Layer 2: Drifting Bubbles -->
+    <div class="bubble-layer" id="bubbleLayer"></div>
+
+    <!-- Layer 3: Main App Content -->
+    <div class="app-container">
+
+          <!-- NEW: Sleek Top Navigation -->
+    <nav class="top-nav">
+        <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+        <a href="index.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+    </nav>
+
+        <header>
+            <!-- BRAND LOGO SECTION -->
+            <div class="brand-logo-box">
+                <!-- Replace 'logo.png' with your actual file name -->
+                <img src="examverse_logo.png" alt="ExamVerse Logo" class="main-logo">
+                <div class="brand-name">EXAM<span>VERSE</span></div>
+            </div>
+            
+            <h1>Subject Syllabus</h1>
+            <p>Select your topics and generate smart practice questions.</p>
+        </header>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="subjectSearch" placeholder="Search for a subject...">
+        </div>
+
+        <div id="subjectGrid" class="subject-grid">
+            <!-- Injected via JS -->
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 ExamVerse AI. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Help Center</a>
+                </div>
+            </div>
+        </footer>
+
+        <div id="actionFab" class="fab-container">
+            <button class="generate-btn" onclick="startGeneration()">
+                <i class="fas fa-rocket"></i>
+                <span>Generate Questions (<span id="count">0</span>)</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="subjects.js"></script>
+</body>
+</html>

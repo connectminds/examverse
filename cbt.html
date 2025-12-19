@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Mode | ExamVerse</title>
+    <link rel="stylesheet" href="subjects.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .cbt-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .question-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+        }
+        .option-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .option-item:hover { background: rgba(139, 92, 246, 0.1); border-color: var(--primary); }
+        .option-item.selected { background: var(--primary); border-color: white; }
+        .cbt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #timer { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="watermark-bg" id="cbtSubjectWatermark">EXAM</div>
+    
+    <div class="app-container cbt-container">
+        <div class="cbt-header">
+            <div>
+                <h2 id="displaySubject">Subject</h2>
+                <p>Question <span id="qNum">1</span> of <span id="qTotal">0</span></p>
+            </div>
+            <div id="timer">00:00</div>
+        </div>
+
+        <div class="question-card">
+            <h3 id="questionText">Loading your practice questions...</h3>
+            <div id="optionsList">
+                <!-- Options injected here -->
+            </div>
+        </div>
+
+        <div class="nav-btns">
+            <button class="nav-link" onclick="prevQuestion()"><i class="fas fa-chevron-left"></i> Previous</button>
+            <button class="nav-link" id="nextBtn" onclick="nextQuestion()">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Inside cbt.html, just before the closing </body> tag -->
+
+<!-- 1. Load your actual database file first -->
+<script src="questions.js"></script> 
+
+<!-- 2. Load the CBT logic script second -->
+<script src="cbt.js"></script>
+
+    <script src="cbt.js"></script>
+</body>
+</html>
