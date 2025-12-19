@@ -4,49 +4,49 @@ const questions = [
     image: "",
     answers: [
       { text: "Gottfried Leibniz", img: "", correct: true },
-      { text: "Herman Hollerith", img: "images/a2.jpg", correct: false },
-      { text: "John Von Neumann", img: "images/a3.jpg", correct: false },
-      { text: "William Schickard", img: "images/a4.jpg", correct: false }
+      { text: "Herman Hollerith", img: "", correct: false },
+      { text: "John Von Neumann", img: "", correct: false },
+      { text: "William Schickard", img: "", correct: false }
     ]
   },
   {
     question: "The binary number 100101 can be written in denary as",
-    image: "images/q2.jpg",
+    image: "",
     answers: [
-      { text: "25", img: "images/25.jpg", correct: false },
-      { text: "37", img: "images/37.jpg", correct: true },
-      { text: "45", img: "images/45.jpg", correct: false },
-      { text: "211", img: "images/211.jpg", correct: false }
+      { text: "25", img: "", correct: false },
+      { text: "37", img: "", correct: true },
+      { text: "45", img: "", correct: false },
+      { text: "211", img: "", correct: false }
     ]
   },
   {
     question: "The first in computer data processing procedure is _________",
-    image: "images/q3.jpg",
+    image: "",
     answers: [
-      { text: "Collection of data", img: "images/op1.jpg", correct: true },
-      { text: "Communication of information", img: "images/op2.jpg", correct: false },
-      { text: "Conversion of data", img: "images/op3.jpg", correct: false },
-      { text: "Manipulation of data", img: "images/op4.jpg", correct: false }
+      { text: "Collection of data", img: "", correct: true },
+      { text: "Communication of information", img: "", correct: false },
+      { text: "Conversion of data", img: "", correct: false },
+      { text: "Manipulation of data", img: "", correct: false }
     ]
   },
   {
     question: "One advantage of electronic data processing is that it",
-    image: "images/q4.jpg",
+    image: "",
     answers: [
-      { text: "Involves special skills", img: "images/s1.jpg", correct: false },
-      { text: "Deals only with simple data", img: "images/s2.jpg", correct: false },
-      { text: "Is completely error-free", img: "images/s3.jpg", correct: false },
-      { text: "Handles complex data", img: "images/s4.jpg", correct: true }
+      { text: "Involves special skills", img: "", correct: false },
+      { text: "Deals only with simple data", img: "", correct: false },
+      { text: "Is completely error-free", img: "", correct: false },
+      { text: "Handles complex data", img: "", correct: true }
     ]
   },
   {
     question: "A computer cannot operate without",
-    image: "images/q5.jpg",
+    image: "",
     answers: [
-      { text: "An operator", img: "images/opA.jpg", correct: false },
-      { text: "An instruction", img: "images/opB.jpg", correct: true },
-      { text: "A printer", img: "images/opC.jpg", correct: false },
-      { text: "A mouse", img: "images/opD.jpg", correct: false }
+      { text: "An operator", img: "", correct: false },
+      { text: "An instruction", img: "", correct: true },
+      { text: "A printer", img: "", correct: false },
+      { text: "A mouse", img: "", correct: false }
     ]
   }
 ];

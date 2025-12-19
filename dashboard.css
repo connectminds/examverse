@@ -88,7 +88,12 @@ body {
 .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3); }
 
 /* Footer */
-.site-footer { padding: 20px 0; text-align: center; color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; }
+.site-footer { 
+    padding: 20px 0; 
+    text-align: center; 
+    color: rgba(255, 255, 255, 0.4); 
+    font-size: 1.00rem; 
+    }
 
 /* Mobile Menu */
 @media (max-width: 880px) {
