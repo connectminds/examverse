@@ -8,21 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- MASSIVE WATERMARK OVERRIDE --- */
+        /* --- MASSIVE CINEMATIC WATERMARK --- */
         .watermark-bg {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-20deg);
-            font-size: 22vw; /* Increased from 14vw to 22vw */
+            font-size: 22vw;
             font-weight: 900;
-            color: rgba(255, 255, 255, 0.04); /* Very subtle but enormous */
+            color: rgba(255, 255, 255, 0.04);
             z-index: -2;
             pointer-events: none;
             user-select: none;
             white-space: nowrap;
             letter-spacing: -5px;
-            line-height: 1;
         }
 
         .about-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
@@ -31,6 +30,9 @@
             text-align: center;
             padding: 40px 0;
             animation: fadeInDown 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .main-brand-logo {
@@ -39,6 +41,7 @@
             margin-bottom: 25px;
             filter: drop-shadow(0 15px 30px rgba(139, 92, 246, 0.5));
             animation: pulse 3s infinite ease-in-out;
+            border-radius: 20px; /* Added border radius here too */
         }
 
         .hero-section h1 {
@@ -49,15 +52,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            color: var(--text-dim);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.8;
-            font-weight: 300;
         }
 
         .glass-card {
@@ -97,6 +91,7 @@
             opacity: 0.9;
         }
 
+        /* --- LEGACY BRANDING: CENTERED LOGO LOGIC --- */
         .brand-legacy {
             background: linear-gradient(145deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.08));
             border: 1px solid var(--glass-border);
@@ -104,13 +99,23 @@
             padding: 50px;
             text-align: center;
             margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Ensures centering on all devices */
         }
 
         .cm-logo {
             width: 260px;
+            max-width: 100%; /* Prevents overflow on mobile */
+            height: auto;
             margin-bottom: 30px;
+            border-radius: 24px; /* Added border radius */
             filter: drop-shadow(0 15px 30px rgba(6, 182, 212, 0.4));
+            transition: 0.4s;
+            object-fit: contain;
         }
+
+        .cm-logo:hover { transform: scale(1.03); }
 
         .cta-sentence {
             font-size: 1rem;
@@ -169,17 +174,17 @@
         }
 
         @media (max-width: 768px) {
-            .glass-card { padding: 30px; }
-            .hero-section h1 { font-size: 2.2rem; }
-            .watermark-bg { font-size: 30vw; } /* Even bigger on mobile to fill space */
+            .glass-card { padding: 40px 25px; }
+            .hero-section h1 { font-size: 2rem; }
+            .watermark-bg { font-size: 30vw; }
+            .cm-logo { width: 200px; } /* Slightly smaller on mobile */
+            .brand-legacy { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MASSIVE WATERMARK -->
     <div class="watermark-bg">LEGACY</div>
-    
     <div class="bubble-layer" id="bubbleLayer"></div>
 
     <div class="app-container about-container">
@@ -187,18 +192,18 @@
         <nav style="margin-bottom: 20px;">
             <a href="index.html" class="nav-link" style="width: fit-content;">
                 <i class="fas fa-arrow-left"></i>
-                <span>Return to Knowledge Hub</span>
+                <span>Return to Intelligence Hub</span>
             </a>
         </nav>
 
         <section class="hero-section">
             <img src="examverse_logo.png" alt="ExamVerse" class="main-brand-logo">
-            <h1>The Convergence of Logic and Ambition</h1>
+            <h1>The Confluence of Logic and Ambition</h1>
             <p>ExamVerse is a high-fidelity academic ecosystem, purpose-built to bridge the variance between intellectual potential and standardized examination rigor.</p>
         </section>
 
         <div class="glass-card">
-            <!-- Section 1 -->
+            <!-- Section 1: The ExamVerse Paradigm -->
             <div class="content-block">
                 <div class="intellectual-title">
                     <i class="fas fa-microchip"></i>
@@ -215,7 +220,7 @@
                 </div>
             </div>
 
-            <!-- Section 2 -->
+            <!-- Section 2: The Connectminds IT Tech Heritage -->
             <div class="brand-legacy">
                 <img src="Brandlogo.jpg" alt="Connectminds IT Tech" class="cm-logo">
                 
@@ -232,7 +237,7 @@
                     </p>
                 </div>
 
-                <!-- REQUESTED HIGH-LEVEL CTA -->
+                <!-- Strategic CTA -->
                 <p class="cta-sentence">
                     Synergizing Academic Ambition with Technical Excellence—It is <span class="cta-highlight">Connectminds IT Tech</span>.
                 </p>
@@ -240,7 +245,7 @@
                 <!-- Part 3: The Social Nexus -->
                 <div class="social-nexus">
                     <!-- WHATSAPP -->
-                    <a href="https://wa.me/2348141320730" class="social-icon" title="Strategic WhatsApp Consultation" target="_blank">
+                    <a href="https://wa.me/2348141320730" class="social-icon" title="Instant Consultation" target="_blank">
                         <i class="fab fa-whatsapp"></i>
                     </a>
 
@@ -255,7 +260,7 @@
                     </a>
 
                     <!-- WEBSITE -->
-                    <a href="https://connectminds.tech" class="social-icon" title="Official Web Portal" target="_blank">
+                    <a href="https://connectminds.tech" class="social-icon" title="Digital Hub" target="_blank">
                         <i class="fas fa-globe"></i>
                     </a>
 
@@ -277,7 +282,7 @@
             </div>
         </div>
 
-        <footer style="margin-top: 0; background: transparent; border: none; box-shadow: none;">
+        <footer style="margin-top: 0; background: transparent; border: none; box-shadow: none; text-align: center;">
             <p style="font-weight: 300; font-size: 0.75rem; letter-spacing: 3px; color: var(--text-dim);">
                 ENGINEERED BY <span style="color: var(--accent); font-weight: 800;">CONNECTMINDS IT TECH</span> &copy; 2025
             </p>
