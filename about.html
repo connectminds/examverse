@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | ExamVerse & Connectminds IT Tech</title>
+    <link rel="stylesheet" href="subjects.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- MASSIVE WATERMARK OVERRIDE --- */
+        .watermark-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            font-size: 22vw; /* Increased from 14vw to 22vw */
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.04); /* Very subtle but enormous */
+            z-index: -2;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+            letter-spacing: -5px;
+            line-height: 1;
+        }
+
+        .about-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .main-brand-logo {
+            width: 130px;
+            height: auto;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 15px 30px rgba(139, 92, 246, 0.5));
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 50%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 60px;
+            backdrop-filter: blur(30px);
+            margin-bottom: 50px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .intellectual-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intellectual-title span {
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(to right, var(--accent), transparent);
+        }
+
+        .copy-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--text-white);
+            text-align: justify;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .brand-legacy {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.08));
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 50px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cm-logo {
+            width: 260px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 15px 30px rgba(6, 182, 212, 0.4));
+        }
+
+        .cta-sentence {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-top: 40px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .cta-highlight {
+            color: #fff;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 2px;
+        }
+
+        .social-nexus {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-icon {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            text-decoration: none;
+            font-size: 1.4rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            border-color: white;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .glass-card { padding: 30px; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .watermark-bg { font-size: 30vw; } /* Even bigger on mobile to fill space */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MASSIVE WATERMARK -->
+    <div class="watermark-bg">LEGACY</div>
+    
+    <div class="bubble-layer" id="bubbleLayer"></div>
+
+    <div class="app-container about-container">
+        
+        <nav style="margin-bottom: 20px;">
+            <a href="index.html" class="nav-link" style="width: fit-content;">
+                <i class="fas fa-arrow-left"></i>
+                <span>Return to Knowledge Hub</span>
+            </a>
+        </nav>
+
+        <section class="hero-section">
+            <img src="examverse_logo.png" alt="ExamVerse" class="main-brand-logo">
+            <h1>The Convergence of Logic and Ambition</h1>
+            <p>ExamVerse is a high-fidelity academic ecosystem, purpose-built to bridge the variance between intellectual potential and standardized examination rigor.</p>
+        </section>
+
+        <div class="glass-card">
+            <!-- Section 1 -->
+            <div class="content-block">
+                <div class="intellectual-title">
+                    <i class="fas fa-microchip"></i>
+                    The ExamVerse Architecture
+                    <span></span>
+                </div>
+                <div class="copy-text">
+                    <p>
+                        ExamVerse is not merely a practice tool; it is a sophisticated cognitive environment engineered for the academic elite. Our core philosophy rests on the deconstruction of the exhaustive WAEC syllabus into precise **Intellectual Nodes**. By deploying a Topic-Aware Algorithmic Engine, we facilitate rapid information retention and systemic mental optimization.
+                    </p>
+                    <p>
+                        In strict alignment with the 2025/26 pedagogical revisions, our simulation environment integrates nearly two decades of empirical data, offering students a strategic vantage point that transforms rote memorization into data-driven mastery.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="brand-legacy">
+                <img src="Brandlogo.jpg" alt="Connectminds IT Tech" class="cm-logo">
+                
+                <div class="intellectual-title" style="justify-content: center; border: none;">
+                    Architects of Digital Pedagogy
+                </div>
+
+                <div class="copy-text" style="text-align: center;">
+                    <p>
+                        ExamVerse is the flagship intellectual property developed and maintained by **Connectminds IT Tech**—a visionary collective of software architects and educational researchers. Our mission is the democratization of high-tier technical resources, ensuring the African student is equipped to dominate the global knowledge economy.
+                    </p>
+                    <p>
+                        At Connectminds IT Tech, we don’t just build applications; we engineer pathways to supremacy. Every line of code in this ecosystem serves the ultimate objective: **Empowering the Mind to Lead.**
+                    </p>
+                </div>
+
+                <!-- REQUESTED HIGH-LEVEL CTA -->
+                <p class="cta-sentence">
+                    Synergizing Academic Ambition with Technical Excellence—It is <span class="cta-highlight">Connectminds IT Tech</span>.
+                </p>
+
+                <!-- Part 3: The Social Nexus -->
+                <div class="social-nexus">
+                    <!-- WHATSAPP -->
+                    <a href="https://wa.me/2348141320730" class="social-icon" title="Strategic WhatsApp Consultation" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+
+                    <!-- YOUTUBE -->
+                    <a href="https://youtube.com/@connectmindsITTech" class="social-icon" title="Cinematic Knowledge Base" target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+
+                    <!-- FACEBOOK -->
+                    <a href="https://facebook.com/connectmindsITTech" class="social-icon" title="Global Community Hub" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+
+                    <!-- WEBSITE -->
+                    <a href="https://connectminds.tech" class="social-icon" title="Official Web Portal" target="_blank">
+                        <i class="fas fa-globe"></i>
+                    </a>
+
+                    <!-- LINKEDIN -->
+                    <a href="#" class="social-icon" title="Professional Network" target="_blank">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+
+                    <!-- INSTAGRAM -->
+                    <a href="#" class="social-icon" title="Visual Identity" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+
+                    <!-- X (Twitter) -->
+                    <a href="#" class="social-icon" title="Intellectual Discourse" target="_blank">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer style="margin-top: 0; background: transparent; border: none; box-shadow: none;">
+            <p style="font-weight: 300; font-size: 0.75rem; letter-spacing: 3px; color: var(--text-dim);">
+                ENGINEERED BY <span style="color: var(--accent); font-weight: 800;">CONNECTMINDS IT TECH</span> &copy; 2025
+            </p>
+        </footer>
+    </div>
+
+    <!-- Ensure subjects.js is present for background bubbles -->
+    <script src="subjects.js"></script>
+</body>
+</html>
