@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Sheet | ExamVerse</title>
+<link rel="stylesheet" href="report.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Watermark -->
+<div class="watermark-bg">EXAMVERSE</div>
+
+<!-- Floating Bubbles -->
+<div class="bubble-layer" id="bubbleLayer"></div>
+
+<div class="report-container glass-modal">
+    <div class="report-header">
+        <div class="student-info">
+            <img id="studentPhoto" src="" alt="Student Photo" class="student-photo">
+            <span id="studentName"></span>
+        </div>
+        <div class="report-actions">
+            <a href="subject.html" class="back-link">← Back to Subjects</a>
+            <button class="print-btn" onclick="window.print()">Print Report</button>
+        </div>
+    </div>
+
+    <h1>Exam Report Sheet</h1>
+
+    <!-- Student Performance Summary -->
+    <div class="performance-summary">
+        <div class="performance-left">
+            <div class="student-details-section">
+                <h3>Student Performance</h3>
+                <div class="detail-row">
+                    <span class="detail-label">Time Taken:</span>
+                    <span class="detail-value" id="timeTaken">00:00</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Score:</span>
+                    <span class="detail-value" id="scorePercentage">0%</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Performance:</span>
+                    <span class="detail-value" id="performanceFeedback">—</span>
+                </div>
+            </div>
+        </div>
+        <div class="performance-right">
+            <div class="comments-box">
+                <h3><i class="fas fa-lightbulb"></i>Comment On Performance</h3>
+                <p id="teacherComment"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <table class="summary-table">
+        <tr>
+            <th>Total Questions</th>
+            <th>Attempted</th>
+            <th>Correct</th>
+            <th>Incorrect</th>
+            <th>Grade</th>
+        </tr>
+        <tr>
+            <td id="total"></td>
+            <td id="attempted"></td>
+            <td id="correct"></td>
+            <td id="incorrect"></td>
+            <td id="grade"></td>
+        </tr>
+    </table>
+
+    <div class="charts">
+        <div class="chart-container">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <div class="explanations">
+        <h2>Explanations for Incorrect Answers</h2>
+        <ul id="explanationList"></ul>
+    </div>
+</div>
+
+<script src="report.js"></script>
+<script src="bubbles.js"></script>
+</body>
+</html>

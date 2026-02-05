@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects | ExamVerse</title>
+    <link rel="stylesheet" href="subjects.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="watermark-bg">EXAMVERSE</div>
+    <div class="bubble-layer" id="bubbleLayer"></div>
+
+    <div class="app-container">
+
+        <nav class="top-nav">
+            <a href="dashboard.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </nav>
+
+        <header>
+            <div class="brand-logo-box">
+                <img src="examverse_logo.png" alt="ExamVerse Logo" class="main-logo">
+                <div class="brand-name">EXAM<span>VERSE</span></div>
+            </div>
+            
+            <h1>Subject Syllabus</h1>
+            <p>Select your topics and generate smart practice questions.</p>
+        </header>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="subjectSearch" placeholder="Search for a subject...">
+        </div>
+
+        <div id="subjectGrid" class="subject-grid">
+            <!-- Injected via JS -->
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2026 ExamVerse | CONNECTMIDS IT Tech. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Help Center</a>
+                </div>
+            </div>
+        </footer>
+
+        <div id="actionFab" class="fab-container">
+            <button class="generate-btn" onclick="showQuestionCountModal()">
+                <i class="fas fa-rocket"></i>
+                <span>Generate Questions (<span id="count">0</span>)</span>
+            </button>
+        </div>
+
+        <!-- Question Count Modal -->
+        <div id="questionCountModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Select Number of Questions</h2>
+                    <button class="modal-close" onclick="closeQuestionCountModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="student-name-input">
+                        <label for="studentNameInput"><i class="fas fa-user"></i> Student Name</label>
+                        <input type="text" id="studentNameInput" placeholder="Enter your full name" required>
+                    </div>
+                    <p>You have selected <strong id="selectedCount">0</strong> topic(s)</p>
+                    <p style="background: rgba(6, 182, 212, 0.1); padding: 12px 16px; border-left: 3px solid #06b6d4; border-radius: 6px; margin-bottom: 20px;">
+                        <i class="fas fa-database"></i> <strong id="availableQuestionsCount">0</strong> questions available
+                    </p>
+                    <div class="question-count-input">
+                        <label for="questionCount">How many questions would you like?</label>
+                        <input type="number" id="questionCount" min="1" max="100" value="10" placeholder="Enter number of questions">
+                    </div>
+                    <p class="info-text"><i class="fas fa-info-circle"></i> Available questions will be randomly selected from your chosen topics.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeQuestionCountModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" onclick="clearSelection()">
+                        <i class="fas fa-redo"></i> Change Subject
+                    </button>
+                    <button type="button" class="btn-confirm" onclick="proceedToExam(); return false;">
+                        <i class="fas fa-play"></i> Start Exam
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="subjects.js"></script>
+    <script src="bubbles.js"></script>
+</body>
+</html>

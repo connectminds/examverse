@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>examverse | Select Exam</title>
-    <link rel="stylesheet" href="project.CSS">
-    <!-- Using Poppins for a modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam | ExamVerse</title>
+<link rel="stylesheet" href="exam.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <!-- Floating bubbles container -->
-    <div class="blob-bg"></div>
+<!-- Watermark -->
+<div class="watermark-bg">EXAMVERSE</div>
 
-    <header class="menu">
-        <div class="container">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
+<!-- Bubbles -->
+<div class="bubble-layer" id="bubbleLayer"></div>
+
+<div class="exam-container">
+
+    <!-- Header with Student Info -->
+    <div class="exam-header">
+        <div class="student-info">
+            <img src="https://via.placeholder.com/80" alt="Student Photo" id="studentPhoto">
+            <div class="student-details">
+                <h2 id="studentName">Student Name</h2>
+                <p id="studentID">ID: 2024001</p>
+            </div>
         </div>
-    </header>
-
-    <main class="portal-content">
-        <p>Choose Your Universe</p>
-        <div class="exam-grid">
-            <a href="year.HTML" class="btnn">WAEC</a>
-            <a href="#" class="btnn">NECO</a>
-            <a href="#" class="btnn">JAMB/UTME</a>
-            <a href="#" class="btnn">GCE</a>
+        <div class="exam-timer">
+            <i class="fas fa-clock"></i> <span id="timer">00:00</span>
         </div>
-    </main>
+    </div>
 
-    <footer>
-        &copy; ConnectMindsITTech | ExamVerse 2025. All rights reserved.
-    </footer>
+    <!-- Main Exam Layout -->
+    <div class="exam-body">
+        <!-- Sidebar with Question Numbers -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Question numbers will be injected here -->
+        </aside>
 
-    <!-- New JS File Link -->
-    <script src="exam.js" defer></script>
+        <!-- Questions Display Area -->
+        <main class="question-area">
+            <div id="questionContent">
+                <!-- Question will be injected here -->
+            </div>
+            <div class="nav-buttons">
+                <button id="prevBtn"><i class="fas fa-chevron-left"></i> Previous</button>
+                <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                <button id="submitBtn"><i class="fas fa-check-circle"></i> Submit Exam</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="exam.js"></script>
+<script src="bubbles.js"></script>
 </body>
 </html>
