@@ -7,6 +7,16 @@ let currentSelectedSubject = null;
 let allSubjects = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // populate avatar from registered user using shared utility
+    const userProfile = loadUserProfileInfo();
+    if (userProfile && userProfile.photo) {
+        const avatarEl = document.getElementById('userAvatar');
+        if (avatarEl) {
+            avatarEl.src = userProfile.photo;
+            avatarEl.style.display = 'block';
+        }
+    }
+
     try {
         const response = await fetch("questions.json");
         const data = await response.json();
@@ -58,7 +68,12 @@ function renderSubjects(subjects) {
         card.setAttribute("data-subject-name", subject.name);
         card.innerHTML = `
             <div class="card-header">
-                <h3><i class="fas fa-book sub-icon"></i>${subject.name}</h3>
+                <div class="header-content">
+                    <div class="subject-checkbox-wrapper">
+                        <div class="subject-checkbox"><i class="fas fa-check"></i></div>
+                    </div>
+                    <h3><i class="fas fa-book sub-icon"></i>${subject.name}</h3>
+                </div>
                 <i class="fas fa-chevron-down chevron"></i>
             </div>
             <div class="topics-area">
@@ -74,16 +89,70 @@ function renderSubjects(subjects) {
         subjectGrid.appendChild(card);
     });
 
+    // Subject checkbox logic (select/deselect all topics in subject)
+    document.querySelectorAll(".subject-checkbox-wrapper").forEach(wrapper => {
+        wrapper.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const card = wrapper.closest(".subject-card");
+            const subject = card.dataset.subjectName;
+            const checkbox = wrapper.querySelector(".subject-checkbox");
+            const topicRows = card.querySelectorAll(".topic-row");
+            
+            // Check if all topics in this subject are already selected
+            const allTopicsSelected = Array.from(topicRows).every(row => row.classList.contains("selected"));
+            
+            if (allTopicsSelected) {
+                // Deselect all topics in this subject
+                topicRows.forEach(row => {
+                    const topic = row.dataset.topic;
+                    const key = subject + "||" + topic;
+                    row.classList.remove("selected");
+                    selectedTopics.delete(key);
+                });
+                checkbox.classList.remove("checked");
+                
+                // Clear currentSelectedSubject if no more topics selected
+                let hasTopicsFromSubject = false;
+                selectedTopics.forEach(t => {
+                    if (t.startsWith(subject + "||")) {
+                        hasTopicsFromSubject = true;
+                    }
+                });
+                if (!hasTopicsFromSubject) currentSelectedSubject = null;
+            } else {
+                // Check if trying to select from different subject
+                if (currentSelectedSubject && currentSelectedSubject !== subject) {
+                    alert(`You can only select topics from one subject at a time. Clear your selection to switch subjects.`);
+                    return;
+                }
+                
+                // Select all topics in this subject
+                topicRows.forEach(row => {
+                    const topic = row.dataset.topic;
+                    const key = subject + "||" + topic;
+                    row.classList.add("selected");
+                    selectedTopics.add(key);
+                });
+                checkbox.classList.add("checked");
+                currentSelectedSubject = subject;
+            }
+            updateCount();
+        });
+    });
+
     // Topic selection logic - ENFORCE SINGLE SUBJECT ONLY
     document.querySelectorAll(".topic-row").forEach(row => {
         row.addEventListener("click", () => {
             const subject = row.dataset.subject;
             const topic = row.dataset.topic;
             const key = subject + "||" + topic;
+            const card = row.closest(".subject-card");
+            const topicRows = card.querySelectorAll(".topic-row");
+            const subjectCheckbox = card.querySelector(".subject-checkbox");
 
             // If trying to select from a different subject, warn and prevent
             if (currentSelectedSubject && currentSelectedSubject !== subject) {
-                alert(`You can only select topics from one subject at a time. You have already selected from "${currentSelectedSubject}". Clear your selection to switch subjects.`);
+                alert(`You can only select topics from one subject at a time. Clear your selection to switch subjects.`);
                 return;
             }
 
@@ -91,6 +160,7 @@ function renderSubjects(subjects) {
             if (row.classList.contains("selected")) {
                 row.classList.remove("selected");
                 selectedTopics.delete(key);
+                subjectCheckbox.classList.remove("checked");
                 
                 // If no more topics from this subject, clear currentSelectedSubject
                 let hasTopicsFromSubject = false;
@@ -108,13 +178,17 @@ function renderSubjects(subjects) {
                 row.classList.add("selected");
                 selectedTopics.add(key);
                 currentSelectedSubject = subject;
+                
+                // Update subject checkbox state if all topics are now selected
+                const allSelected = Array.from(topicRows).every(r => r.classList.contains("selected"));
+                if (allSelected) subjectCheckbox.classList.add("checked");
             }
 
             updateCount();
         });
     });
 
-    // Card header click - toggle expand/collapse for individual subject only
+    // Card header click - toggle expand/collapse (exclude checkbox click)
     document.querySelectorAll(".card-header").forEach(header => {
         header.addEventListener("click", () => {
             const card = header.closest(".subject-card");
@@ -152,6 +226,21 @@ function showQuestionCountModal() {
         return;
     }
     
+    // when modal opens ensure student name input is filled
+    const studentNameInput = document.getElementById("studentNameInput");
+    if (studentNameInput) {
+        let nameVal = localStorage.getItem("studentName") || '';
+        const storedUser = localStorage.getItem("examVerseUser");
+        if (storedUser) {
+            try {
+                const u = JSON.parse(storedUser);
+                const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ');
+                if (fullName) nameVal = fullName;
+            } catch (e) { }
+        }
+        studentNameInput.value = nameVal;
+    }
+
     const modal = document.getElementById("questionCountModal");
     const selectedCountSpan = document.getElementById("selectedCount");
     const availableQuestionsSpan = document.getElementById("availableQuestionsCount");

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .test { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #06b6d4; }
+        button { padding: 10px 20px; background: #8b5cf6; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { opacity: 0.8; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Exam Navigation Test</h1>
+    
+    <div class="test">
+        <h3>Test 1: Check if proceedToExam exists</h3>
+        <button onclick="testFunction()">Test</button>
+        <p id="test1"></p>
+    </div>
+
+    <div class="test">
+        <h3>Test 2: Simulate button click</h3>
+        <label>Name: <input type="text" id="studentNameInput" value="Test Student"></label>
+        <label>Questions: <input type="number" id="questionCount" value="10" min="1"></label>
+        <button onclick="simulateClick()">Simulate Start Exam</button>
+        <p id="test2"></p>
+    </div>
+
+    <div class="test">
+        <h3>Test 3: Check localStorage after click</h3>
+        <button onclick="checkStorage()">Check Storage</button>
+        <p id="test3"></p>
+    </div>
+
+    <script src="subjects.js"></script>
+    <script>
+        function testFunction() {
+            if (typeof proceedToExam === 'function') {
+                document.getElementById('test1').innerHTML = '<span class="success">✓ proceedToExam function exists</span>';
+            } else {
+                document.getElementById('test1').innerHTML = '<span class="error">✗ proceedToExam NOT found</span>';
+            }
+        }
+
+        function simulateClick() {
+            const name = document.getElementById('studentNameInput').value;
+            const count = document.getElementById('questionCount').value;
+            
+            let html = '';
+            if (!name) {
+                html = '<span class="error">✗ Name is empty</span>';
+            } else if (!count || count < 1) {
+                html = '<span class="error">✗ Question count invalid</span>';
+            } else {
+                // Simulate setting selectedTopics before calling proceedToExam
+                selectedTopics.add('Mathematics||Algebra');
+                html = '<span class="success">✓ Would proceed with: Name="' + name + '", Count=' + count + '</span>';
+                html += '<br><span class="success">✓ Calling proceedToExam()...</span>';
+                // Uncomment below to actually test navigation
+                // proceedToExam();
+            }
+            document.getElementById('test2').innerHTML = html;
+        }
+
+        function checkStorage() {
+            let html = '<strong>localStorage contents:</strong><br>';
+            html += 'studentName: ' + (localStorage.getItem('studentName') || 'null') + '<br>';
+            html += 'questionCount: ' + (localStorage.getItem('questionCount') || 'null') + '<br>';
+            html += 'selectedTopics: ' + (localStorage.getItem('selectedTopics') || 'null') + '<br>';
+            html += 'examStartTime: ' + (localStorage.getItem('examStartTime') || 'null');
+            document.getElementById('test3').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

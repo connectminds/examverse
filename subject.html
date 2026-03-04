@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="description" content="Select subjects and topics to begin your exam on ExamVerse." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Subjects | ExamVerse</title>
+    <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="subjects.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,6 +29,8 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
+            <!-- user avatar if logged in -->
+            <img id="userAvatar" class="nav-avatar" src="" alt="User photo" style="display:none;" />
         </nav>
 
         <header>
@@ -33,7 +40,7 @@
             </div>
             
             <h1>Subject Syllabus</h1>
-            <p>Select your topics and generate smart practice questions.</p>
+            <p>Select your topics to generate smart examination questions.</p>
         </header>
 
         <div class="search-wrapper">
@@ -49,8 +56,8 @@
             <div class="footer-content">
                 <p>&copy; 2026 ExamVerse | CONNECTMIDS IT Tech. All rights reserved.</p>
                 <div class="footer-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
+                    <a href="Terms & Privacy.html">Privacy</a>
+                    <a href="Terms & Privacy.html">Terms</a>
                     <a href="#">Help Center</a>
                 </div>
             </div>
@@ -98,6 +105,8 @@
         </div>
     </div>
 
+    <script src="pwa-init.js"></script>
+    <script src="user-profile.js"></script>
     <script src="subjects.js"></script>
     <script src="bubbles.js"></script>
 </body>

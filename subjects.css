@@ -32,7 +32,7 @@ body {
     white-space: nowrap;
 }
 
-/* --- PERFECTED CONTINUOUS FLOWING BUBBLES --- */
+/* --- PERFECTED CONTINUOUS FLOWING BUBBLES WITH GLOW --- */
 .bubble-layer {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -44,7 +44,10 @@ body {
     position: absolute;
     border-radius: 50%;
     will-change: transform;
+    filter: blur(40px);
 }
+
+/* Bubble animations are injected by bubbles.js */
 
 /* --- LOGO STYLING --- */
 .brand-logo-box {
@@ -97,6 +100,12 @@ header p { color: var(--text-dim); }
 .subject-card:hover { transform: translateY(-8px); border-color: var(--primary); }
 
 .card-header { padding: 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.header-content { display: flex; align-items: center; gap: 14px; flex: 1; }
+.subject-checkbox-wrapper { cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.subject-checkbox { width: 20px; height: 20px; border: 2px solid var(--text-dim); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+.subject-checkbox i { font-size: 10px; color: white; display: none; }
+.subject-checkbox.checked { background: var(--primary); border-color: var(--primary); }
+.subject-checkbox.checked i { display: block; }
 .card-header h3 { font-size: 1.15rem; display: flex; align-items: center; gap: 12px; }
 .card-header i.sub-icon { color: var(--primary); font-size: 1.3rem; }
 .chevron { transition: 0.3s; color: var(--text-dim); }
@@ -157,6 +166,39 @@ footer {
     display: flex; align-items: center; gap: 12px;
 }
 
+/* Responsive: make subject cards stack and adjust grid */
+@media (max-width: 1200px) {
+    .subject-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    header h1 { font-size: 2.4rem; }
+    .app-container { padding: 40px 16px 20px; }
+}
+
+@media (max-width: 768px) {
+    .subject-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    header h1 { font-size: 2rem; }
+    .brand-logo-box { margin-bottom: 15px; }
+    .search-wrapper { margin-bottom: 30px; }
+    .fab-container { bottom: 20px; }
+    .generate-btn { padding: 12px 20px; font-size: 0.95rem; }
+}
+
+@media (max-width: 480px) {
+    .subject-grid { grid-template-columns: 1fr; gap: 12px; }
+    header h1 { font-size: 1.6rem; }
+    header p { font-size: 0.95rem; }
+    .search-wrapper input { padding: 12px 14px 12px 44px; }
+    .generate-btn { width: calc(100% - 40px); padding: 12px; left: 20px; right: 20px; }
+    .top-nav { padding: 8px; gap: 8px; }
+}
+
+/* Touch optimizations for subjects page */
+@media (pointer: coarse) {
+    .subject-card { padding: 18px; }
+    .topic-row { padding: 16px; }
+    .generate-btn { padding: 14px 18px; font-size: 1rem; }
+    .nav-link { padding: 12px 14px; }
+}
+
 /* --- NAVIGATION --- */
 .top-nav {
     display: flex; justify-content: space-between; align-items: center;
@@ -167,6 +209,15 @@ footer {
     background: var(--glass); border: 1px solid var(--glass-border);
     border-radius: 12px; color: var(--text-white); text-decoration: none;
     font-size: 0.9rem; font-weight: 600; backdrop-filter: blur(10px);
+}
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+    margin-left: 10px;
+    display: none;
 }
 
 .select-all-row { background: rgba(139, 92, 246, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
