@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ExamVerse — Modern Online Exams</title>
+  <title>ExamVerse — Modern Offline Exams</title>
 
   <!-- Styles -->
   <link rel="stylesheet" href="index.css" />
@@ -11,8 +11,13 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Theme color -->
-  <meta name="theme-color" content="#2a1e4f" />
+  <!-- PWA & Theme -->
+  <meta name="theme-color" content="#8b5cf6" />
+  <meta name="description" content="ExamVerse - Smart exam platform with offline support, real-time analytics, and AI-powered questions." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ExamVerse" />
+  <link rel="manifest" href="/manifest.json" />
 </head>
 <body>
   <!-- Preloader -->
@@ -57,6 +62,32 @@
           <a href="registration.html" class="btn btn-primary">Get Started</a>
           <a href="dashboard.html" class="btn btn-tertiary">Take Exam Now</a>
         </div>
+        <div class="hero-subscribe">
+          <a href="subscribe.html" class="btn btn-secondary btn-subscribe">Subscribe</a>
+        </div>
+
+        <section class="activation-panel" id="activationPanel" aria-labelledby="activation-title">
+          <h2 id="activation-title">Activate Your Premium Access</h2>
+          <p>Enter the 8-character activation code sent to your email after payment confirmation.</p>
+          <form id="activationForm" class="activation-form">
+            <input
+              id="activationCodeInput"
+              name="activationCode"
+              type="text"
+              maxlength="8"
+              minlength="8"
+              autocomplete="one-time-code"
+              placeholder="Enter activation code"
+              aria-label="Activation code"
+              required
+            />
+            <button type="submit" class="btn btn-primary" id="activateBtn">Unlock Dashboard</button>
+          </form>
+          <div class="activation-actions">
+            <button type="button" class="btn btn-tertiary" id="resendCodeBtn">Resend Code</button>
+          </div>
+          <div class="activation-message" id="activationMessage" role="status" aria-live="polite"></div>
+        </section>
       </div>
     </section>
 
@@ -89,6 +120,7 @@
   </footer>
 
   <!-- Script -->
+  <script src="pwa-init.js" defer></script>
   <script src="index.js" defer></script>
 </body>
 </html>

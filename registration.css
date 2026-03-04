@@ -58,6 +58,7 @@ body.light-mode { background: var(--bg-light); color: var(--text-light); }
   color: var(--primary);
   margin: 0 auto 8px;
   margin-top: -30px;
+  margin-top: 5px;
 }
 
 body.light-mode .card {
@@ -68,15 +69,23 @@ body.light-mode .card {
 
 .card-header { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:24px; }
 .logo { width:64px; height:64px; object-fit:contain; border-radius:12px; transition: 0.3s; }
-.muted { color:#9aa4b2; font-size:1rem; }
+.muted { color:#9aa4b2; font-size:1rem; margin-top: -0.75px; }
 
 .row { display:flex; gap:20px; flex-wrap:wrap; }
 .field { flex:1; display:flex; flex-direction:column; margin-bottom:18px; }
 .field label { margin-bottom:8px; font-weight:500; font-size:1rem; }
 .field input, .field select { padding:12px 14px; border-radius:10px; border:1px solid #ccc; font-size:1rem; }
 
-#dob { background: var(--card-dark); color: var(--text-dark); }
-body.light-mode #dob { background: var(--card-light); color: var(--text-light); }
+/* contrast for date field should always be light for readability */
+#dob {
+    background: #fff !important;
+    color: #000 !important;
+}
+/* light/dark mode no longer affects the date field since calendar uses white background */
+body.light-mode #dob {
+    background: #fff !important;
+    color: #000 !important;
+}
 
 .actions { display:flex; flex-direction:column; gap:14px; margin-top:24px; }
 .actions .btn { padding:14px; font-weight:600; border-radius:12px; text-align:center; text-decoration:none; transition: 0.2s; cursor: pointer; border: none; }
@@ -106,7 +115,13 @@ body.light-mode #dob { background: var(--card-light); color: var(--text-light); 
 
 /* Passport Preview */
 .passport-preview { margin: 10px auto; width: 120px; height: 120px; border-radius: 10px; border: 2px dashed var(--primary); display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); }
-.passport-preview img { max-width: 100%; height: auto; }
+.passport-preview img { max-width: 100%; height: auto; display: none; }
+.passport-preview img[ src ] { display: block; }
+.passport-preview .placeholder { color: var(--text-light); font-size: 0.9rem; text-align: center; }
+
+/* hide placeholder when image is loaded */
+.passport-preview img[src]:not([src=""]) + .placeholder,
+.passport-preview img[src]:not([src=""]) ~ .placeholder { display: none; }
 
 /* === PROFESSIONAL LOADING & SUCCESS STATES === */
 .btn-loading {
@@ -139,3 +154,20 @@ body.light-mode #dob { background: var(--card-light); color: var(--text-light); 
   from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+/* Social user badge */
+.user-badge { display:flex; align-items:center; gap:10px; margin-top:10px; background: rgba(255,255,255,0.03); padding:8px 10px; border-radius:10px; }
+.user-avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; background:#eee; }
+.user-info { display:flex; flex-direction:column; min-width:0; }
+.user-name { font-weight:700; font-size:0.95rem; color:var(--primary); }
+.user-email { font-size:0.85rem; color:#9aa4b2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
+
+/* Modal */
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:9999; }
+.modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.45); backdrop-filter: blur(2px); }
+.modal-content { position:relative; background:var(--card-dark); color:var(--text-dark); padding:18px; border-radius:12px; width:320px; box-shadow:0 10px 30px rgba(2,6,23,0.6); z-index:2; text-align:center; }
+.modal-content h3 { margin:0 0 8px; color:var(--primary); }
+.modal-actions { display:flex; gap:10px; justify-content:center; margin-top:14px; }
+.modal .btn { padding:10px 12px; border-radius:10px; }
+
+body.light-mode .modal-content { background: var(--card-light); color: var(--text-light); }
