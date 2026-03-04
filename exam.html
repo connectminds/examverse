@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8b5cf6" />
+<meta name="description" content="Take your exam on ExamVerse with offline support and countdown timer." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Exam | ExamVerse</title>
+<link rel="manifest" href="/manifest.json" />
 <link rel="stylesheet" href="exam.css">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,6 +36,10 @@
         <div class="exam-timer">
             <i class="fas fa-clock"></i> <span id="timer">00:00</span>
         </div>
+        <!-- Sidebar toggle for mobile & touch devices -->
+        <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle question sidebar" title="Toggle questions">
+            <i class="fas fa-list"></i>
+        </button>
     </div>
 
     <!-- Main Exam Layout -->
@@ -54,6 +63,12 @@
     </div>
 </div>
 
+<!-- Bottom question bar for small devices -->
+<!-- visible by default via CSS; inline hide removed so it can show when questions are generated -->
+<div id="bottomQuestionBar" class="bottom-question-bar" aria-hidden="true"></div>
+
+<script src="pwa-init.js"></script>
+<script src="user-profile.js"></script>
 <script src="exam.js"></script>
 <script src="bubbles.js"></script>
 </body>

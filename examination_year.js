@@ -1,44 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. SILENT AUTH CHECK
-    // Ensures only registered users can access the exam selection
-    const userData = localStorage.getItem('examVerseUser');
-    if (!userData) {
+    // Ensure only authenticated users may access exam selection.
+    // older pages sometimes relied on "examVerseUser" but login only sets
+    // the "examVerseLoggedIn" flag, so guard against both.
+    if (!localStorage.getItem('examVerseLoggedIn')) {
         window.location.href = 'login.html';
         return;
     }
+    // optional: we can still read profile if it exists
+    const userData = localStorage.getItem('examVerseUser');
 
-    // 2. DYNAMIC BUBBLE GENERATOR
-    const blobBg = document.querySelector('.blob-bg');
-    const colors = ['#6a8cff', '#ffc107', '#ff6b6b', '#18b981', '#8e44ad'];
-
-    function createBubbles() {
-        for (let i = 0; i < 25; i++) {
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-
-            // Random Size
-            const size = Math.random() * 60 + 20 + 'px';
-            bubble.style.width = size;
-            bubble.style.height = size;
-
-            // Random Position
-            bubble.style.left = Math.random() * 100 + '%';
-
-            // Random Color
-            bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-            // Random Animation Duration
-            const duration = Math.random() * 10 + 10 + 's';
-            bubble.style.animationDuration = duration;
-
-            // Random Delay
-            bubble.style.animationDelay = Math.random() * 5 + 's';
-
-            blobBg.appendChild(bubble);
-        }
-    }
-
-    createBubbles();
+    // 2. BUBBLE ANIMATION HANDLED BY bubbles.js
+    // No need to create bubbles here since bubbles.js manages it
 
     // 3. Smooth fade-in for buttons
     const buttons = document.querySelectorAll('.btnn');

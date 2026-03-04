@@ -1,50 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ExamVerse | Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ExamVerse</title>
     <link rel="stylesheet" href="dashboard.css">
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-inner">
-            <a class="brand" href="index.html">ExamVerse</a>
-            <button id="navToggle" class="hamburger" aria-label="Toggle navigation">
-                <span class="hamburger-box"><span class="hamburger-inner"></span></span>
-            </button>
-            <nav id="mainNav" class="nav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="subject.html">CBT</a></li>
-                    <li><a href="year.HTML">Years</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="examination_year.html">Exam</a></li>
-                    <li><a href="year.HTML" class="btn outline">Past Years</a></li>
-                    <li><a id="navLogout" href="#" class="danger">Logout</a></li>
-                </ul>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="examverse_logo.png" alt="Logo" class="sidebar-logo">
+                <h1>ExamVerse</h1>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="year.HTML" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Exams</span>
+                </a>
+                <a href="examination_year.html" class="nav-item ">
+                    <i class="fas fa-chart-line"></i>
+                    <span> Year</span>
+                </a>
+                <a href="subject.html" class="nav-item">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>Start Exam</span>
+                </a>
+                <a href="theory.html" class="nav-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Theory</span>
+                </a>
+                <a href="practical.html" class="nav-item">
+                    <i class="fas fa-flask"></i>
+                    <span>Practical</span>
+                </a>
+                <button class="nav-item logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
             </nav>
-        </div>
-    </header>
+        </aside>
 
-    <main class="content">
-        <div class="user-card">
-            <!-- Default photo is used if passport isn't found -->
-            <img id="userPhoto" src="images/empty.png" alt="User photo" class="profile" />
-            <h1 id="welcomeMessage">Welcome back!</h1>
-            <p class="sub">You're logged in to ExamVerse. Continue to explore past questions and resources.</p>
-            <div class="actions">
-                <a href="" class="btn">Subscribe</a>
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Analytics Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportBtn">
+                        <i class="fas fa-download"></i>
+                        <span>Export</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Summary Statistics -->
+            <!-- User Welcome Card -->
+            <section class="user-welcome-card">
+                <div class="user-card-left">
+                    <img id="welcomeUserPhoto" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User" class="welcome-photo" style="display: block;">
+                    <div class="welcome-text">
+                        <p class="welcome-greeting">Welcome Back</p>
+                        <h2 id="welcomeUserName" class="welcome-name">Student Name</h2>
+                        <p id="welcomeUserEmail" class="welcome-email">user@example.com</p>
+                    </div>
+                </div>
+                <div class="user-card-right">
+                    <div class="stat-mini">
+                        <span class="stat-value" id="welcomeTotalExams">0</span>
+                        <span class="stat-label">Exams Taken</span>
+                    </div>
+                    <div class="stat-mini">
+                        <span class="stat-value" id="welcomeAvgScore">0%</span>
+                        <span class="stat-label">Avg. Score</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary-stats">
+                <div class="stat-card">
+                    <div class="stat-icon total-exams">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Exams</p>
+                        <p class="stat-value" id="totalExams">0</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon average-score">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Average Score</p>
+                        <p class="stat-value" id="avgScore">0%</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon study-time">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Study Time</p>
+                        <p class="stat-value" id="studyTime">0h</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon best-score">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Best Score</p>
+                        <p class="stat-value" id="bestScore">0%</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <!-- Score Trend Chart -->
+                <div class="chart-container">
+                    <h2>Score Trend</h2>
+                    <canvas id="scoreTrendChart"></canvas>
+                    <p class="empty-message" id="noScoreTrend" style="display: none;">
+                        <i class="fas fa-inbox"></i> No exam data yet. Start an exam to see your trends.
+                    </p>
+                </div>
+
+                <!-- Subject Performance Chart -->
+                <div class="chart-container">
+                    <h2>Subject Performance</h2>
+                    <canvas id="subjectPerformanceChart"></canvas>
+                    <p class="empty-message" id="noSubjectData" style="display: none;">
+                        <i class="fas fa-inbox"></i> Complete exams to see subject breakdown.
+                    </p>
+                </div>
+
+                <!-- Difficulty Distribution Chart -->
+                <div class="chart-container">
+                    <h2>Question Difficulty Analysis</h2>
+                    <canvas id="difficultyChart"></canvas>
+                    <p class="empty-message" id="noDifficultyData" style="display: none;">
+                        <i class="fas fa-inbox"></i> Complete exams to see difficulty breakdown.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Exam History Table -->
+            <section class="history-section">
+                <h2>Exam History</h2>
+                <div class="table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th>Duration</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr class="empty-row">
+                                <td colspan="6">
+                                    <i class="fas fa-inbox"></i>
+                                    No exams completed yet. <a href="subject.html">Start an exam</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Result Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <h2 id="resultTitle">Exam Result</h2>
+                <div class="result-details">
+                    <div class="result-score">
+                        <svg class="score-circle" viewBox="0 0 100 100">
+                            <circle class="score-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="score-progress" cx="50" cy="50" r="45"></circle>
+                            <text class="score-text" x="50" y="55" text-anchor="middle" id="resultScoreText">0%</text>
+                        </svg>
+                    </div>
+                    <div class="result-stats">
+                        <div class="result-stat">
+                            <span class="label">Subject</span>
+                            <span class="value" id="resultSubject">--</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="label">Questions</span>
+                            <span class="value" id="resultQCount">0/0</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="label">Correct</span>
+                            <span class="value correct" id="resultCorrect">0</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="label">Duration</span>
+                            <span class="value" id="resultDuration">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Breakdown -->
+                <div class="breakdown-section">
+                    <h3>Question Breakdown</h3>
+                    <div class="breakdown-list" id="breakdownList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="modalClose2">Close</button>
+                    <button class="btn btn-primary" id="retakeBtn">Retake Exam</button>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
 
-    <footer class="site-footer">
-        <div class="container">
-            <small>© ExamVerse 2026 | ConnectMinds IT Tech. All rights reserved.</small>
-        </div>
-    </footer>
-
+    <script src="pwa-init.js"></script>
+    <script src="user-profile.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="dashboard.js"></script>
+    <script src="bubbles.js"></script>
 </body>
 </html>
