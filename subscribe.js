@@ -1,10 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure only logged-in users can subscribe
-    if (!localStorage.getItem('examVerseLoggedIn')) {
-        window.location.href = 'login.html';
-        return;
-    }
-
     // Mobile navigation toggle
     const navToggle = document.getElementById('nav-toggle');
     const primaryNav = document.getElementById('primary-nav');
