@@ -12,6 +12,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const app = express();
+const IS_PAYSTACK_TEST_MODE = process.env.PAYSTACK_TEST_MODE === 'true';
 
 const SUBSCRIPTION_STORE_PATH = path.join(__dirname, 'subscription-store.json');
 
@@ -514,9 +515,6 @@ app.post('/api/subscribe', async (req, res) => {
 app.post('/api/paystack/initialize', async (req, res) => {
     try {
         const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-        if (!paystackSecretKey) {
-            return res.status(500).json({ error: 'PAYSTACK_SECRET_KEY is not configured on server' });
-        }
 
         const { email, amount, fullName, phone, firstName, lastName } = req.body;
         const normalizedEmail = normalizeEmail(email);
@@ -535,6 +533,54 @@ app.post('/api/paystack/initialize', async (req, res) => {
         const appUrl = process.env.APP_URL || 'http://localhost:5500';
         const callbackUrl = `${appUrl.replace(/\/$/, '')}/subscribe.html?paystack=callback`;
         const reference = `EV-${Date.now()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+
+        if (!paystackSecretKey || IS_PAYSTACK_TEST_MODE) {
+            const store = readSubscriptionStore();
+            store.references[reference] = normalizedEmail;
+
+            if (!store.subscriptions[normalizedEmail]) {
+                store.subscriptions[normalizedEmail] = {
+                    email: normalizedEmail,
+                    firstName: safeString(firstName) || parseName(profileFullName).firstName,
+                    lastName: safeString(lastName) || parseName(profileFullName).lastName,
+                    fullName: profileFullName,
+                    phone: safeString(phone),
+                    status: 'payment_initialized',
+                    amount: numericAmount,
+                    createdAt: new Date().toISOString()
+                };
+            }
+
+            store.subscriptions[normalizedEmail].reference = reference;
+            store.subscriptions[normalizedEmail].status = 'payment_initialized';
+            store.subscriptions[normalizedEmail].amount = numericAmount;
+            store.subscriptions[normalizedEmail].phone = safeString(phone) || store.subscriptions[normalizedEmail].phone || '';
+            store.subscriptions[normalizedEmail].firstName = safeString(firstName) || store.subscriptions[normalizedEmail].firstName || '';
+            store.subscriptions[normalizedEmail].lastName = safeString(lastName) || store.subscriptions[normalizedEmail].lastName || '';
+            store.subscriptions[normalizedEmail].fullName = profileFullName || store.subscriptions[normalizedEmail].fullName || '';
+            store.subscriptions[normalizedEmail].updatedAt = new Date().toISOString();
+
+            upsertSubscriber(store, normalizedEmail, {
+                firstName: store.subscriptions[normalizedEmail].firstName,
+                lastName: store.subscriptions[normalizedEmail].lastName,
+                fullName: store.subscriptions[normalizedEmail].fullName,
+                phone: store.subscriptions[normalizedEmail].phone,
+                status: 'payment_initialized',
+                subscribedToUpdates: true
+            });
+
+            writeSubscriptionStore(store);
+
+            const mockAuthorizationUrl = `${callbackUrl}&reference=${encodeURIComponent(reference)}&trxref=${encodeURIComponent(reference)}&mock=1`;
+
+            return res.json({
+                success: true,
+                authorizationUrl: mockAuthorizationUrl,
+                reference,
+                testMode: true,
+                message: 'Paystack test mode active. Redirecting via local mock callback.'
+            });
+        }
 
         const payload = {
             email: normalizedEmail,
@@ -628,13 +674,53 @@ app.post('/api/paystack/initialize', async (req, res) => {
 app.post('/api/paystack/verify', async (req, res) => {
     try {
         const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-        if (!paystackSecretKey) {
-            return res.status(500).json({ error: 'PAYSTACK_SECRET_KEY is not configured on server' });
-        }
 
         const { reference } = req.body;
         if (!reference) {
             return res.status(400).json({ error: 'Transaction reference is required' });
+        }
+
+        if (!paystackSecretKey || IS_PAYSTACK_TEST_MODE) {
+            const store = readSubscriptionStore();
+            const mappedEmail = normalizeEmail(store.references[reference]);
+            const subscription = mappedEmail ? store.subscriptions[mappedEmail] : null;
+
+            if (!mappedEmail || !subscription) {
+                return res.status(404).json({ error: 'Test-mode payment reference not found' });
+            }
+
+            const transaction = {
+                id: `MOCK-${reference}`,
+                amount: Number(subscription.amount || 0) * 100,
+                currency: 'NGN',
+                status: 'success',
+                paid_at: new Date().toISOString(),
+                customer: {
+                    email: mappedEmail,
+                    first_name: subscription.firstName || subscription.fullName || '',
+                    phone: subscription.phone || ''
+                }
+            };
+
+            const result = await finalizeVerifiedPayment({
+                transaction,
+                reference,
+                profile: {
+                    email: mappedEmail,
+                    fullName: subscription.fullName,
+                    phone: subscription.phone
+                }
+            });
+
+            return res.json({
+                success: true,
+                status: 'paid_pending_activation',
+                email: result.email,
+                testMode: true,
+                message: result.shouldIssueCode
+                    ? 'Test payment verified and activation code sent'
+                    : 'Test payment already verified. Existing activation code is valid'
+            });
         }
 
         const transaction = await verifyPaystackTransactionByReference(reference, paystackSecretKey);

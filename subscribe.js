@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const authNotice = document.getElementById('authNotice');
+    const isLoggedIn = !!localStorage.getItem('examVerseLoggedIn');
+    if (authNotice) {
+        authNotice.hidden = isLoggedIn;
+    }
+
     // Mobile navigation toggle
     const navToggle = document.getElementById('nav-toggle');
     const primaryNav = document.getElementById('primary-nav');
