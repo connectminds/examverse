@@ -3,9 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8b5cf6" />
+<meta name="description" content="View your exam results and analytics on ExamVerse." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Report Sheet | ExamVerse</title>
+<link rel="manifest" href="/manifest.json" />
 <link rel="stylesheet" href="report.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -19,10 +25,16 @@
     <div class="report-header">
         <div class="student-info">
             <img id="studentPhoto" src="" alt="Student Photo" class="student-photo">
-            <span id="studentName"></span>
+            <div class="student-text">
+                <span id="studentName"></span>
+                <span id="studentID" class="student-id"></span>
+            </div>
         </div>
         <div class="report-actions">
             <a href="subject.html" class="back-link">← Back to Subjects</a>
+            <button class="print-btn" id="emailBtn" title="Email this result to yourself">
+                <i class="fas fa-envelope"></i> Email Result
+            </button>
             <button class="print-btn" onclick="window.print()">Print Report</button>
         </div>
     </div>
@@ -89,6 +101,9 @@
     </div>
 </div>
 
+<script src="pwa-init.js"></script>
+<script src="user-profile.js"></script>
+<script src="notification-service.js"></script>
 <script src="report.js"></script>
 <script src="bubbles.js"></script>
 </body>

@@ -135,9 +135,19 @@ body {
     object-fit: cover;
     border: 2px solid var(--primary, #8b5cf6);
 }
+.student-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 .student-info span {
     font-weight: 600;
     font-size: 1.1rem;
+}
+.student-id {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #666;
 }
 
 /* Back link & print button */
@@ -230,6 +240,96 @@ body {
     font-weight: 700;
 }
 
+/* Explanation Header with Badges */
+.explanation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.explanation-header strong {
+    flex: 1;
+}
+
+.explanation-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.difficulty-easy {
+    background-color: #10b981;
+}
+
+.difficulty-medium {
+    background-color: #f59e0b;
+}
+
+.difficulty-hard {
+    background-color: #ef4444;
+}
+
+/* Explanation Text Section */
+.explanation-text {
+    background: rgba(6, 182, 212, 0.1);
+    border-left: 3px solid #06b6d4;
+    padding: 12px 14px;
+    margin: 12px 0;
+    border-radius: 6px;
+}
+
+.explanation-text p {
+    margin: 6px 0 0 0;
+    color: #d1d5db;
+    line-height: 1.6;
+}
+
+/* Tags Section */
+.explanation-tags {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.tag {
+    display: inline-block;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    color: #a78bfa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.tag:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.6);
+}
+
 /* Bubbles */
 .bubble-layer {
     position: fixed;
@@ -245,4 +345,26 @@ body {
     .report-header { flex-direction: column; align-items: flex-start; gap: 10px; }
     .print-btn { align-self: flex-end; }
     .summary-table th, .summary-table td { font-size: 0.9rem; padding: 8px; }
+}
+
+@media screen and (max-width: 1024px){
+    .report-container { max-width: 720px; padding: 18px; }
+    .performance-summary { grid-template-columns: 1fr; padding: 16px; }
+    .chart-container { width: 200px; height: 200px; }
+}
+
+@media screen and (max-width: 480px){
+    .report-container { margin: 16px; padding: 12px; border-radius: 12px; }
+    .student-info span { font-size: 1rem; }
+    .detail-value { font-size: 1rem; }
+    .chart-container { width: 100%; height: 220px; }
+    .summary-table th, .summary-table td { font-size: 0.85rem; padding: 6px; }
+    .explanations h2 { font-size: 1.1rem; }
+}
+
+/* Touch optimizations for report page */
+@media (pointer: coarse) {
+    .print-btn { padding: 14px 18px; font-size: 1rem; }
+    .chart-container { height: 260px; }
+    .report-container { padding: 18px; }
 }

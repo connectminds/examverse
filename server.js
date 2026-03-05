@@ -9,10 +9,8 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 
 const app = express();
-const IS_PAYSTACK_TEST_MODE = process.env.PAYSTACK_TEST_MODE === 'true';
 
 const SUBSCRIPTION_STORE_PATH = path.join(__dirname, 'subscription-store.json');
 
@@ -46,91 +44,6 @@ function safeString(value) {
     return String(value || '').trim();
 }
 
-function parseName(fullName) {
-    const cleaned = safeString(fullName);
-    if (!cleaned) return { firstName: '', lastName: '', fullName: '' };
-    const parts = cleaned.split(/\s+/).filter(Boolean);
-    const firstName = parts[0] || '';
-    const lastName = parts.slice(1).join(' ');
-    return { firstName, lastName, fullName: cleaned };
-}
-
-function generateActivationCode(length = 8) {
-    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = '';
-    for (let i = 0; i < length; i++) {
-        const index = crypto.randomInt(0, alphabet.length);
-        code += alphabet[index];
-    }
-    return code;
-}
-
-function getActivationCodeEmailTemplate({ fullName, activationCode }) {
-    return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f3f4f6; color: #111827; margin: 0; padding: 0; }
-            .wrap { max-width: 620px; margin: 24px auto; background: #ffffff; border-radius: 14px; overflow: hidden; border: 1px solid #e5e7eb; }
-            .head { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: #fff; padding: 28px; text-align: center; }
-            .content { padding: 28px; }
-            .code-box { margin: 18px 0; padding: 18px; border: 2px dashed #8b5cf6; border-radius: 10px; text-align: center; background: #faf5ff; }
-            .code { font-size: 2rem; letter-spacing: 4px; font-weight: 800; color: #5b21b6; }
-            .note { color: #6b7280; font-size: 0.92rem; }
-            .footer { border-top: 1px solid #e5e7eb; padding: 18px 28px; color: #6b7280; font-size: 0.88rem; text-align: center; }
-        </style>
-    </head>
-    <body>
-        <div class="wrap">
-            <div class="head">
-                <h1 style="margin:0;">ExamVerse Payment Confirmed ✅</h1>
-                <p style="margin:10px 0 0;">Your activation code is ready</p>
-            </div>
-            <div class="content">
-                <p>Hi ${fullName || 'ExamVerse Learner'},</p>
-                <p>Your one-time subscription payment has been confirmed successfully.</p>
-                <p>Please use the activation code below on the ExamVerse home page to unlock your dashboard:</p>
-                <div class="code-box">
-                    <div class="code">${activationCode}</div>
-                </div>
-                <p class="note">Enter this code exactly as shown. It can be used once for your account activation.</p>
-            </div>
-            <div class="footer">
-                © 2026 ExamVerse | ConnectMinds IT Tech
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
-}
-
-function getWelcomeSubscriberTemplate({ fullName }) {
-    return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </head>
-    <body style="font-family:Segoe UI,Arial,sans-serif;background:#f3f4f6;padding:24px;">
-        <div style="max-width:620px;margin:auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-            <div style="background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;padding:24px;text-align:center;">
-                <h1 style="margin:0;">Welcome to ExamVerse Premium 🎉</h1>
-            </div>
-            <div style="padding:24px;color:#111827;line-height:1.6;">
-                <p>Hi ${fullName || 'ExamVerse Learner'},</p>
-                <p>Congratulations! Your subscription is now fully active.</p>
-                <p>You will receive product updates, launch announcements, and important subscriber messages from us.</p>
-                <p>Thank you for supporting ExamVerse.</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
-}
 
 function getSubscriberBroadcastTemplate({ fullName, message }) {
     return `
@@ -177,84 +90,6 @@ function upsertSubscriber(store, email, payload = {}) {
     store.subscribers[normalizedEmail] = merged;
 }
 
-async function verifyPaystackTransactionByReference(reference, paystackSecretKey) {
-    const verifyResponse = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${paystackSecretKey}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const verifyData = await verifyResponse.json();
-    if (!verifyResponse.ok || !verifyData.status) {
-        throw new Error(verifyData.message || 'Verification failed');
-    }
-
-    return verifyData.data;
-}
-
-async function finalizeVerifiedPayment({ transaction, reference, profile = {} }) {
-    const paidEmail = normalizeEmail(transaction.customer?.email || profile.email);
-    if (!paidEmail) {
-        throw new Error('Unable to resolve customer email from Paystack response');
-    }
-
-    const store = readSubscriptionStore();
-    const subscription = store.subscriptions[paidEmail] || { email: paidEmail };
-
-    let activationCode = subscription.activationCode;
-    const shouldIssueCode = !activationCode || subscription.status !== 'paid_pending_activation';
-
-    if (shouldIssueCode) {
-        activationCode = generateActivationCode(8);
-        await sendActivationCodeEmail({
-            email: paidEmail,
-            fullName: profile.fullName || subscription.fullName || transaction.customer?.first_name || 'ExamVerse Learner',
-            activationCode
-        });
-    }
-
-    const customerName = profile.fullName || subscription.fullName || transaction.customer?.first_name || '';
-    const parsedName = parseName(customerName);
-    const phone = safeString(profile.phone || subscription.phone || transaction.customer?.phone);
-
-    store.references[reference] = paidEmail;
-    store.subscriptions[paidEmail] = {
-        ...subscription,
-        email: paidEmail,
-        firstName: parsedName.firstName || subscription.firstName || '',
-        lastName: parsedName.lastName || subscription.lastName || '',
-        fullName: parsedName.fullName || subscription.fullName || '',
-        phone,
-        reference,
-        paystackTransactionId: transaction.id,
-        amount: Number(transaction.amount || 0) / 100,
-        currency: transaction.currency,
-        paidAt: transaction.paid_at || new Date().toISOString(),
-        status: 'paid_pending_activation',
-        activationCode,
-        activationCodeIssuedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    };
-
-    upsertSubscriber(store, paidEmail, {
-        firstName: store.subscriptions[paidEmail].firstName,
-        lastName: store.subscriptions[paidEmail].lastName,
-        fullName: store.subscriptions[paidEmail].fullName,
-        phone,
-        status: 'paid_pending_activation',
-        subscribedToUpdates: true
-    });
-
-    writeSubscriptionStore(store);
-
-    return {
-        email: paidEmail,
-        shouldIssueCode,
-        status: 'paid_pending_activation'
-    };
-}
 
 // ============ Middleware ============
 app.use(cors());
@@ -423,36 +258,6 @@ function getExamResultEmailTemplate(examData) {
     `;
 }
 
-async function sendActivationCodeEmail({ email, fullName, activationCode }) {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'ExamVerse Activation Code',
-        html: getActivationCodeEmailTemplate({ fullName, activationCode })
-    };
-
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-        await transporter.sendMail(mailOptions);
-    } else {
-        console.log(`📧 [EMAIL PREVIEW] Activation code for ${email}: ${activationCode}`);
-    }
-}
-
-async function sendWelcomeSubscriberEmail({ email, fullName }) {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Welcome to ExamVerse Premium',
-        html: getWelcomeSubscriberTemplate({ fullName })
-    };
-
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-        await transporter.sendMail(mailOptions);
-    } else {
-        console.log(`📧 [EMAIL PREVIEW] Welcome subscriber email for ${email}`);
-    }
-}
-
 // ============ Routes ============
 
 // Health check
@@ -463,21 +268,35 @@ app.get('/api/health', (req, res) => {
 // Subscribe to notifications
 app.post('/api/subscribe', async (req, res) => {
     try {
-        const { email, preferences } = req.body;
+        const { email, preferences, firstName = '', lastName = '', fullName = '', phone = '' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
 
-        if (!email || !email.includes('@')) {
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
             return res.status(400).json({ error: 'Valid email required' });
         }
 
+        const resolvedFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
+
+        const store = readSubscriptionStore();
+        upsertSubscriber(store, normalizedEmail, {
+            firstName,
+            lastName,
+            fullName: resolvedFullName,
+            phone,
+            status: 'active',
+            subscribedToUpdates: true
+        });
+        writeSubscriptionStore(store);
+
         // In production, save to database
         // For now, log to console
-        console.log(`✓ New subscription: ${email}`);
+        console.log(`✓ New subscription: ${normalizedEmail}`);
         console.log('  Preferences:', preferences);
 
         // Send confirmation email
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: email,
+            to: normalizedEmail,
             subject: 'Welcome to ExamVerse Notifications!',
             html: `
                 <h2>Subscription Confirmed ✓</h2>
@@ -495,13 +314,13 @@ app.post('/api/subscribe', async (req, res) => {
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
             await transporter.sendMail(mailOptions);
         } else {
-            console.log('📧 [EMAIL PREVIEW] Confirmation email would be sent to:', email);
+            console.log('📧 [EMAIL PREVIEW] Confirmation email would be sent to:', normalizedEmail);
         }
 
         res.json({
             success: true,
             message: 'Subscription confirmed!',
-            email: email
+            email: normalizedEmail
         });
     } catch (error) {
         console.error('Subscription error:', error.message);
@@ -509,422 +328,6 @@ app.post('/api/subscribe', async (req, res) => {
             error: 'Subscription failed',
             details: error.message
         });
-    }
-});
-
-app.post('/api/paystack/initialize', async (req, res) => {
-    try {
-        const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-
-        const { email, amount, fullName, phone, firstName, lastName } = req.body;
-        const normalizedEmail = normalizeEmail(email);
-        const numericAmount = Number(amount);
-
-        if (!normalizedEmail || !normalizedEmail.includes('@')) {
-            return res.status(400).json({ error: 'Valid email is required' });
-        }
-
-        if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
-            return res.status(400).json({ error: 'Valid amount is required' });
-        }
-
-        const profileFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
-
-        const appUrl = process.env.APP_URL || 'http://localhost:5500';
-        const callbackUrl = `${appUrl.replace(/\/$/, '')}/subscribe.html?paystack=callback`;
-        const reference = `EV-${Date.now()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-
-        if (!paystackSecretKey || IS_PAYSTACK_TEST_MODE) {
-            const store = readSubscriptionStore();
-            store.references[reference] = normalizedEmail;
-
-            if (!store.subscriptions[normalizedEmail]) {
-                store.subscriptions[normalizedEmail] = {
-                    email: normalizedEmail,
-                    firstName: safeString(firstName) || parseName(profileFullName).firstName,
-                    lastName: safeString(lastName) || parseName(profileFullName).lastName,
-                    fullName: profileFullName,
-                    phone: safeString(phone),
-                    status: 'payment_initialized',
-                    amount: numericAmount,
-                    createdAt: new Date().toISOString()
-                };
-            }
-
-            store.subscriptions[normalizedEmail].reference = reference;
-            store.subscriptions[normalizedEmail].status = 'payment_initialized';
-            store.subscriptions[normalizedEmail].amount = numericAmount;
-            store.subscriptions[normalizedEmail].phone = safeString(phone) || store.subscriptions[normalizedEmail].phone || '';
-            store.subscriptions[normalizedEmail].firstName = safeString(firstName) || store.subscriptions[normalizedEmail].firstName || '';
-            store.subscriptions[normalizedEmail].lastName = safeString(lastName) || store.subscriptions[normalizedEmail].lastName || '';
-            store.subscriptions[normalizedEmail].fullName = profileFullName || store.subscriptions[normalizedEmail].fullName || '';
-            store.subscriptions[normalizedEmail].updatedAt = new Date().toISOString();
-
-            upsertSubscriber(store, normalizedEmail, {
-                firstName: store.subscriptions[normalizedEmail].firstName,
-                lastName: store.subscriptions[normalizedEmail].lastName,
-                fullName: store.subscriptions[normalizedEmail].fullName,
-                phone: store.subscriptions[normalizedEmail].phone,
-                status: 'payment_initialized',
-                subscribedToUpdates: true
-            });
-
-            writeSubscriptionStore(store);
-
-            const mockAuthorizationUrl = `${callbackUrl}&reference=${encodeURIComponent(reference)}&trxref=${encodeURIComponent(reference)}&mock=1`;
-
-            return res.json({
-                success: true,
-                authorizationUrl: mockAuthorizationUrl,
-                reference,
-                testMode: true,
-                message: 'Paystack test mode active. Redirecting via local mock callback.'
-            });
-        }
-
-        const payload = {
-            email: normalizedEmail,
-            amount: Math.round(numericAmount * 100),
-            currency: 'NGN',
-            reference,
-            callback_url: callbackUrl,
-            metadata: {
-                custom_fields: [
-                    {
-                        display_name: 'Plan',
-                        variable_name: 'plan',
-                        value: 'ExamVerse Lifetime Access'
-                    },
-                    {
-                        display_name: 'Subscriber Name',
-                        variable_name: 'subscriber_name',
-                        value: profileFullName
-                    },
-                    {
-                        display_name: 'Subscriber Phone',
-                        variable_name: 'subscriber_phone',
-                        value: safeString(phone)
-                    }
-                ]
-            }
-        };
-
-        const paystackResponse = await fetch('https://api.paystack.co/transaction/initialize', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${paystackSecretKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const paystackData = await paystackResponse.json();
-        if (!paystackResponse.ok || !paystackData.status) {
-            return res.status(400).json({
-                error: 'Unable to initialize Paystack transaction',
-                details: paystackData.message || 'Initialization failed'
-            });
-        }
-
-        const store = readSubscriptionStore();
-        store.references[reference] = normalizedEmail;
-        if (!store.subscriptions[normalizedEmail]) {
-            store.subscriptions[normalizedEmail] = {
-                email: normalizedEmail,
-                firstName: safeString(firstName) || parseName(profileFullName).firstName,
-                lastName: safeString(lastName) || parseName(profileFullName).lastName,
-                fullName: profileFullName,
-                phone: safeString(phone),
-                status: 'payment_initialized',
-                amount: numericAmount,
-                createdAt: new Date().toISOString()
-            };
-        }
-        store.subscriptions[normalizedEmail].reference = reference;
-        store.subscriptions[normalizedEmail].status = 'payment_initialized';
-        store.subscriptions[normalizedEmail].amount = numericAmount;
-        store.subscriptions[normalizedEmail].phone = safeString(phone) || store.subscriptions[normalizedEmail].phone || '';
-        store.subscriptions[normalizedEmail].firstName = safeString(firstName) || store.subscriptions[normalizedEmail].firstName || '';
-        store.subscriptions[normalizedEmail].lastName = safeString(lastName) || store.subscriptions[normalizedEmail].lastName || '';
-        store.subscriptions[normalizedEmail].fullName = profileFullName || store.subscriptions[normalizedEmail].fullName || '';
-        store.subscriptions[normalizedEmail].updatedAt = new Date().toISOString();
-
-        upsertSubscriber(store, normalizedEmail, {
-            firstName: store.subscriptions[normalizedEmail].firstName,
-            lastName: store.subscriptions[normalizedEmail].lastName,
-            fullName: store.subscriptions[normalizedEmail].fullName,
-            phone: store.subscriptions[normalizedEmail].phone,
-            status: 'payment_initialized',
-            subscribedToUpdates: true
-        });
-
-        writeSubscriptionStore(store);
-
-        return res.json({
-            success: true,
-            authorizationUrl: paystackData.data.authorization_url,
-            reference: paystackData.data.reference
-        });
-    } catch (error) {
-        console.error('Paystack initialize error:', error.message);
-        return res.status(500).json({ error: 'Failed to initialize payment', details: error.message });
-    }
-});
-
-app.post('/api/paystack/verify', async (req, res) => {
-    try {
-        const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-
-        const { reference } = req.body;
-        if (!reference) {
-            return res.status(400).json({ error: 'Transaction reference is required' });
-        }
-
-        if (!paystackSecretKey || IS_PAYSTACK_TEST_MODE) {
-            const store = readSubscriptionStore();
-            const mappedEmail = normalizeEmail(store.references[reference]);
-            const subscription = mappedEmail ? store.subscriptions[mappedEmail] : null;
-
-            if (!mappedEmail || !subscription) {
-                return res.status(404).json({ error: 'Test-mode payment reference not found' });
-            }
-
-            const transaction = {
-                id: `MOCK-${reference}`,
-                amount: Number(subscription.amount || 0) * 100,
-                currency: 'NGN',
-                status: 'success',
-                paid_at: new Date().toISOString(),
-                customer: {
-                    email: mappedEmail,
-                    first_name: subscription.firstName || subscription.fullName || '',
-                    phone: subscription.phone || ''
-                }
-            };
-
-            const result = await finalizeVerifiedPayment({
-                transaction,
-                reference,
-                profile: {
-                    email: mappedEmail,
-                    fullName: subscription.fullName,
-                    phone: subscription.phone
-                }
-            });
-
-            return res.json({
-                success: true,
-                status: 'paid_pending_activation',
-                email: result.email,
-                testMode: true,
-                message: result.shouldIssueCode
-                    ? 'Test payment verified and activation code sent'
-                    : 'Test payment already verified. Existing activation code is valid'
-            });
-        }
-
-        const transaction = await verifyPaystackTransactionByReference(reference, paystackSecretKey);
-        if (transaction.status !== 'success') {
-            return res.status(400).json({
-                error: 'Payment not successful',
-                status: transaction.status
-            });
-        }
-
-        const paidEmail = normalizeEmail(transaction.customer?.email);
-        const store = readSubscriptionStore();
-        const existingSubscription = paidEmail ? store.subscriptions[paidEmail] : null;
-        if (existingSubscription && existingSubscription.status === 'active') {
-            return res.json({
-                success: true,
-                alreadyActive: true,
-                message: 'Subscription is already active'
-            });
-        }
-
-        const result = await finalizeVerifiedPayment({ transaction, reference });
-
-        return res.json({
-            success: true,
-            status: 'paid_pending_activation',
-            email: result.email,
-            message: result.shouldIssueCode
-                ? 'Payment verified and activation code sent to subscriber email'
-                : 'Payment already verified. Existing activation code is still valid'
-        });
-    } catch (error) {
-        console.error('Paystack verify error:', error.message);
-        return res.status(500).json({ error: 'Failed to verify payment', details: error.message });
-    }
-});
-
-app.post('/api/subscription/activate', (req, res) => {
-    try {
-        const { email, activationCode } = req.body;
-        const normalizedEmail = normalizeEmail(email);
-        const normalizedCode = String(activationCode || '').trim().toUpperCase();
-
-        if (!normalizedEmail || !normalizedCode) {
-            return res.status(400).json({ error: 'Email and activation code are required' });
-        }
-
-        const store = readSubscriptionStore();
-        const subscription = store.subscriptions[normalizedEmail];
-
-        if (!subscription) {
-            return res.status(404).json({ error: 'No subscription record found for this email' });
-        }
-
-        if (subscription.status === 'active') {
-            return res.json({ success: true, status: 'active', message: 'Subscription already active' });
-        }
-
-        if (subscription.status !== 'paid_pending_activation') {
-            return res.status(400).json({ error: 'Payment is not verified yet for this account' });
-        }
-
-        if (String(subscription.activationCode || '').toUpperCase() !== normalizedCode) {
-            return res.status(400).json({ error: 'Invalid activation code' });
-        }
-
-        store.subscriptions[normalizedEmail] = {
-            ...subscription,
-            status: 'active',
-            activatedAt: new Date().toISOString(),
-            activationCode: null,
-            updatedAt: new Date().toISOString()
-        };
-
-        upsertSubscriber(store, normalizedEmail, {
-            firstName: store.subscriptions[normalizedEmail].firstName,
-            lastName: store.subscriptions[normalizedEmail].lastName,
-            fullName: store.subscriptions[normalizedEmail].fullName,
-            phone: store.subscriptions[normalizedEmail].phone,
-            status: 'active',
-            subscribedToUpdates: true
-        });
-
-        writeSubscriptionStore(store);
-
-        sendWelcomeSubscriberEmail({
-            email: normalizedEmail,
-            fullName: store.subscriptions[normalizedEmail].fullName
-        }).catch((emailError) => {
-            console.error('Welcome subscriber email error:', emailError.message);
-        });
-
-        return res.json({ success: true, status: 'active', message: 'Subscription activated successfully' });
-    } catch (error) {
-        console.error('Activation error:', error.message);
-        return res.status(500).json({ error: 'Failed to activate subscription', details: error.message });
-    }
-});
-
-app.get('/api/subscription/status', (req, res) => {
-    try {
-        const normalizedEmail = normalizeEmail(req.query.email);
-        if (!normalizedEmail) {
-            return res.status(400).json({ error: 'Email is required' });
-        }
-
-        const store = readSubscriptionStore();
-        const subscription = store.subscriptions[normalizedEmail];
-
-        if (!subscription) {
-            return res.status(404).json({ error: 'No subscription record found' });
-        }
-
-        return res.json({
-            success: true,
-            status: subscription.status,
-            paidAt: subscription.paidAt || null,
-            activatedAt: subscription.activatedAt || null,
-            email: subscription.email,
-            fullName: subscription.fullName || '',
-            phone: subscription.phone || ''
-        });
-    } catch (error) {
-        console.error('Status check error:', error.message);
-        return res.status(500).json({ error: 'Failed to check subscription status', details: error.message });
-    }
-});
-
-app.post('/api/subscription/resend-code', async (req, res) => {
-    try {
-        const normalizedEmail = normalizeEmail(req.body.email);
-        if (!normalizedEmail) {
-            return res.status(400).json({ error: 'Email is required' });
-        }
-
-        const store = readSubscriptionStore();
-        const subscription = store.subscriptions[normalizedEmail];
-        if (!subscription) {
-            return res.status(404).json({ error: 'No subscription found for this email' });
-        }
-
-        if (subscription.status !== 'paid_pending_activation') {
-            return res.status(400).json({ error: 'Activation code can only be resent after payment verification' });
-        }
-
-        let activationCode = subscription.activationCode;
-        if (!activationCode) {
-            activationCode = generateActivationCode(8);
-            store.subscriptions[normalizedEmail].activationCode = activationCode;
-            store.subscriptions[normalizedEmail].activationCodeIssuedAt = new Date().toISOString();
-            store.subscriptions[normalizedEmail].updatedAt = new Date().toISOString();
-            writeSubscriptionStore(store);
-        }
-
-        await sendActivationCodeEmail({
-            email: normalizedEmail,
-            fullName: subscription.fullName || 'ExamVerse Learner',
-            activationCode
-        });
-
-        return res.json({ success: true, message: 'Activation code resent successfully' });
-    } catch (error) {
-        console.error('Resend activation code error:', error.message);
-        return res.status(500).json({ error: 'Failed to resend activation code', details: error.message });
-    }
-});
-
-app.post('/api/paystack/webhook', async (req, res) => {
-    try {
-        const secret = process.env.PAYSTACK_WEBHOOK_SECRET || process.env.PAYSTACK_SECRET_KEY;
-        if (!secret) {
-            return res.status(500).json({ error: 'PAYSTACK_SECRET_KEY or PAYSTACK_WEBHOOK_SECRET is not configured' });
-        }
-
-        const signature = req.headers['x-paystack-signature'];
-        const expectedSignature = crypto
-            .createHmac('sha512', secret)
-            .update(req.rawBody || JSON.stringify(req.body || {}))
-            .digest('hex');
-
-        if (!signature || signature !== expectedSignature) {
-            return res.status(401).json({ error: 'Invalid webhook signature' });
-        }
-
-        const event = req.body;
-        if (event?.event !== 'charge.success') {
-            return res.json({ success: true, ignored: true, event: event?.event || 'unknown' });
-        }
-
-        const data = event.data || {};
-        const reference = data.reference;
-        if (!reference) {
-            return res.status(400).json({ error: 'Webhook payload missing reference' });
-        }
-
-        const transaction = await verifyPaystackTransactionByReference(reference, process.env.PAYSTACK_SECRET_KEY);
-        if (transaction.status === 'success') {
-            await finalizeVerifiedPayment({ transaction, reference });
-        }
-
-        return res.json({ success: true, processed: true });
-    } catch (error) {
-        console.error('Paystack webhook error:', error.message);
-        return res.status(500).json({ error: 'Webhook processing failed', details: error.message });
     }
 });
 

@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pricing | ExamVerse — Upgrade Your Learning</title>
+  <title>Access | ExamVerse</title>
   <link rel="stylesheet" href="subscribe.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <meta name="theme-color" content="#8b5cf6" />
-  <meta name="description" content="Unlock premium features with ExamVerse Premium. Get unlimited practice exams, detailed analytics, and more." />
+  <meta name="description" content="Explore ExamVerse access and continue to your dashboard." />
 </head>
 <body>
   <!-- Floating Bubbles Background -->
@@ -40,14 +40,14 @@
     <div class="subscribe-container">
       <!-- Hero Section -->
       <section class="subscribe-hero">
-        <h1>Unlock Your Full Potential</h1>
-        <p>Get full premium access with a single one-time subscription as ExamVerse evolves into installable apps for desktop, Android, iOS, and tablet.</p>
+        <h1>Get Full Access</h1>
+        <p>Unlock full ExamVerse access with a one-time subscription of #5000 and enjoy uninterrupted exam practice.</p>
       </section>
 
       <section class="auth-notice" id="authNotice" aria-live="polite" hidden>
-        <p>You can view plans now. To continue payment, please login or create an account.</p>
+        <p>Please login or create an account to continue to your dashboard.</p>
         <div class="auth-notice-actions">
-          <a class="plan-cta auth-btn" href="login.html?next=subscribe">Login</a>
+          <a class="plan-cta auth-btn" href="login.html">Login</a>
           <a class="plan-cta auth-btn auth-btn-secondary" href="registration.html">Sign Up</a>
         </div>
       </section>
@@ -57,9 +57,9 @@
         <!-- One-Time Plan (Featured) -->
         <div class="plan-card featured">
           <span class="plan-badge">ONE-TIME</span>
-          <h3 class="plan-name">ExamVerse Lifetime Access</h3>
-          <div class="plan-price">#5,999<span>/one-time</span></div>
-          <p class="plan-description">Single payment for complete premium access</p>
+          <h3 class="plan-name">ExamVerse Full Access</h3>
+          <div class="plan-price">#5000<span>/one-time</span></div>
+          <p class="plan-description">One payment, full access, no recurring charges.</p>
           <ul class="plan-features">
             <li>Unlimited Practice Exams</li>
             <li>Detailed Analytics & Reports</li>
@@ -69,7 +69,7 @@
             <li>Offline Study Mode</li>
             <li>Future App Access (Desktop, Android, iOS, Tablet)</li>
           </ul>
-          <button class="plan-cta" id="oneTimeSubscribe" onclick="subscribeOneTimePlan()">Pay One-Time</button>
+          <button class="plan-cta" id="oneTimeSubscribe" type="button">Subscribe Now</button>
         </div>
       </section>
 
@@ -79,31 +79,21 @@
         
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
-            Is this a recurring subscription?
+            Do I need to make any payment?
             <span class="faq-toggle">▼</span>
           </div>
           <div class="faq-answer">
-            No. This is a one-time payment plan and does not auto-renew.
+            Yes. Full access is available for a one-time payment of #5000.
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
-            Will I still have access after app launch?
+            How do I start using ExamVerse?
             <span class="faq-toggle">▼</span>
           </div>
           <div class="faq-answer">
-            Yes. This one-time purchase includes access as ExamVerse expands to desktop, Android, iOS, and tablet apps.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">
-            What payment methods do you accept?
-            <span class="faq-toggle">▼</span>
-          </div>
-          <div class="faq-answer">
-            We accept all major credit cards (Visa, Mastercard, American Express), bank transfers, and mobile money payments. Your payment information is always secure.
+            Create an account or login, click Subscribe Now, then continue to your dashboard.
           </div>
         </div>
 
@@ -113,22 +103,52 @@
             <span class="faq-toggle">▼</span>
           </div>
           <div class="faq-answer">
-            Absolutely! We use industry-leading encryption and security protocols to protect your personal data and exam results. Your privacy is our top priority.
+            Absolutely! We use industry-leading encryption and security protocols to protect your personal data and exam results.
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
-            Do you offer refunds?
+            Can I get updates by email?
             <span class="faq-toggle">▼</span>
           </div>
           <div class="faq-answer">
-            We offer a 7-day money-back guarantee on all purchases. If you're not satisfied, simply contact our support team for a full refund.
+            Yes. You can enable or change notification preferences anytime in notification settings.
           </div>
         </div>
       </section>
     </div>
   </main>
+
+  <!-- Payment Dialog -->
+  <div class="payment-modal" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle" hidden>
+    <div class="payment-modal-backdrop" id="paymentModalBackdrop"></div>
+    <section class="payment-modal-card" aria-describedby="paymentModalDesc">
+      <button class="payment-close" id="closePaymentModal" aria-label="Close payment details">&times;</button>
+      <p class="payment-pill">One-Time Subscription</p>
+      <h2 id="paymentModalTitle">Complete Your #5000 Payment</h2>
+      <p id="paymentModalDesc" class="payment-subtitle">Transfer to the account below and send your payment confirmation to our WhatsApp support number.</p>
+
+      <div class="payment-grid">
+        <article class="payment-detail-card">
+          <h3>Bank Details</h3>
+          <p><strong>Bank:</strong> FIRST BANK</p>
+          <p><strong>Account Name:</strong> TITILOLA OWOMIDE</p>
+          <p><strong>Account Number:</strong> <span id="accountNumberText">3102209117</span></p>
+          <button class="detail-action" id="copyAccountNumber" type="button">Copy Account Number</button>
+        </article>
+
+        <article class="payment-detail-card">
+          <h3>Confirmation Contact</h3>
+          <p><strong>WhatsApp:</strong> <span id="whatsAppText">08141320730</span></p>
+          <p>Send your full name, email, and payment proof after transfer.</p>
+          <a class="detail-action detail-action-link" id="openWhatsAppLink" href="https://wa.me/2348141320730?text=Hello%20ExamVerse%2C%20I%20have%20made%20my%20%235000%20payment.%20Please%20find%20my%20confirmation." target="_blank" rel="noopener">Send Confirmation on WhatsApp</a>
+        </article>
+      </div>
+
+      <p class="payment-note" id="paymentFeedback" aria-live="polite"></p>
+    </section>
+  </div>
 
   <!-- Footer -->
   <footer>

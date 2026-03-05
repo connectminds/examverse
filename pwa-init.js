@@ -71,11 +71,35 @@
           <strong>📦 ExamVerse Update Available</strong>
           <p style="margin: 4px 0 0; font-size: 0.9rem; opacity: 0.95;">A new version is ready to install.</p>
         </div>
-        <button onclick="document.getElementById('pwa-update-notification').style.display='none'; location.reload();" style="background: white; color: #8b5cf6; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-left: 16px; white-space: nowrap;">Update Now</button>
+        <button id="pwa-update-now" style="background: white; color: #8b5cf6; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-left: 16px; white-space: nowrap;">Update Now</button>
         <button onclick="document.getElementById('pwa-update-notification').style.display='none';" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-left: 8px; font-size: 18px; line-height: 1;">×</button>
       </div>
     `;
     document.body.insertBefore(notification, document.body.firstChild);
+
+    const updateBtn = document.getElementById('pwa-update-now');
+    if (updateBtn) {
+      updateBtn.addEventListener('click', () => applyUpdate(registration));
+    }
+  }
+
+  function applyUpdate(registration) {
+    const notification = document.getElementById('pwa-update-notification');
+    if (notification) {
+      notification.style.display = 'none';
+    }
+
+    if (registration.waiting) {
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      const onControllerChange = () => {
+        navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+        location.reload();
+      };
+      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+      return;
+    }
+
+    location.reload();
   }
 
   function showOfflineNotification() {

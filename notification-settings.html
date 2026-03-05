@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Settings | ExamVerse</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .notification-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-card h2 {
+            margin: 0 0 20px 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        .form-group input[type="email"],
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            background: #d1d5db;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #8b5cf6;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 24px;
+        }
+
+        .toggle-label {
+            flex: 1;
+        }
+
+        .toggle-label strong {
+            display: block;
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .toggle-label small {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .btn-submit {
+            background: #8b5cf6;
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert.success {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        .alert.info {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            color: #0c2340;
+        }
+
+        .alert i {
+            font-size: 1.1rem;
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #0c2340;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #0284c7;
+        }
+
+        .current-email {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 768px) {
+            .notification-card {
+                padding: 16px;
+            }
+
+            .form-group input {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .toggle-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>ExamVerse</h1>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="examination_year.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Exams</span>
+                </a>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notification-settings.html" class="nav-item active">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <button class="nav-item logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Notification Settings</h1>
+                <div class="header-actions"></div>
+            </header>
+
+            <div style="padding: 32px; background: #f9fafb; overflow-y: auto; flex: 1;">
+                <!-- Email Subscription -->
+                <div class="notification-card">
+                    <h2><i class="fas fa-envelope" style="color: #8b5cf6; margin-right: 10px;"></i>Email Notifications</h2>
+                    
+                    <div id="alertBox"></div>
+
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label for="emailInput">Email Address *</label>
+                            <input 
+                                type="email" 
+                                id="emailInput" 
+                                placeholder="your@email.com" 
+                                required
+                            >
+                            <div class="current-email" id="currentEmail" style="display: none;"></div>
+                        </div>
+
+                        <h3 style="margin-top: 24px; margin-bottom: 16px; color: #1f2937; font-size: 1.1rem;">
+                            <i class="fas fa-cogs" style="color: #8b5cf6; margin-right: 8px;"></i>
+                            Email Preferences
+                        </h3>
+
+                        <div class="toggle-group">
+                            <input type="checkbox" id="updateToggle" class="toggle-preference" data-pref="appUpdates" checked>
+                            <div class="toggle-switch" id="updateSwitch" style="cursor: pointer;"></div>
+                            <div class="toggle-label">
+                                <strong>App Updates & Features</strong>
+                                <small>Get notified about new features, improvements, and app updates</small>
+                            </div>
+                        </div>
+
+                        <div class="toggle-group">
+                            <input type="checkbox" id="resultToggle" class="toggle-preference" data-pref="examResults" checked>
+                            <div class="toggle-switch" id="resultSwitch" style="cursor: pointer;"></div>
+                            <div class="toggle-label">
+                                <strong>Exam Results</strong>
+                                <small>Receive your exam results and detailed performance analysis via email</small>
+                            </div>
+                        </div>
+
+                        <div class="toggle-group">
+                            <input type="checkbox" id="reminderToggle" class="toggle-preference" data-pref="reminders" checked>
+                            <div class="toggle-switch" id="reminderSwitch" style="cursor: pointer;"></div>
+                            <div class="toggle-label">
+                                <strong>Study Reminders</strong>
+                                <small>Get gentle reminders to keep up with your practice</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="fas fa-check" style="margin-right: 8px;"></i>
+                            Save Preferences
+                        </button>
+                    </form>
+
+                    <div class="info-box">
+                        <strong><i class="fas fa-info-circle"></i> How it works</strong>
+                        Once subscribed, you'll receive emails for:
+                        <ul style="margin: 10px 0 0 20px; padding: 0;">
+                            <li>App updates and new feature announcements</li>
+                            <li>Exam result notifications with detailed analysis</li>
+                            <li>Periodic study reminders (optional)</li>
+                        </ul>
+                        <p style="margin-top: 10px; text-align: right;">
+                            <small>We respect your privacy. Unsubscribe anytime from the email footer.</small>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Subscribed Status -->
+                <div class="notification-card" id="statusCard" style="display: none;">
+                    <h2><i class="fas fa-check-circle" style="color: #059669; margin-right: 10px;"></i>Subscribed</h2>
+                    <p style="color: #6b7280; margin: 0;">
+                        You're subscribed for email notifications. Your preferences are saved and can be updated anytime.
+                    </p>
+                    <button type="button" class="btn-submit" id="unsubscribeBtn" style="background: #ef4444; margin-top: 16px;">
+                        <i class="fas fa-times" style="margin-right: 8px;"></i>
+                        Unsubscribe from All
+                    </button>
+                </div>
+
+                <!-- API Configuration (For admins) -->
+                <div class="notification-card">
+                    <h2><i class="fas fa-server" style="color: #8b5cf6; margin-right: 10px;"></i>Email Service Configuration</h2>
+                    
+                    <div class="form-group">
+                        <label for="apiUrl">Email Service API URL</label>
+                        <input 
+                            type="text" 
+                            id="apiUrl" 
+                            placeholder="http://localhost:5000/api" 
+                            value="http://localhost:5000/api"
+                        >
+                        <small style="color: #6b7280; display: block; margin-top: 8px;">
+                            Change this if your email service is hosted elsewhere. Default: localhost:5000
+                        </small>
+                    </div>
+
+                    <button type="button" id="testBtn" class="btn-submit" style="background: #0284c7;">
+                        <i class="fas fa-flask" style="margin-right: 8px;"></i>
+                        Test Connection
+                    </button>
+                    <div id="testResult" style="margin-top: 12px;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="pwa-init.js"></script>
+    <script src="notification-service.js"></script>
+    <script>
+        // redirect unauthenticated users
+        if (!localStorage.getItem('examVerseLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+        // ============ Elements ============
+        const form = document.getElementById('notificationForm');
+        const emailInput = document.getElementById('emailInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertBox = document.getElementById('alertBox');
+        const statusCard = document.getElementById('statusCard');
+        const currentEmailDiv = document.getElementById('currentEmail');
+        const unsubscribeBtn = document.getElementById('unsubscribeBtn');
+        const testBtn = document.getElementById('testBtn');
+        const testResult = document.getElementById('testResult');
+        const apiUrlInput = document.getElementById('apiUrl');
+
+        // ============ Toggle Switches ============
+        document.querySelectorAll('.toggle-preference').forEach(toggle => {
+            toggle.addEventListener('change', () => {
+                const switchEl = document.getElementById(toggle.id.replace('Toggle', 'Switch'));
+                if (toggle.checked) {
+                    switchEl.classList.add('active');
+                } else {
+                    switchEl.classList.remove('active');
+                }
+            });
+
+            // Set initial state
+            const switchEl = document.getElementById(toggle.id.replace('Toggle', 'Switch'));
+            if (toggle.checked) {
+                switchEl.classList.add('active');
+            }
+        });
+
+        // ============ Toggle Switch Click Handler ============
+        document.querySelectorAll('.toggle-switch').forEach(switcher => {
+            switcher.addEventListener('click', () => {
+                const toggleId = switcher.id.replace('Switch', 'Toggle');
+                const toggle = document.getElementById(toggleId);
+                toggle.checked = !toggle.checked;
+                toggle.dispatchEvent(new Event('change'));
+            });
+        });
+
+        // ============ Load Existing Preferences ============
+        function loadPreferences() {
+            const prefs = NotificationService.getPreferences();
+            if (prefs) {
+                emailInput.value = prefs.email || '';
+                document.getElementById('updateToggle').checked = prefs.appUpdates !== false;
+                document.getElementById('resultToggle').checked = prefs.examResults !== false;
+                document.getElementById('reminderToggle').checked = prefs.reminders !== false;
+
+                // Show subscribed status
+                statusCard.style.display = 'block';
+                currentEmailDiv.textContent = `Currently subscribed as: ${prefs.email}`;
+                currentEmailDiv.style.display = 'block';
+
+                // Update toggle switches
+                document.querySelectorAll('.toggle-preference').forEach(t => {
+                    t.dispatchEvent(new Event('change'));
+                });
+            }
+        }
+
+        // ============ Show Alert ============
+        function showAlert(message, type = 'info') {
+            const icons = {
+                success: 'check-circle',
+                error: 'exclamation-circle',
+                info: 'info-circle'
+            };
+
+            alertBox.innerHTML = `
+                <div class="alert ${type}">
+                    <i class="fas fa-${icons[type]}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertBox.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // ============ Form Submission ============
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            if (!email) {
+                showAlert('Please enter an email address', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Saving...';
+
+            try {
+                const apiUrl = apiUrlInput.value || 'http://localhost:5000/api';
+                NotificationService.setApiUrl(apiUrl);
+
+                const preferences = {
+                    appUpdates: document.getElementById('updateToggle').checked,
+                    examResults: document.getElementById('resultToggle').checked,
+                    reminders: document.getElementById('reminderToggle').checked
+                };
+
+                const result = await NotificationService.subscribe(email, preferences);
+
+                if (result.success) {
+                    showAlert('✓ Preferences saved! Check your email for confirmation.', 'success');
+                    statusCard.style.display = 'block';
+                    currentEmailDiv.textContent = `Currently subscribed as: ${email}`;
+                    currentEmailDiv.style.display = 'block';
+                } else {
+                    showAlert(result.error || 'Failed to save preferences', 'error');
+                }
+            } catch (error) {
+                showAlert(error.message || 'An error occurred', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i>Save Preferences';
+            }
+        });
+
+        // ============ Unsubscribe ============
+        unsubscribeBtn?.addEventListener('click', () => {
+            if (confirm('Are you sure? You will stop receiving all email notifications.')) {
+                localStorage.removeItem('notificationPrefs');
+                statusCard.style.display = 'none';
+                currentEmailDiv.style.display = 'none';
+                emailInput.value = '';
+                document.querySelectorAll('.toggle-preference').forEach(t => {
+                    t.checked = false;
+                    t.dispatchEvent(new Event('change'));
+                });
+                showAlert('✓ Unsubscribed from all notifications', 'success');
+            }
+        });
+
+        // ============ Test Email Service Connection ============
+        testBtn?.addEventListener('click', async () => {
+            testBtn.disabled = true;
+            testBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Testing...';
+            testResult.innerHTML = '';
+
+            try {
+                const apiUrl = apiUrlInput.value || 'http://localhost:5000/api';
+                NotificationService.setApiUrl(apiUrl);
+
+                const result = await NotificationService.checkHealth();
+
+                if (result.success) {
+                    testResult.innerHTML = `
+                        <div class="alert success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>✓ Email service is online and ready!</span>
+                        </div>
+                    `;
+                } else {
+                    testResult.innerHTML = `
+                        <div class="alert error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>✗ Cannot reach email service. Make sure server is running.</span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                testResult.innerHTML = `
+                    <div class="alert error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>✗ ${error.message}</span>
+                    </div>
+                `;
+            } finally {
+                testBtn.disabled = false;
+                testBtn.innerHTML = '<i class="fas fa-flask" style="margin-right: 8px;"></i>Test Connection';
+            }
+        });
+
+        // ============ Sidebar Toggle ============
+        document.getElementById('menuToggle')?.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay')?.classList.toggle('active');
+        });
+
+        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay')?.classList.remove('active');
+        });
+
+        document.getElementById('sidebarOverlay')?.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay')?.classList.remove('active');
+        });
+
+        // ============ Logout ============
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('examVerseLoggedIn');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // redirect unauthenticated users
+        if (!localStorage.getItem('examVerseLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // ============ Initialize ============
+        loadPreferences();
+    </script>
+    <script src="bubbles.js"></script>
+</body>
+</html>

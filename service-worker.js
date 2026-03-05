@@ -1,12 +1,12 @@
-// ExamVerse Service Worker v1.0.0
-// Handles offline support, caching, and auto-updates
+// ExamVerse Service Worker v2.0.0
+// Reliable offline caching, fallback routing, and update handoff
 
-const CACHE_VERSION = 'examverse-v1';
-const ASSETS_CACHE = 'examverse-assets-v1';
-const API_CACHE = 'examverse-api-v1';
+const CACHE_VERSION = 'v2.0.0';
+const ASSETS_CACHE = `examverse-assets-${CACHE_VERSION}`;
+const DATA_CACHE = `examverse-data-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `examverse-runtime-${CACHE_VERSION}`;
 
-// Assets to cache on install (static files)
-const STATIC_ASSETS = [
+const APP_SHELL_ASSETS = [
   '/',
   '/index.html',
   '/registration.html',
@@ -15,139 +15,154 @@ const STATIC_ASSETS = [
   '/exam.html',
   '/report.html',
   '/dashboard.html',
+  '/offline.html',
   '/index.css',
   '/style.css',
   '/registration.css',
   '/subjects.css',
   '/exam.css',
   '/report.css',
+  '/dashboard.css',
   '/index.js',
   '/script.js',
   '/registration.js',
   '/subjects.js',
   '/exam.js',
   '/report.js',
+  '/dashboard.js',
+  '/user-profile.js',
   '/bubbles.js',
+  '/pwa-init.js',
   '/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://cdn.jsdelivr.net/npm/chart.js',
-  'https://cdn.jsdelivr.net/npm/flatpickr'
+  '/questions.json',
+  '/examverse_logo.png'
 ];
 
-// Install event - cache static assets
+const CDN_ALLOWLIST = [
+  'fonts.googleapis.com',
+  'cdnjs.cloudflare.com',
+  'cdn.jsdelivr.net'
+];
+
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open(ASSETS_CACHE).then((cache) => {
-      console.log('Caching static assets');
-      return cache.addAll(STATIC_ASSETS).catch((err) => {
-        console.warn('Some assets failed to cache (expected for external CDNs):', err);
-        // Don't fail install if some assets fail
-      });
-    }).then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(ASSETS_CACHE);
+    await Promise.allSettled(
+      APP_SHELL_ASSETS.map((asset) => cache.add(new Request(asset, { cache: 'reload' })))
+    );
+    await self.skipWaiting();
+  })());
 });
 
-// Activate event - clean up old caches and check for updates
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== ASSETS_CACHE && cacheName !== API_CACHE && cacheName !== CACHE_VERSION) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const cacheNames = await caches.keys();
+    await Promise.all(
+      cacheNames
+        .filter((name) => name.startsWith('examverse-') && ![ASSETS_CACHE, DATA_CACHE, RUNTIME_CACHE].includes(name))
+        .map((name) => caches.delete(name))
+    );
+    await self.clients.claim();
+  })());
 });
 
-// Fetch event - network-first for API, cache-first for assets
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-
-  // Skip cross-origin requests (like analytics)
-  if (url.origin !== location.origin && !url.href.includes('googleapis') && !url.href.includes('cdnjs') && !url.href.includes('cdn.jsdelivr')) {
+  const { request } = event;
+  if (request.method !== 'GET') {
     return;
   }
 
-  // API endpoints - network first, fallback to cache
-  if (url.pathname.includes('/api/') || url.pathname.endsWith('.json')) {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (!response || response.status !== 200 || response.type === 'error') {
-            return response;
-          }
-          const responseClone = response.clone();
-          caches.open(API_CACHE).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-          return response;
-        })
-        .catch(() => {
-          return caches.match(event.request).then((response) => {
-            return response || new Response('Offline - please check your connection', { status: 503 });
-          });
-        })
-    );
-  } else {
-    // Static assets - cache first, fallback to network
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request)
-          .then((response) => {
-            if (!response || response.status !== 200 || response.type === 'error') {
-              return response;
-            }
-            const responseClone = response.clone();
-            // Cache successful responses
-            if (event.request.method === 'GET') {
-              caches.open(ASSETS_CACHE).then((cache) => {
-                cache.put(event.request, responseClone);
-              });
-            }
-            return response;
-          })
-          .catch(() => {
-            // Return offline page if available
-            if (event.request.destination === 'document') {
-              return caches.match('/index.html');
-            }
-          });
-      })
-    );
+  const url = new URL(request.url);
+  const isSameOrigin = url.origin === self.location.origin;
+  const isAllowedCdn = CDN_ALLOWLIST.some((host) => url.hostname.includes(host));
+
+  if (!isSameOrigin && !isAllowedCdn) {
+    return;
   }
+
+  if (request.mode === 'navigate' || request.destination === 'document') {
+    event.respondWith(handleNavigationRequest(request));
+    return;
+  }
+
+  if (isSameOrigin && url.pathname.endsWith('.json')) {
+    event.respondWith(networkFirst(request, DATA_CACHE));
+    return;
+  }
+
+  if (
+    request.destination === 'script' ||
+    request.destination === 'style' ||
+    request.destination === 'image' ||
+    request.destination === 'font'
+  ) {
+    event.respondWith(cacheFirstWithRefresh(request, isSameOrigin ? ASSETS_CACHE : RUNTIME_CACHE));
+    return;
+  }
+
+  event.respondWith(networkFirst(request, isSameOrigin ? DATA_CACHE : RUNTIME_CACHE));
 });
 
-// Auto-update check when connection is restored
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'CHECK_UPDATE') {
-    checkForUpdates();
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
-// Check for service worker updates
-function checkForUpdates() {
-  navigator.serviceWorker.getRegistration().then((registration) => {
-    if (registration) {
-      registration.update().then(() => {
-        console.log('Service Worker update checked');
-      });
+async function handleNavigationRequest(request) {
+  try {
+    const fresh = await fetch(request);
+    const cache = await caches.open(ASSETS_CACHE);
+    cache.put(request, fresh.clone());
+    return fresh;
+  } catch {
+    const cachedPage = await caches.match(request);
+    if (cachedPage) {
+      return cachedPage;
     }
-  });
+    const fallbackPage = await caches.match('/offline.html');
+    if (fallbackPage) {
+      return fallbackPage;
+    }
+    return new Response('Offline', { status: 503, statusText: 'Offline' });
+  }
 }
 
-// Periodically check for updates (every 60 minutes)
-setInterval(() => {
-  checkForUpdates();
-}, 3600000);
+async function networkFirst(request, cacheName) {
+  try {
+    const response = await fetch(request);
+    if (response && response.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) {
+      return cached;
+    }
+    return new Response('Offline - content unavailable', { status: 503, statusText: 'Offline' });
+  }
+}
 
-console.log('ExamVerse Service Worker loaded');
+async function cacheFirstWithRefresh(request, cacheName) {
+  const cached = await caches.match(request);
+  if (cached) {
+    fetch(request)
+      .then(async (response) => {
+        if (response && response.ok) {
+          const cache = await caches.open(cacheName);
+          cache.put(request, response.clone());
+        }
+      })
+      .catch(() => {});
+    return cached;
+  }
+
+  const response = await fetch(request);
+  if (response && response.ok) {
+    const cache = await caches.open(cacheName);
+    cache.put(request, response.clone());
+  }
+  return response;
+}

@@ -1,11 +1,14 @@
 {
-  "name": "examverse-email-service",
+  "name": "examverse",
   "version": "1.0.0",
-  "description": "Email notification service for ExamVerse - handles app updates, exam results, and study reminders",
-  "main": "server.js",
+  "description": "ExamVerse desktop and web app with offline exam support and notifications",
+  "main": "desktop-main.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "desktop": "electron .",
+    "desktop:build": "electron-builder --win nsis",
+    "desktop:build-portable": "electron-builder --win portable",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -24,6 +27,35 @@
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
     "nodemon": "^3.0.2"
+  },
+  "build": {
+    "appId": "com.connectminds.examverse",
+    "productName": "ExamVerse",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "**/*",
+      "!release/**",
+      "!.git/**",
+      "!node_modules/.cache/**"
+    ],
+    "asar": true,
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "ExamVerse-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "ExamVerse"
+    }
   }
 }

@@ -1,3 +1,8 @@
+// redirect to login if user isn't authenticated
+if (!localStorage.getItem('examVerseLoggedIn')) {
+    window.location.href = 'login.html';
+}
+
 // Comments database based on score ranges
 const commentsDatabase = {
     '0-40': [
@@ -72,15 +77,25 @@ function getPerformanceFeedback(percentage, timeMinutes) {
     return 'Needs Improvement';
 }
 
-// Student info
-const studentName = localStorage.getItem('studentName') || 'Student';
-const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
-if(studentInfo){
-    document.getElementById('studentName').textContent = studentName;
-    document.getElementById('studentPhoto').src = studentInfo.photo;
-} else {
-    document.getElementById('studentName').textContent = studentName;
+// Student info (prefer registered user data but fall back to manual entry)
+let studentName = localStorage.getItem('studentName') || 'Student';
+let studentPhoto = '';
+let studentEmail = '';
+const storedUser = localStorage.getItem('examVerseUser');
+if (storedUser) {
+    try {
+        const u = JSON.parse(storedUser);
+        const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ');
+        if (fullName) studentName = fullName;
+        if (u.passport) studentPhoto = u.passport;
+        if (u.email) studentEmail = u.email;
+    } catch (e) {
+        console.error('Error parsing registered user data', e);
+    }
 }
+
+// write values to DOM using shared utility
+displayUserProfile('#studentName', '#studentPhoto', '#studentID');
 
 // Questions & Answers
 const userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
@@ -125,7 +140,7 @@ const scoreRange = getScoreRange(scorePercentage);
 const randomComment = getRandomComment(scoreRange);
 document.getElementById('teacherComment').textContent = randomComment;
 
-// Explanations for Wrong and Unattempted Answers
+// Explanations for Wrong and Unattempted Answers (Enhanced with Difficulty and Tags)
 const explanationList = document.getElementById('explanationList');
 questions.forEach((q, i) => {
     const userAnswer = userAnswers[q.id];
@@ -139,9 +154,25 @@ questions.forEach((q, i) => {
             ? q.options.find(opt => opt.label === correctAnswer)?.text || correctAnswer
             : q.options[correctAnswer] || correctAnswer;
         
+        // Get difficulty and tags (from enhanced questions.json)
+        const difficulty = q.difficulty || 'Medium';
+        const tags = q.tags || [];
+        
+        const difficultyClass = difficulty.toLowerCase();
+        const difficultyColor = 
+            difficulty === 'Easy' ? '#10b981' :
+            difficulty === 'Medium' ? '#f59e0b' : '#ef4444';
+        
         let htmlContent = `
             <div class="explanation-item">
-                <strong>Q${i+1}: ${q.question || ''}</strong>
+                <div class="explanation-header">
+                    <strong>Q${i+1}: ${q.question || ''}</strong>
+                    <div class="explanation-badges">
+                        <span class="difficulty-badge difficulty-${difficultyClass}" style="background-color: ${difficultyColor};">
+                            ${difficulty}
+                        </span>
+                    </div>
+                </div>
         `;
         
         // If user didn't attempt
@@ -156,15 +187,40 @@ questions.forEach((q, i) => {
                 : q.options[userAnswer] || userAnswer;
             
             htmlContent += `
-                <p><span style="color: #ef4444;">Your Answer:</span> ${userAnswer} - ${userAnswerText}</p>
+                <p><span style="color: #ef4444;">Your Answer:</span> <strong>${userAnswer}</strong> - ${userAnswerText}</p>
             `;
         }
         
         htmlContent += `
-                <p><span style="color: #8b5cf6;">Correct Answer:</span> ${correctAnswer} - ${correctAnswerText}</p>
-                <p><span style="color: #06b6d4;">Explanation:</span> ${q.explanation}</p>
-            </div>
+                <p><span style="color: #8b5cf6;">Correct Answer:</span> <strong>${correctAnswer}</strong> - ${correctAnswerText}</p>
+                <div class="explanation-text">
+                    <span style="color: #06b6d4; font-weight: 600;">Explanation:</span>
+                    <p>${q.explanation || 'Review this topic carefully.'}</p>
+                </div>
         `;
+        
+        // Add tags if available
+        if (tags && tags.length > 0) {
+            htmlContent += `
+                <div class="explanation-tags">
+                    <span style="color: #6b7280; font-size: 0.85rem; font-weight: 500;">Concepts:</span>
+                    <div class="tags-list">
+                        ${tags.map(tag => `<span class="tag">${tag.replace(/_/g, ' ')}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add topic if available
+        if (q.topic) {
+            htmlContent += `
+                <p style="font-size: 0.9rem; color: #9ca3af; margin-top: 10px;">
+                    <strong>Topic:</strong> ${q.topic}
+                </p>
+            `;
+        }
+        
+        htmlContent += `</div>`;
         
         li.innerHTML = htmlContent;
         explanationList.appendChild(li);
@@ -206,4 +262,71 @@ new Chart(ctxPie, {
         maintainAspectRatio:false, 
         plugins:{ legend:{position:'bottom'} } 
     }
+});
+
+// ============ Email Notification Integration ============
+document.addEventListener('DOMContentLoaded', () => {
+    const emailBtn = document.getElementById('emailBtn');
+    if (!emailBtn) return;
+
+    emailBtn.addEventListener('click', async () => {
+        const prefs = NotificationService.getPreferences();
+        
+        if (!prefs || !prefs.email) {
+            alert('Please subscribe to email notifications first.\n\nVisit: Settings > Email Notifications');
+            return;
+        }
+
+        emailBtn.disabled = true;
+        emailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        try {
+            const examData = {
+                subject: localStorage.getItem('selectedSubject') || 'Exam',
+                score: scorePercentage,
+                correct: correct,
+                totalQuestions: questions.length,
+                duration: timeTakenMinutes
+            };
+
+            const result = await NotificationService.notifyExamResult(prefs.email, examData);
+
+            if (result.success) {
+                alert('✓ Exam result email sent to ' + prefs.email);
+            } else {
+                alert('Failed to send email: ' + (result.error || 'Unknown error'));
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            emailBtn.disabled = false;
+            emailBtn.innerHTML = '<i class="fas fa-envelope"></i> Email Result';
+        }
+    });
+
+    // Auto-send exam result email if user has preferences set
+    (async () => {
+        try {
+            const prefs = NotificationService.getPreferences();
+            if (prefs && prefs.email && prefs.examResults) {
+                // Wait a moment for page to fully load
+                setTimeout(async () => {
+                    const examData = {
+                        subject: localStorage.getItem('selectedSubject') || 'Exam',
+                        score: scorePercentage,
+                        correct: correct,
+                        totalQuestions: questions.length,
+                        duration: timeTakenMinutes
+                    };
+
+                    const result = await NotificationService.notifyExamResult(prefs.email, examData);
+                    if (result.success) {
+                        console.log('✓ Exam result auto-sent to:', prefs.email);
+                    }
+                }, 2000);
+            }
+        } catch (error) {
+            console.log('Auto-send skipped:', error.message);
+        }
+    })();
 });

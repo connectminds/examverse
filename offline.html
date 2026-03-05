@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#8b5cf6" />
+  <title>Offline | ExamVerse</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0f172a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #8b5cf6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top, #1e1b4b, var(--bg));
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(560px, 100%);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    a,
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .secondary {
+      background: rgba(148, 163, 184, 0.18);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <img src="/examverse_logo.png" alt="ExamVerse" class="logo" />
+    <h1>You’re offline</h1>
+    <p>ExamVerse is still available with cached pages. Reconnect for fresh data and updates.</p>
+    <div class="actions">
+      <a class="primary" href="/index.html">Go to Home</a>
+      <button class="secondary" onclick="location.reload()">Try Again</button>
+    </div>
+  </main>
+</body>
+</html>
