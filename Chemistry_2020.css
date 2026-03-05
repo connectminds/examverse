@@ -376,3 +376,16 @@ footer {
   .btn span:empty + .answer-img { width: 120px; height: 120px; }
   .btn { padding: 12px; font-size: 1rem; min-height: 100px; }
 }
+
+/* =========================================
+   11. ADDITIONAL STYLES FOR SUBJECTS PAGE for the badge
+   ========================================= */>
+.badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+.badge.topic { background: rgba(139, 92, 246, 0.2); color: var(--primary); }
+.badge.year { background: rgba(6, 182, 212, 0.2); color: var(--accent); }
+.q-img { max-width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid var(--glass-border); }

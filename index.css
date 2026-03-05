@@ -218,6 +218,12 @@ body {
   padding: 14px 30px;
 }
 
+.subscribe-text {
+  display: inline-block;
+  transform: scale(1.59);
+  transform-origin: center;
+}
+
 @keyframes pulseGlow {
   0%, 100% { filter: brightness(1); }
   50% { filter: brightness(1.5); }

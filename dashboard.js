@@ -53,16 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const dashboardUnlocked = localStorage.getItem('dashboardUnlocked') === '1';
-    const subscriptionStatus = localStorage.getItem('subscriptionStatus');
-    if (!dashboardUnlocked) {
-        const reason = subscriptionStatus === 'paid_pending_activation'
-            ? 'Enter your activation code on the home page to unlock dashboard access.'
-            : 'Complete your one-time subscription first to unlock dashboard access.';
-        showCenteredAlert(reason, { redirectTo: 'index.html', delay: 2000 });
-        return;
-    }
-
     loadUserProfile();
     loadExamHistory();
     updateSummaryStats();
