@@ -11,24 +11,26 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const ADMIN_ACCESS_KEY = process.env.ADMIN_ACCESS_KEY || 'examverse-admin-2026';
 
 const SUBSCRIPTION_STORE_PATH = path.join(__dirname, 'subscription-store.json');
 
 function readSubscriptionStore() {
     try {
         if (!fs.existsSync(SUBSCRIPTION_STORE_PATH)) {
-            return { subscriptions: {}, references: {}, subscribers: {} };
+            return { subscriptions: {}, references: {}, subscribers: {}, auditLogs: [] };
         }
         const raw = fs.readFileSync(SUBSCRIPTION_STORE_PATH, 'utf8');
         const parsed = JSON.parse(raw);
         return {
             subscriptions: parsed.subscriptions || {},
             references: parsed.references || {},
-            subscribers: parsed.subscribers || {}
+            subscribers: parsed.subscribers || {},
+            auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : []
         };
     } catch (error) {
         console.error('Failed to read subscription store:', error.message);
-        return { subscriptions: {}, references: {}, subscribers: {} };
+        return { subscriptions: {}, references: {}, subscribers: {}, auditLogs: [] };
     }
 }
 
@@ -42,6 +44,23 @@ function normalizeEmail(email) {
 
 function safeString(value) {
     return String(value || '').trim();
+}
+
+function appendAuditLog(store, entry) {
+    if (!Array.isArray(store.auditLogs)) {
+        store.auditLogs = [];
+    }
+
+    store.auditLogs.push({
+        id: `audit-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        timestamp: new Date().toISOString(),
+        ...entry
+    });
+
+    // Prevent unbounded growth while keeping recent history.
+    if (store.auditLogs.length > 5000) {
+        store.auditLogs = store.auditLogs.slice(-5000);
+    }
 }
 
 
@@ -100,6 +119,7 @@ app.use(express.json({
     }
 }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.static(__dirname));
 
 // ============ Email Configuration ============
 const emailConfig = {
@@ -331,8 +351,50 @@ app.post('/api/subscribe', async (req, res) => {
     }
 });
 
+app.post('/api/subscribers/request-access', (req, res) => {
+    try {
+        const { email, firstName = '', lastName = '', fullName = '', phone = '' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
+            return res.status(400).json({ error: 'Valid email is required' });
+        }
+
+        const store = readSubscriptionStore();
+        const existing = store.subscribers[normalizedEmail];
+        const nextStatus = existing?.status === 'active' ? 'active' : 'pending';
+        const resolvedFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
+
+        upsertSubscriber(store, normalizedEmail, {
+            firstName,
+            lastName,
+            fullName: resolvedFullName,
+            phone,
+            status: nextStatus,
+            subscribedToUpdates: existing?.subscribedToUpdates !== undefined ? existing.subscribedToUpdates : true
+        });
+
+        writeSubscriptionStore(store);
+
+        return res.json({
+            success: true,
+            status: nextStatus,
+            message: nextStatus === 'active'
+                ? 'Subscriber is already active.'
+                : 'Payment request recorded. Awaiting owner confirmation.'
+        });
+    } catch (error) {
+        console.error('Request access error:', error.message);
+        return res.status(500).json({ error: 'Failed to record subscription request', details: error.message });
+    }
+});
+
 app.get('/api/subscribers', (req, res) => {
     try {
+        const adminKey = req.headers['x-admin-key'] || req.query.adminKey;
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
         const store = readSubscriptionStore();
         const subscribers = Object.values(store.subscribers || {});
         return res.json({
@@ -347,9 +409,101 @@ app.get('/api/subscribers', (req, res) => {
     }
 });
 
+app.get('/api/subscribers/status', (req, res) => {
+    try {
+        const normalizedEmail = normalizeEmail(req.query.email);
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
+            return res.status(400).json({ error: 'Valid email query is required' });
+        }
+
+        const store = readSubscriptionStore();
+        const subscriber = store.subscribers[normalizedEmail];
+        if (!subscriber) {
+            return res.status(404).json({
+                success: false,
+                status: 'not-found',
+                email: normalizedEmail,
+                message: 'Subscriber record not found'
+            });
+        }
+
+        return res.json({
+            success: true,
+            email: normalizedEmail,
+            status: subscriber.status || 'inactive',
+            subscriber
+        });
+    } catch (error) {
+        console.error('Get subscriber status error:', error.message);
+        return res.status(500).json({ error: 'Failed to load subscriber status', details: error.message });
+    }
+});
+
+app.post('/api/subscribers/status', (req, res) => {
+    try {
+        const { email, status, adminKey, adminIdentity = '', firstName = '', lastName = '', fullName = '', phone = '' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+        const normalizedStatus = safeString(status).toLowerCase();
+        const resolvedAdminIdentity = safeString(adminIdentity) || 'owner';
+        const allowedStatuses = new Set(['pending', 'active', 'inactive']);
+
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
+            return res.status(400).json({ error: 'Valid email is required' });
+        }
+
+        if (!allowedStatuses.has(normalizedStatus)) {
+            return res.status(400).json({ error: 'Status must be pending, active, or inactive' });
+        }
+
+        const store = readSubscriptionStore();
+        const previousStatus = (store.subscribers[normalizedEmail]?.status || 'not-registered').toLowerCase();
+        const resolvedFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
+
+        upsertSubscriber(store, normalizedEmail, {
+            firstName,
+            lastName,
+            fullName: resolvedFullName,
+            phone,
+            status: normalizedStatus
+        });
+
+        const subscriber = store.subscribers[normalizedEmail];
+        subscriber.lastStatusChangeAt = new Date().toISOString();
+        subscriber.lastStatusChangedBy = resolvedAdminIdentity;
+
+        appendAuditLog(store, {
+            action: 'subscriber-status-change',
+            actor: resolvedAdminIdentity,
+            email: normalizedEmail,
+            previousStatus,
+            nextStatus: normalizedStatus,
+            note: `Status changed from ${previousStatus} to ${normalizedStatus}`
+        });
+
+        writeSubscriptionStore(store);
+
+        return res.json({
+            success: true,
+            message: `Subscriber status updated to ${normalizedStatus}`,
+            subscriber
+        });
+    } catch (error) {
+        console.error('Update subscriber status error:', error.message);
+        return res.status(500).json({ error: 'Failed to update subscriber status', details: error.message });
+    }
+});
+
 app.post('/api/subscribers/broadcast', async (req, res) => {
     try {
-        const { subject, message, onlyActive = true } = req.body;
+        const { subject, message, onlyActive = true, adminKey } = req.body;
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
         if (!subject || !message) {
             return res.status(400).json({ error: 'Subject and message are required' });
         }
