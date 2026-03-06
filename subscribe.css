@@ -233,6 +233,12 @@ main {
   opacity: 0;
   transition: opacity 0.4s;
   border-radius: 50%;
+  pointer-events: none;
+}
+
+.plan-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .plan-card:hover {

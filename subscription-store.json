@@ -1,0 +1,103 @@
+{
+  "subscriptions": {},
+  "references": {},
+  "subscribers": {
+    "connectmindsittech@gmail.com": {
+      "email": "connectmindsittech@gmail.com",
+      "firstName": "",
+      "lastName": "",
+      "fullName": "",
+      "phone": "",
+      "status": "active",
+      "subscribedToUpdates": true,
+      "createdAt": "2026-03-05T23:53:00.500Z",
+      "updatedAt": "2026-03-05T23:53:13.848Z",
+      "lastStatusChangeAt": "2026-03-05T23:53:13.848Z",
+      "lastStatusChangedBy": "mide"
+    },
+    "temi.akin2211@gmail.com": {
+      "email": "temi.akin2211@gmail.com",
+      "firstName": "Rice",
+      "lastName": "Beans",
+      "fullName": "Rice Beans",
+      "phone": "+2349118116878",
+      "status": "active",
+      "subscribedToUpdates": true,
+      "createdAt": "2026-03-05T23:59:50.275Z",
+      "updatedAt": "2026-03-06T00:18:52.605Z"
+    },
+    "owomide.84@gmail.com": {
+      "email": "owomide.84@gmail.com",
+      "firstName": "gh",
+      "lastName": "fghjk",
+      "fullName": "gh fghjk",
+      "phone": "08141320730",
+      "status": "pending",
+      "subscribedToUpdates": true,
+      "createdAt": "2026-03-06T00:15:03.345Z",
+      "updatedAt": "2026-03-06T00:15:03.345Z"
+    }
+  },
+  "auditLogs": [
+    {
+      "id": "audit-1772754780500-5d0rmp",
+      "timestamp": "2026-03-05T23:53:00.501Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "connectmindsittech@gmail.com",
+      "previousStatus": "not-registered",
+      "nextStatus": "active",
+      "note": "Status changed from not-registered to active"
+    },
+    {
+      "id": "audit-1772754790076-te9zy6",
+      "timestamp": "2026-03-05T23:53:10.076Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "connectmindsittech@gmail.com",
+      "previousStatus": "active",
+      "nextStatus": "active",
+      "note": "Status changed from active to active"
+    },
+    {
+      "id": "audit-1772754792226-q3cm4x",
+      "timestamp": "2026-03-05T23:53:12.226Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "connectmindsittech@gmail.com",
+      "previousStatus": "active",
+      "nextStatus": "inactive",
+      "note": "Status changed from active to inactive"
+    },
+    {
+      "id": "audit-1772754793848-1q7ytu",
+      "timestamp": "2026-03-05T23:53:13.848Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "connectmindsittech@gmail.com",
+      "previousStatus": "inactive",
+      "nextStatus": "active",
+      "note": "Status changed from inactive to active"
+    },
+    {
+      "id": "audit-1772755208508-zc1s93",
+      "timestamp": "2026-03-06T00:00:08.508Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "temi.akin2211@gmail.com",
+      "previousStatus": "pending",
+      "nextStatus": "active",
+      "note": "Status changed from pending to active"
+    },
+    {
+      "id": "audit-1772755210672-jfzlho",
+      "timestamp": "2026-03-06T00:00:10.672Z",
+      "action": "subscriber-status-change",
+      "actor": "mide",
+      "email": "temi.akin2211@gmail.com",
+      "previousStatus": "active",
+      "nextStatus": "active",
+      "note": "Status changed from active to active"
+    }
+  ]
+}
