@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Activation Control | ExamVerse</title>
+  <link rel="stylesheet" href="admin-activation.css" />
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="hero">
+      <p class="kicker">Owner Console</p>
+      <h1>Subscriber Activation Control</h1>
+      <p class="lead">Confirm payments and switch app access to <strong>Active</strong> for each subscriber.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Admin Access</h2>
+      <div class="row">
+        <input id="adminIdentity" type="text" placeholder="Your name (for audit log)" autocomplete="off" />
+        <input id="adminKey" type="password" placeholder="Enter admin key" autocomplete="off" />
+        <button id="saveAdminKey" type="button">Save Key</button>
+      </div>
+      <p class="hint">Default key in backend: <code>examverse-admin-2026</code>. Change it using <code>ADMIN_ACCESS_KEY</code> in <code>.env</code>.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Subscribers</h2>
+        <button id="refreshList" type="button">Refresh</button>
+      </div>
+      <div id="subscribersList" class="subscribers-list"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Manual Status Update</h2>
+      <form id="manualForm" class="manual-form">
+        <input id="manualEmail" type="email" placeholder="subscriber@email.com" required />
+        <select id="manualStatus" aria-label="Subscription status" required>
+          <option value="pending">Pending</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button type="submit">Apply Status</button>
+      </form>
+    </section>
+
+    <p id="feedback" class="feedback" aria-live="polite"></p>
+  </main>
+
+  <script src="admin-activation.js" defer></script>
+</body>
+</html>

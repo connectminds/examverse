@@ -46,10 +46,15 @@ let examHistory = [];
 let charts = { scoreTr: null, subjectPerf: null, difficultDist: null };
 
 // ============ Initialize ============
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // redirect to login if not authenticated
     if (!localStorage.getItem('examVerseLoggedIn')) {
         window.location.href = 'login.html';
+        return;
+    }
+
+    const active = await ensureSubscriberIsActive();
+    if (!active) {
         return;
     }
 
@@ -60,6 +65,42 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHistoryTable();
     setupEventListeners();
 });
+
+async function ensureSubscriberIsActive() {
+    try {
+        const userStr = localStorage.getItem('examVerseUser');
+        const user = userStr ? JSON.parse(userStr) : null;
+        const email = (user?.email || '').trim().toLowerCase();
+
+        if (!email) {
+            showCenteredAlert('No subscriber email found. Complete subscription to continue.', {
+                redirectTo: 'subscribe.html',
+                delay: 1900
+            });
+            return false;
+        }
+
+        const apiBase = localStorage.getItem('notificationApiUrl') || 'http://localhost:5000/api';
+        const response = await fetch(`${apiBase}/subscribers/status?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success || data.status !== 'active') {
+            showCenteredAlert('Your subscription is not active yet. Please complete payment confirmation.', {
+                redirectTo: 'subscribe.html',
+                delay: 2100
+            });
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        showCenteredAlert('Unable to verify subscription status. Please try again.', {
+            redirectTo: 'subscribe.html',
+            delay: 2100
+        });
+        return false;
+    }
+}
 
 // ============ Load User Profile ============
 function loadUserProfile() {
