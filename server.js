@@ -709,6 +709,25 @@ app.post('/api/subscribers/status', (req, res) => {
             status: normalizedStatus
         });
 
+        // Keep device-level access aligned when owner updates a subscriber globally.
+        // This avoids a mismatch where subscriber shows active but individual devices stay pending.
+        const subscriberDeviceKeys = Object.keys(store.deviceSubscriptions || {}).filter((key) => {
+            return key.startsWith(`${normalizedEmail}::`);
+        });
+
+        subscriberDeviceKeys.forEach((key) => {
+            const existingDevice = store.deviceSubscriptions[key] || {};
+            const nextDeviceStatus = normalizedStatus === 'active' ? 'active' : normalizedStatus;
+            store.deviceSubscriptions[key] = {
+                ...existingDevice,
+                email: normalizedEmail,
+                status: nextDeviceStatus,
+                updatedAt: new Date().toISOString(),
+                lastStatusChangeAt: new Date().toISOString(),
+                lastStatusChangedBy: resolvedAdminIdentity
+            };
+        });
+
         const subscriber = store.subscribers[normalizedEmail];
         subscriber.lastStatusChangeAt = new Date().toISOString();
         subscriber.lastStatusChangedBy = resolvedAdminIdentity;
