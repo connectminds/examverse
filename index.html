@@ -44,6 +44,7 @@
           <li><a href="registration.html">Register</a></li>
           <li><a href="login.html">Login</a></li>
           <li><a href="dashboard.html">Take Exam</a></li>
+          <li><a href="release/ExamVerse-Setup-1.0.0.exe" download>Download App</a></li>
         </ul>
       </nav>
     </div>
@@ -63,31 +64,12 @@
           <a href="dashboard.html" class="btn btn-tertiary">Take Exam Now</a>
         </div>
         <div class="hero-subscribe">
-          <a href="subscribe.html" class="btn btn-secondary btn-subscribe">Subscribe</a>
+          <a href="subscribe.html" class="btn btn-secondary btn-subscribe"><span class="subscribe-text">Subscribe</span></a>
         </div>
-
-        <section class="activation-panel" id="activationPanel" aria-labelledby="activation-title">
-          <h2 id="activation-title">Activate Your Premium Access</h2>
-          <p>Enter the 8-character activation code sent to your email after payment confirmation.</p>
-          <form id="activationForm" class="activation-form">
-            <input
-              id="activationCodeInput"
-              name="activationCode"
-              type="text"
-              maxlength="8"
-              minlength="8"
-              autocomplete="one-time-code"
-              placeholder="Enter activation code"
-              aria-label="Activation code"
-              required
-            />
-            <button type="submit" class="btn btn-primary" id="activateBtn">Unlock Dashboard</button>
-          </form>
-          <div class="activation-actions">
-            <button type="button" class="btn btn-tertiary" id="resendCodeBtn">Resend Code</button>
-          </div>
-          <div class="activation-message" id="activationMessage" role="status" aria-live="polite"></div>
-        </section>
+        <div class="hero-desktop-download">
+          <a href="release/ExamVerse-Setup-1.0.0.exe" class="btn btn-download" download>Download Desktop App (Windows)</a>
+          <p class="download-note">For PC users: download and install ExamVerse for the best offline experience.</p>
+        </div>
       </div>
     </section>
 
