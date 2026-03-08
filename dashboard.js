@@ -44,6 +44,12 @@ function showCenteredAlert(message, options = {}) {
 
 let examHistory = [];
 let charts = { scoreTr: null, subjectPerf: null, difficultDist: null };
+const defaultDashboardUpdates = [
+    'New subscription verification added for secure dashboard access.',
+    'Exam analytics charts improved for better score tracking.',
+    'Export now downloads full exam history as CSV.',
+    'Mobile dashboard performance and responsiveness optimized.'
+];
 
 // ============ Initialize ============
 document.addEventListener('DOMContentLoaded', async () => {
@@ -59,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadUserProfile();
+    await renderDashboardUpdatesMarquee();
     loadExamHistory();
     updateSummaryStats();
     renderCharts();
@@ -66,11 +73,117 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
 });
 
+async function renderDashboardUpdatesMarquee() {
+    const marquee = document.getElementById('dashboardUpdateMarquee');
+    if (!marquee) return;
+
+    const updates = await getDashboardUpdates();
+    const tickerText = updates.join('  |  ');
+    marquee.innerHTML = '';
+
+    for (let i = 0; i < 2; i += 1) {
+        const part = document.createElement('span');
+        part.className = 'updates-marquee-text';
+        part.textContent = tickerText;
+        marquee.appendChild(part);
+    }
+}
+
+async function getDashboardUpdates() {
+    const apiBase = localStorage.getItem('notificationApiUrl') || 'http://localhost:5000/api';
+
+    try {
+        const response = await fetch(`${apiBase}/dashboard/updates`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const apiUpdates = Array.isArray(data?.updates)
+                ? data.updates.filter(item => typeof item === 'string' && item.trim().length > 0)
+                : [];
+
+            if (apiUpdates.length) {
+                localStorage.setItem('examverseAppUpdates', JSON.stringify(apiUpdates));
+                return apiUpdates;
+            }
+        }
+    } catch (error) {
+        console.warn('Could not load dashboard updates from API, using local fallback.', error.message);
+    }
+
+    let updates = [];
+    const storedUpdates = localStorage.getItem('examverseAppUpdates');
+
+    if (storedUpdates) {
+        try {
+            const parsed = JSON.parse(storedUpdates);
+            if (Array.isArray(parsed)) {
+                updates = parsed.filter(item => typeof item === 'string' && item.trim().length > 0);
+            }
+        } catch {
+            // keep defaults if stored value is not a JSON array
+        }
+    }
+
+    if (!updates.length) {
+        updates = defaultDashboardUpdates;
+    }
+
+    return updates;
+}
+
+// Helper for admin/debug usage: set updates from console and persist to localStorage.
+window.setDashboardUpdates = async function (updatesArray, adminKey = '') {
+    if (!Array.isArray(updatesArray) || updatesArray.length === 0) {
+        console.warn('setDashboardUpdates expects a non-empty array of update strings.');
+        return;
+    }
+
+    const sanitized = updatesArray
+        .filter(item => typeof item === 'string' && item.trim().length > 0)
+        .map(item => item.trim());
+
+    if (!sanitized.length) {
+        console.warn('No valid update text found.');
+        return;
+    }
+
+    const keyToUse = String(adminKey || localStorage.getItem('examverseAdminKey') || '').trim();
+    const apiBase = localStorage.getItem('notificationApiUrl') || 'http://localhost:5000/api';
+
+    if (keyToUse) {
+        try {
+            const response = await fetch(`${apiBase}/dashboard/updates`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates: sanitized, adminKey: keyToUse, adminIdentity: 'dashboard-admin' })
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                console.warn('Backend update failed:', err.error || response.statusText);
+            }
+        } catch (error) {
+            console.warn('Could not save dashboard updates to API.', error.message);
+        }
+    } else {
+        console.warn('No admin key supplied. Saved only in browser localStorage.');
+    }
+
+    localStorage.setItem('examverseAppUpdates', JSON.stringify(sanitized));
+    await renderDashboardUpdatesMarquee();
+    console.log('Dashboard updates marquee changed successfully.');
+};
+
 async function ensureSubscriberIsActive() {
     try {
         const userStr = localStorage.getItem('examVerseUser');
         const user = userStr ? JSON.parse(userStr) : null;
         const email = (user?.email || '').trim().toLowerCase();
+        const deviceId = await resolveClientDeviceId();
 
         if (!email) {
             showCenteredAlert('No subscriber email found. Complete subscription to continue.', {
@@ -80,8 +193,16 @@ async function ensureSubscriberIsActive() {
             return false;
         }
 
+        if (!deviceId) {
+            showCenteredAlert('Unable to detect this device. Re-open the app and try again.', {
+                redirectTo: 'subscribe.html',
+                delay: 2100
+            });
+            return false;
+        }
+
         const apiBase = localStorage.getItem('notificationApiUrl') || 'http://localhost:5000/api';
-        const response = await fetch(`${apiBase}/subscribers/status?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`${apiBase}/subscribers/status?email=${encodeURIComponent(email)}&deviceId=${encodeURIComponent(deviceId)}`);
         const data = await response.json();
 
         if (!response.ok || !data.success || data.status !== 'active') {
@@ -100,6 +221,27 @@ async function ensureSubscriberIsActive() {
         });
         return false;
     }
+}
+
+async function resolveClientDeviceId() {
+    const existing = localStorage.getItem('examVerseDeviceId');
+    if (existing) return existing;
+
+    if (window.examverseDesktop?.isDesktopApp && typeof window.examverseDesktop.getInstallId === 'function') {
+        try {
+            const installId = await window.examverseDesktop.getInstallId();
+            if (installId) {
+                localStorage.setItem('examVerseDeviceId', installId);
+                return installId;
+            }
+        } catch (error) {
+            console.warn('Unable to resolve desktop install id', error);
+        }
+    }
+
+    const fallbackId = `web-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem('examVerseDeviceId', fallbackId);
+    return fallbackId;
 }
 
 // ============ Load User Profile ============
@@ -701,6 +843,10 @@ window.addEventListener('storage', event => {
         updateSummaryStats();
         renderCharts();
         renderHistoryTable();
+    }
+
+    if (event.key === 'examverseAppUpdates') {
+        renderDashboardUpdatesMarquee();
     }
 });
 

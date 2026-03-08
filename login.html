@@ -237,30 +237,47 @@ for(let i = 0; i < bubbleCount; i++) {
   bg.appendChild(bubble);
 }
 
-// Passport preview logic (Your original code)
+// Passport preview logic – load from localStorage rather than external API
 const passportPreview = document.getElementById('passportPreview');
-async function loadPassport(email){
-  try{
-    const res = await fetch(`/api/get-passport?email=${encodeURIComponent(email)}`);
-    if(res.ok){
-      const data = await res.json();
-      if(data.passportUrl){
-        passportPreview.src = data.passportUrl;
-        passportPreview.style.display='block';
-      } else {
-        passportPreview.style.display='none';
-      }
-    }
-  } catch(err){
-    console.error('Failed to load passport', err);
+
+function showAvatarForEmail(email) {
+  if (!email) {
+    passportPreview.style.display = 'none';
+    return;
   }
+  const storedUser = localStorage.getItem('examVerseUser');
+  if (storedUser) {
+    try {
+      const u = JSON.parse(storedUser);
+      if (u.email && u.email.trim().toLowerCase() === email.toLowerCase() && u.passport) {
+        passportPreview.src = u.passport;
+        passportPreview.style.display = 'block';
+        return;
+      }
+    } catch {}
+  }
+  passportPreview.style.display = 'none';
 }
 
 const emailInput = document.querySelector('input[name="email"]');
 emailInput.addEventListener('blur', ()=>{
-  const email = emailInput.value.trim();
-  if(email) loadPassport(email);
+  showAvatarForEmail(emailInput.value.trim());
 });
+
+// also run once on page load if the stored email matches current value
+document.addEventListener('DOMContentLoaded', () => {
+  if (emailInput) showAvatarForEmail(emailInput.value.trim());
+});
+
+// redirect already-logged-in visitors immediately
+if (localStorage.getItem('examVerseLoggedIn')) {
+  window.location.href = 'dashboard.html';
+}
+
+// determine where to send user after successful login
+function getLoginRedirect() {
+    return 'dashboard.html';
+}
 
 // === UPDATED LOGIN FORM SUBMIT WITH 3s DELAY TO DASHBOARD ===
 const loginForm = document.getElementById('loginForm');
@@ -282,13 +299,25 @@ loginForm.addEventListener('submit', async e=>{
     // We wrap the redirect in a 3-second timeout for a professional feel
     setTimeout(() => {
         // Here you would normally check if credentials are valid
-        document.getElementById('loginSuccess').textContent = 'Welcome back! Redirecting to Dashboard...';
+        // set logged-in flag so future visits go straight to dashboard
+        localStorage.setItem('examVerseLoggedIn', '1');
+
+        // personalize with stored name
+        const storedUser = localStorage.getItem('examVerseUser');
+        let namePart = '';
+        if (storedUser) {
+            try {
+                const u = JSON.parse(storedUser);
+                if (u.firstName) namePart = ', ' + u.firstName;
+            } catch {};
+        }
+        document.getElementById('loginSuccess').textContent = `Welcome back${namePart}! Redirecting to Dashboard...`;
         document.getElementById('loginSuccess').style.display = 'block';
         document.getElementById('loginError').style.display = 'none';
 
-        // 3. Final Redirect to Dashboard after the 3 seconds is up
+        // 3. Final redirect after the 3 seconds is up; destination may vary
         setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            window.location.href = getLoginRedirect();
         }, 500); // Tiny buffer for success message to be read
 
     }, 2500); // 2.5s for "Authenticating" + 0.5s for success message = 3s total
