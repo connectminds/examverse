@@ -12,13 +12,19 @@ const path = require('path');
 
 const app = express();
 const ADMIN_ACCESS_KEY = process.env.ADMIN_ACCESS_KEY || 'examverse-admin-2026';
+const DEFAULT_DASHBOARD_UPDATES = [
+    'New subscription verification added for secure dashboard access.',
+    'Exam analytics charts improved for better score tracking.',
+    'Export now downloads full exam history as CSV.',
+    'Mobile dashboard performance and responsiveness optimized.'
+];
 
 const SUBSCRIPTION_STORE_PATH = path.join(__dirname, 'subscription-store.json');
 
 function readSubscriptionStore() {
     try {
         if (!fs.existsSync(SUBSCRIPTION_STORE_PATH)) {
-            return { subscriptions: {}, references: {}, subscribers: {}, auditLogs: [] };
+            return { subscriptions: {}, references: {}, subscribers: {}, auditLogs: [], appUpdates: [] };
         }
         const raw = fs.readFileSync(SUBSCRIPTION_STORE_PATH, 'utf8');
         const parsed = JSON.parse(raw);
@@ -26,11 +32,13 @@ function readSubscriptionStore() {
             subscriptions: parsed.subscriptions || {},
             references: parsed.references || {},
             subscribers: parsed.subscribers || {},
-            auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : []
+            deviceSubscriptions: parsed.deviceSubscriptions || {},
+            auditLogs: Array.isArray(parsed.auditLogs) ? parsed.auditLogs : [],
+            appUpdates: Array.isArray(parsed.appUpdates) ? parsed.appUpdates : []
         };
     } catch (error) {
         console.error('Failed to read subscription store:', error.message);
-        return { subscriptions: {}, references: {}, subscribers: {}, auditLogs: [] };
+        return { subscriptions: {}, references: {}, subscribers: {}, deviceSubscriptions: {}, auditLogs: [], appUpdates: [] };
     }
 }
 
@@ -44,6 +52,53 @@ function normalizeEmail(email) {
 
 function safeString(value) {
     return String(value || '').trim();
+}
+
+function normalizeDeviceId(deviceId) {
+    return String(deviceId || '').trim();
+}
+
+function buildDeviceKey(email, deviceId) {
+    const normalizedEmail = normalizeEmail(email);
+    const normalizedDeviceId = normalizeDeviceId(deviceId);
+    if (!normalizedEmail || !normalizedDeviceId) return '';
+    return `${normalizedEmail}::${normalizedDeviceId}`;
+}
+
+function upsertDeviceSubscription(store, payload = {}) {
+    const email = normalizeEmail(payload.email);
+    const deviceId = normalizeDeviceId(payload.deviceId);
+    const key = buildDeviceKey(email, deviceId);
+    if (!key) return null;
+
+    if (!store.deviceSubscriptions || typeof store.deviceSubscriptions !== 'object') {
+        store.deviceSubscriptions = {};
+    }
+
+    const existing = store.deviceSubscriptions[key] || {};
+    const nextStatus = safeString(payload.status || existing.status || 'pending').toLowerCase();
+
+    const record = {
+        email,
+        deviceId,
+        deviceLabel: safeString(payload.deviceLabel || existing.deviceLabel || ''),
+        platform: safeString(payload.platform || existing.platform || ''),
+        appChannel: safeString(payload.appChannel || existing.appChannel || ''),
+        status: ['pending', 'active', 'inactive'].includes(nextStatus) ? nextStatus : 'pending',
+        createdAt: existing.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        lastStatusChangeAt: payload.lastStatusChangeAt || existing.lastStatusChangeAt || null,
+        lastStatusChangedBy: safeString(payload.lastStatusChangedBy || existing.lastStatusChangedBy || '')
+    };
+
+    store.deviceSubscriptions[key] = record;
+    return record;
+}
+
+function getSubscriberDevices(store, email) {
+    const normalizedEmail = normalizeEmail(email);
+    const allDeviceSubs = Object.values(store.deviceSubscriptions || {});
+    return allDeviceSubs.filter((entry) => normalizeEmail(entry.email) === normalizedEmail);
 }
 
 function appendAuditLog(store, entry) {
@@ -353,15 +408,32 @@ app.post('/api/subscribe', async (req, res) => {
 
 app.post('/api/subscribers/request-access', (req, res) => {
     try {
-        const { email, firstName = '', lastName = '', fullName = '', phone = '' } = req.body;
+        const {
+            email,
+            firstName = '',
+            lastName = '',
+            fullName = '',
+            phone = '',
+            deviceId = '',
+            deviceLabel = '',
+            platform = '',
+            appChannel = ''
+        } = req.body;
         const normalizedEmail = normalizeEmail(email);
+        const normalizedDeviceId = normalizeDeviceId(deviceId);
         if (!normalizedEmail || !normalizedEmail.includes('@')) {
             return res.status(400).json({ error: 'Valid email is required' });
         }
 
+        if (!normalizedDeviceId) {
+            return res.status(400).json({ error: 'Device ID is required for activation request' });
+        }
+
         const store = readSubscriptionStore();
         const existing = store.subscribers[normalizedEmail];
-        const nextStatus = existing?.status === 'active' ? 'active' : 'pending';
+        const deviceKey = buildDeviceKey(normalizedEmail, normalizedDeviceId);
+        const existingDevice = (store.deviceSubscriptions || {})[deviceKey];
+        const nextStatus = existingDevice?.status === 'active' ? 'active' : 'pending';
         const resolvedFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
 
         upsertSubscriber(store, normalizedEmail, {
@@ -369,8 +441,26 @@ app.post('/api/subscribers/request-access', (req, res) => {
             lastName,
             fullName: resolvedFullName,
             phone,
-            status: nextStatus,
+            status: existing?.status || 'pending',
             subscribedToUpdates: existing?.subscribedToUpdates !== undefined ? existing.subscribedToUpdates : true
+        });
+
+        const deviceRecord = upsertDeviceSubscription(store, {
+            email: normalizedEmail,
+            deviceId: normalizedDeviceId,
+            deviceLabel,
+            platform,
+            appChannel,
+            status: nextStatus
+        });
+
+        appendAuditLog(store, {
+            action: 'subscriber-device-request-access',
+            actor: 'subscriber',
+            email: normalizedEmail,
+            deviceId: normalizedDeviceId,
+            nextStatus,
+            note: `Device access request (${safeString(platform) || 'unknown-platform'})`
         });
 
         writeSubscriptionStore(store);
@@ -378,6 +468,7 @@ app.post('/api/subscribers/request-access', (req, res) => {
         return res.json({
             success: true,
             status: nextStatus,
+            device: deviceRecord,
             message: nextStatus === 'active'
                 ? 'Subscriber is already active.'
                 : 'Payment request recorded. Awaiting owner confirmation.'
@@ -396,11 +487,20 @@ app.get('/api/subscribers', (req, res) => {
         }
 
         const store = readSubscriptionStore();
-        const subscribers = Object.values(store.subscribers || {});
+        const subscribers = Object.values(store.subscribers || {}).map((subscriber) => {
+            const devices = getSubscriberDevices(store, subscriber.email);
+            return {
+                ...subscriber,
+                devices,
+                activeDevices: devices.filter((device) => device.status === 'active').length,
+                pendingDevices: devices.filter((device) => device.status === 'pending').length
+            };
+        });
         return res.json({
             success: true,
             total: subscribers.length,
             active: subscribers.filter((s) => s.status === 'active').length,
+            totalDevices: Object.values(store.deviceSubscriptions || {}).length,
             subscribers
         });
     } catch (error) {
@@ -412,11 +512,36 @@ app.get('/api/subscribers', (req, res) => {
 app.get('/api/subscribers/status', (req, res) => {
     try {
         const normalizedEmail = normalizeEmail(req.query.email);
+        const normalizedDeviceId = normalizeDeviceId(req.query.deviceId);
         if (!normalizedEmail || !normalizedEmail.includes('@')) {
             return res.status(400).json({ error: 'Valid email query is required' });
         }
 
         const store = readSubscriptionStore();
+        if (normalizedDeviceId) {
+            const deviceKey = buildDeviceKey(normalizedEmail, normalizedDeviceId);
+            const deviceSubscription = (store.deviceSubscriptions || {})[deviceKey];
+
+            if (!deviceSubscription) {
+                return res.status(404).json({
+                    success: false,
+                    status: 'not-found',
+                    email: normalizedEmail,
+                    deviceId: normalizedDeviceId,
+                    message: 'Device subscription record not found'
+                });
+            }
+
+            return res.json({
+                success: true,
+                email: normalizedEmail,
+                deviceId: normalizedDeviceId,
+                status: deviceSubscription.status || 'inactive',
+                subscriber: store.subscribers[normalizedEmail] || null,
+                deviceSubscription
+            });
+        }
+
         const subscriber = store.subscribers[normalizedEmail];
         if (!subscriber) {
             return res.status(404).json({
@@ -439,10 +564,84 @@ app.get('/api/subscribers/status', (req, res) => {
     }
 });
 
+app.get('/api/dashboard/updates', (req, res) => {
+    try {
+        const store = readSubscriptionStore();
+        const updates = Array.isArray(store.appUpdates) && store.appUpdates.length > 0
+            ? store.appUpdates
+            : DEFAULT_DASHBOARD_UPDATES;
+
+        return res.json({
+            success: true,
+            count: updates.length,
+            updates
+        });
+    } catch (error) {
+        console.error('Get dashboard updates error:', error.message);
+        return res.status(500).json({ error: 'Failed to load dashboard updates', details: error.message });
+    }
+});
+
+app.post('/api/dashboard/updates', (req, res) => {
+    try {
+        const { updates, adminKey, adminIdentity = '' } = req.body;
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        if (!Array.isArray(updates) || updates.length === 0) {
+            return res.status(400).json({ error: 'Updates must be a non-empty array of text messages' });
+        }
+
+        const sanitizedUpdates = updates
+            .filter((item) => typeof item === 'string')
+            .map((item) => item.trim())
+            .filter((item) => item.length > 0)
+            .slice(0, 20);
+
+        if (sanitizedUpdates.length === 0) {
+            return res.status(400).json({ error: 'No valid update text provided' });
+        }
+
+        const store = readSubscriptionStore();
+        store.appUpdates = sanitizedUpdates;
+
+        appendAuditLog(store, {
+            action: 'dashboard-updates-change',
+            actor: safeString(adminIdentity) || 'owner',
+            nextCount: sanitizedUpdates.length,
+            note: 'Dashboard marquee updates changed'
+        });
+
+        writeSubscriptionStore(store);
+
+        return res.json({
+            success: true,
+            message: 'Dashboard updates saved successfully',
+            count: sanitizedUpdates.length,
+            updates: sanitizedUpdates
+        });
+    } catch (error) {
+        console.error('Update dashboard updates error:', error.message);
+        return res.status(500).json({ error: 'Failed to save dashboard updates', details: error.message });
+    }
+});
+
 app.post('/api/subscribers/status', (req, res) => {
     try {
-        const { email, status, adminKey, adminIdentity = '', firstName = '', lastName = '', fullName = '', phone = '' } = req.body;
+        const {
+            email,
+            status,
+            adminKey,
+            adminIdentity = '',
+            firstName = '',
+            lastName = '',
+            fullName = '',
+            phone = '',
+            deviceId = ''
+        } = req.body;
         const normalizedEmail = normalizeEmail(email);
+        const normalizedDeviceId = normalizeDeviceId(deviceId);
         const normalizedStatus = safeString(status).toLowerCase();
         const resolvedAdminIdentity = safeString(adminIdentity) || 'owner';
         const allowedStatuses = new Set(['pending', 'active', 'inactive']);
@@ -460,8 +659,47 @@ app.post('/api/subscribers/status', (req, res) => {
         }
 
         const store = readSubscriptionStore();
-        const previousStatus = (store.subscribers[normalizedEmail]?.status || 'not-registered').toLowerCase();
+        const previousStatus = normalizedDeviceId
+            ? (((store.deviceSubscriptions || {})[buildDeviceKey(normalizedEmail, normalizedDeviceId)]?.status) || 'not-registered').toLowerCase()
+            : (store.subscribers[normalizedEmail]?.status || 'not-registered').toLowerCase();
         const resolvedFullName = safeString(fullName) || `${safeString(firstName)} ${safeString(lastName)}`.trim();
+
+        if (normalizedDeviceId) {
+            upsertSubscriber(store, normalizedEmail, {
+                firstName,
+                lastName,
+                fullName: resolvedFullName,
+                phone,
+                status: store.subscribers[normalizedEmail]?.status || 'pending'
+            });
+
+            const updatedDevice = upsertDeviceSubscription(store, {
+                email: normalizedEmail,
+                deviceId: normalizedDeviceId,
+                status: normalizedStatus,
+                lastStatusChangeAt: new Date().toISOString(),
+                lastStatusChangedBy: resolvedAdminIdentity
+            });
+
+            appendAuditLog(store, {
+                action: 'subscriber-device-status-change',
+                actor: resolvedAdminIdentity,
+                email: normalizedEmail,
+                deviceId: normalizedDeviceId,
+                previousStatus,
+                nextStatus: normalizedStatus,
+                note: `Device status changed from ${previousStatus} to ${normalizedStatus}`
+            });
+
+            writeSubscriptionStore(store);
+
+            return res.json({
+                success: true,
+                message: `Subscriber device status updated to ${normalizedStatus}`,
+                subscriber: store.subscribers[normalizedEmail],
+                deviceSubscription: updatedDevice
+            });
+        }
 
         upsertSubscriber(store, normalizedEmail, {
             firstName,

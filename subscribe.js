@@ -113,9 +113,21 @@ async function registerPendingSubscription() {
         const userRaw = localStorage.getItem('examVerseUser');
         const user = userRaw ? JSON.parse(userRaw) : null;
         const email = (user?.email || '').trim();
+        const deviceId = await resolveClientDeviceId();
+        const platform = window.examverseDesktop?.isDesktopApp
+            ? `desktop-${window.examverseDesktop?.platform || 'unknown'}`
+            : navigator.platform || 'web';
+        const deviceLabel = window.examverseDesktop?.isDesktopApp
+            ? `Desktop App (${window.examverseDesktop?.platform || 'unknown'})`
+            : `${navigator.userAgent || 'Web Browser'}`;
 
         if (!email) {
             setPaymentFeedback('Login with your email to allow activation after payment confirmation.');
+            return;
+        }
+
+        if (!deviceId) {
+            setPaymentFeedback('Unable to identify this device. Please restart the app and try again.');
             return;
         }
 
@@ -127,7 +139,11 @@ async function registerPendingSubscription() {
                 firstName: user?.firstName || '',
                 lastName: user?.lastName || '',
                 fullName: user?.name || '',
-                phone: user?.phone || ''
+                phone: user?.phone || '',
+                deviceId,
+                deviceLabel,
+                platform,
+                appChannel: window.examverseDesktop?.isDesktopApp ? 'desktop' : 'web'
             })
         });
 
@@ -143,4 +159,25 @@ async function registerPendingSubscription() {
         console.error('Register pending subscription error:', error);
         setPaymentFeedback('Could not auto-record request. Still send payment proof on WhatsApp for activation.');
     }
+}
+
+async function resolveClientDeviceId() {
+    const existing = localStorage.getItem('examVerseDeviceId');
+    if (existing) return existing;
+
+    if (window.examverseDesktop?.isDesktopApp && typeof window.examverseDesktop.getInstallId === 'function') {
+        try {
+            const installId = await window.examverseDesktop.getInstallId();
+            if (installId) {
+                localStorage.setItem('examVerseDeviceId', installId);
+                return installId;
+            }
+        } catch (error) {
+            console.warn('Unable to resolve desktop install id', error);
+        }
+    }
+
+    const fallbackId = `web-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem('examVerseDeviceId', fallbackId);
+    return fallbackId;
 }

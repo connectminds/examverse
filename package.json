@@ -9,7 +9,14 @@
     "desktop": "electron .",
     "desktop:build": "electron-builder --win nsis",
     "desktop:build-portable": "electron-builder --win portable",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "android:prepare": "node scripts/prepare-web-assets.js",
+    "android:add": "npx cap add android",
+    "android:sync": "npm run android:prepare && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:apk": "npm run android:sync && cd android && gradlew assembleDebug",
+    "android:aab": "npm run android:sync && cd android && gradlew bundleRelease",
+    "desktop:build-all": "electron-builder --win nsis portable"
   },
   "keywords": [
     "examverse",
@@ -21,12 +28,15 @@
   "author": "ConnectMinds IT Tech",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "nodemailer": "^6.9.7",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
     "nodemon": "^3.0.2"
@@ -52,10 +62,12 @@
       "artifactName": "ExamVerse-Setup-${version}.${ext}"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
-      "shortcutName": "ExamVerse"
+      "shortcutName": "ExamVerse",
+      "perMachine": false,
+      "allowElevation": false
     }
   }
 }
