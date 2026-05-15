@@ -1,8 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authNotice = document.getElementById('authNotice');
-    const isLoggedIn = !!localStorage.getItem('examVerseLoggedIn');
+    const oneTimeSubscribe = document.getElementById('oneTimeSubscribe');
+    const user = localStorage.getItem('examVerseUser') ? JSON.parse(localStorage.getItem('examVerseUser')) : null;
+    const isRegistered = !!user;
+
     if (authNotice) {
-        authNotice.hidden = isLoggedIn;
+        authNotice.hidden = isRegistered;
+    }
+
+    if (oneTimeSubscribe) {
+        oneTimeSubscribe.disabled = !isRegistered;
+        if (!isRegistered) {
+            oneTimeSubscribe.textContent = 'Register to Subscribe';
+            oneTimeSubscribe.title = 'Please register or login before subscribing';
+        }
     }
 
     const navToggle = document.getElementById('nav-toggle');
@@ -22,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const oneTimeSubscribe = document.getElementById('oneTimeSubscribe');
     const paymentModal = document.getElementById('paymentModal');
     const paymentBackdrop = document.getElementById('paymentModalBackdrop');
     const closePaymentModal = document.getElementById('closePaymentModal');
@@ -32,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (oneTimeSubscribe && paymentModal) {
         oneTimeSubscribe.addEventListener('click', (event) => {
             event.preventDefault();
+            const user = localStorage.getItem('examVerseUser') ? JSON.parse(localStorage.getItem('examVerseUser')) : null;
+            if (!user || !(user.email || '').trim()) {
+                window.location.href = 'registration.html';
+                return;
+            }
             openPaymentModal();
         });
     }
@@ -122,7 +137,7 @@ async function registerPendingSubscription() {
             : `${navigator.userAgent || 'Web Browser'}`;
 
         if (!email) {
-            setPaymentFeedback('Login with your email to allow activation after payment confirmation.');
+            window.location.href = 'registration.html';
             return;
         }
 

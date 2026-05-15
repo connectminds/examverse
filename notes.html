@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Notes | ExamVerse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #090979);
+            border-radius: 2px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00d4ff, #090979, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #e2e8f0;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: rgba(226, 232, 240, 0.6);
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transform: scale(1.02);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(226, 232, 240, 0.6);
+            font-size: 1.2rem;
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(45deg, #00d4ff, #090979);
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #090979, #ff6b6b);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .subject-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .subject-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #090979);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .subject-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .classes-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .class-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .class-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .class-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .terms-list {
+            list-style: none;
+        }
+
+        .term-link {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .term-link:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Notes Display */
+        .notes-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .notes-content {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: auto;
+        }
+
+        .notes-content * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .notes-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .notes-close {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s ease;
+        }
+
+        .notes-close:hover {
+            background: #c53030;
+        }
+
+        .notes-text {
+            line-height: 1.6;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .notes-text h1, .notes-text h2, .notes-text h3 {
+            color: #2b6cb0;
+            margin-top: 20px;
+        }
+
+        .notes-text p {
+            margin-bottom: 15px;
+        }
+
+        .notes-text ul, .notes-text ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .notes-text li {
+            margin-bottom: 5px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-card {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .subject-card:nth-child(1) { animation-delay: 0.1s; }
+        .subject-card:nth-child(2) { animation-delay: 0.2s; }
+        .subject-card:nth-child(3) { animation-delay: 0.3s; }
+        .subject-card:nth-child(4) { animation-delay: 0.4s; }
+        .subject-card:nth-child(5) { animation-delay: 0.5s; }
+        .subject-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .classes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: rgba(226, 232, 240, 0.6);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='dashboard.html'" title="Back to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <h1>E-Notes Archive</h1>
+            <p>Explore comprehensive study materials organized by subject, class, and term</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search subjects..." id="searchInput">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Subjects</button>
+            <button class="filter-btn" data-filter="science">Science</button>
+            <button class="filter-btn" data-filter="arts">Humanities</button>
+            <button class="filter-btn" data-filter="commercial">Business</button>
+        </div>
+
+        <div class="subjects-grid" id="subjectsGrid">
+            <!-- Mathematics -->
+            <div class="subject-card" data-category="science">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h2 class="subject-title">Mathematics</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- English Language -->
+            <div class="subject-card" data-category="arts">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h2 class="subject-title">English Language</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Physics -->
+            <div class="subject-card" data-category="science">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h2 class="subject-title">Physics</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chemistry -->
+            <div class="subject-card" data-category="science">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h2 class="subject-title">Chemistry</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biology -->
+            <div class="subject-card" data-category="science">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <h2 class="subject-title">Biology</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Economics -->
+            <div class="subject-card" data-category="commercial">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="subject-title">Economics</h2>
+                </div>
+                <div class="classes-container">
+                    <div class="classes-grid">
+                        <div class="class-card">
+                            <div class="class-title">SS1</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link" data-subject="Economics" data-class="SS1" data-term="1st term">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS2</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                        <div class="class-card">
+                            <div class="class-title">SS3</div>
+                            <ul class="terms-list">
+                                <li><a href="#" class="term-link">1st Term</a></li>
+                                <li><a href="#" class="term-link">2nd Term</a></li>
+                                <li><a href="#" class="term-link">3rd Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+            <p>No subjects found matching your search.</p>
+        </div>
+    </div>
+
+    <!-- Notes Modal -->
+    <div class="notes-modal" id="notesModal">
+        <div class="notes-content">
+            <div class="notes-header">
+                <h2 class="notes-title" id="notesTitle">Notes</h2>
+                <button class="notes-close" onclick="closeNotes()">&times;</button>
+            </div>
+            <div class="notes-text" id="notesText">
+                <!-- Notes content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const subjectsGrid = document.getElementById('subjectsGrid');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const noResults = document.getElementById('noResults');
+            const subjectCards = document.querySelectorAll('.subject-card');
+
+            // Notes data
+            const notesData = {
+                'Economics-SS1-1st term': `<h1>FIRST TERM E-LEARNING NOTES</h1>
+<h1>SUBJECT: ECONOMICS                                               SS1</h1>
+<h1>SCHEME OF WORK</h1>
+<h2>WEEK  TOPIC</h2>
+<ul>
+<li>Meaning of Economics and Related Concepts: Definitions, scope, importance and methodology of Economics.  Economics as a social Science.</li>
+<li>Meaning of Economics and Related Concepts :  Wants, Scarcity, Resources, Choice, Scale of Preference, opportunity Cost, etc</li>
+<li>Basic Tools of Economic Analysis: Tables, Graphs and Charts,   Measures of Central Tendency: Mean, Median and Mode</li>
+<li>Concept of Demand and Supply: Price System, Demand and Supply schedules and curves. Law of demand and supply</li>
+<li>Concept of Demand and Supply: Factors affecting demand and supply. Determinants of equilibrium price</li>
+<li>Theory of Production:   Meaning, Types and Factors of Production.</li>
+<li>Theory of Production:   Division of labour and specialization –advantages, disadvantages and limitations of division of labour.</li>
+<li>Theory of Production: Scales of Production –advantages and disadvantages of large scale production</li>
+<li>Basic Economic Problems of society: Definition of Economic System. What to produce, How to produce, for whom to produce and Efficiency of resource use.</li>
+<li>Revision</li>
+<li>Examination.</li>
+</ul>
+
+<h2>WEEK 1</h2>
+<h2>MEANING OF ECONOMICS AND RELATED CONCEPTS</h2>
+
+<h3>Content</h3>
+<ul>
+<li>Definitions, scope, importance of Economics</li>
+<li>Methodology of Economics.</li>
+<li>Economics as a social Science.</li>
+</ul>
+
+<h3>Sub-Topic 1:  Definitions, Scope and Importance of Economics</h3>
+<h3>Meaning of Economics</h3>
+<p>Economics has many definitions. The reason is that Economists see the subject from different points of view.</p>
+<p>Adam Smith: He is regarded as the father of Economics because he laid the foundation of Economics as a discipline/subject. In his book titled "The wealth of nations" written in 1776, he defined Economics as "an inquiry into the nature and causes of the wealth of Nations".</p>
+<p>Other notable Economics are Alfred Marshall (1890), John Stuart Mill (1843); Professor Alfred Pigou; Lord Keynes, H.J. Davenport; Professor Paul Samuelson, Professor Sam Aluko of Nigeria, Professor Lionel Robbins etc.</p>
+<p>Economics has many definitions. The most widely accepted definition is given by Professor Lionel Robbins which says "Economics is a social science which studies human behaviour as a relationship between ends and scare means which have alternative uses". His definition is widely accredited because it embraces the following terms:</p>
+<ul>
+<li>Economics is a Social Science because it deals with human behaviour and the activities of the people in the society.</li>
+<li>Ends: These are needs which are desired by the consumer to give satisfaction. Examples are cares, clothes, foodstuffs, handsets, books etc.</li>
+<li>Scarce means: These are resources which are scare relative to the demand for them.</li>
+<li>Alternative uses: The scarce resources can be put to so many uses. For example land can be used for farming or construction of houses, factories.</li>
+</ul>
+<h3>SCOPE OF ECONOMICS</h3>
+<p>Economics covers the actions and activities of individual households and firms (microeconomics); and the actions and activities of the government (macroeconomics) in relation to production, distribution, consumption, money and exchange of goods and services.</p>
+<p>Evaluation:</p>
+<ul>
+<li>Who is the father of economics and why?</li>
+<li>Define Economics</li>
+<li>What area does economics cover?</li>
+</ul>
+<h3>Sub-Topic 2:  Importance of Economics and Economics as a Social Science</h3>
+<h3>IMPORTANCE OF STUDYING ECONOMICS</h3>
+<p>We study economics for the following reasons</p>
+<p>Allocation of resources:</p>
+<ul>
+<li>It enables the individuals, households, firms, and the government to know how limited resources can be used effectively and efficiently.</li>
+<li>Reduction of resource wastage: Economics helps to reduce wastage in resource allocation. Economic decision-makers channel their resource to areas where they are mostly needed.</li>
+<li>Solution to basic economic problems: the study of Economics provides students with basic skills for analyzing economic problems</li>
+<li>Technique of reasoning and critical thinking: Economics teaches the techniques of reasoning and power of critical thinking.</li>
+<li>Provision of basic tools for analysis: Economics equips the economic agents with the tools of economic analysis to understand and solve current issues and economic problems confronting the society e.g. oil glut, oil spillage, oil theft, unemployment etc.</li>
+<li>Rational decision-making; economics enables individuals, and other economic agencies to be rational or reasonable in the application of scare resources to satisfy unlimited wants. A normal individual takes decisions in the most acceptable and beneficial ways.</li>
+<li>Helps government economic policies and development: economics helps us to weigh the economic policies of the government, determine their advantages and disadvantages and offer the right suggestions on the way forward e.g. problem of unemployment, 'white-elephant' projects, inflation, budget etc.</li>
+</ul>
+<h3>ECONOMICS AS A SOCIAL SCIENCE</h3>
+<p>Economics is not a physical, pure or natural science subject like Physics, Chemistry or Biology because its experiments are not carried out with chemicals in the laboratory or with plants in the farm. Rather, its scientific nature stems from the fact that Economics has laws; and again its theories and principles are analyzed based on scientific techniques, like observation, selection and classification of data, analysis and generalization; just like the pure sciences. Its theories and principles can be verified with facts and figures.</p>
+<p>In the strict sense of the word, Economics is a Social Science. This is because it studies human behaviour, which though cannot be tested in laboratory setting, but can be observed and tested by applying them to real life situation.</p>
+<p>EVALUATION</p>
+<ol>
+<li>a. Give the most accepted definition of economics</li>
+<li>b. Who gave the definition?</li>
+<li>What does the following mean?  (i) Ends (ii) scarce means (iii) alternate uses</li>
+<li>a. Is Economics a science or a social science? Make a defense of your argument.</li>
+<li>Why do we study Economics?</li>
+</ol>
+<h3>WEEKLY ASSIGNMENT</h3>
+<ul>
+<li>Economics is a/an (a) physical science (b) social science (c) pure science (d) art subject (e) applied science</li>
+<li>Which is (are) true about the definition of Economics?</li>
+<li>(a) It has no definite definition</li>
+<li>(b) There are many definitions as there are economists</li>
+<li>(c) It has a generally accepted definition</li>
+<li>(d) Any definition given by anybody is correct</li>
+<li>(e) Majority of its definitions are false.</li>
+<li>Economics is often described as a science because it (a) adopts the use of laboratory experiments (b) involves accurate prediction of human beings (c) deals with observations and field work (d) uses scientific methods to explain observed phenomena (e) makes use of controlled experiments</li>
+<li>The study of economics enables individuals to: (a) change jobs (b) evade taxes (c) accumulate huge wealth (d) make rational decisions (e) be stingy</li>
+<li>The main concern of Economics is to (a) allocate scarce resources to satisfy human wants (b) satisfy all human wants (c) redistribute income between the rich and the poor (d) control the growth of the population (e) fight inequality among nations</li>
+</ul>
+<h3>ESSAY QUESTIONS</h3>
+<ul>
+<li>Why is it difficult to find an acceptable definition of Economics?</li>
+<li>Define Economics (b) Economics is a science. Do you agree?</li>
+<li>What areas does Economics cover?</li>
+<li>Mention four prominent Economists</li>
+<li>What are the benefits of studying Economics?</li>
+</ul>
+<h3>PRE-READING ASSIGNMENT</h3>
+<p>Read about Basic Concepts in Economics</p>
+<h3>WEEK-END ACTIVITES</h3>
+<p>Find out reasons why Economics is a science and a Social Science.</p>
+<h3>REFERENCE TEXTS</h3>
+<ul>
+<li>Fundamentals of Economics for SSCE by R.A.J. Anyanwuoa</li>
+<li>Comprehensive Economics for SSS BY Johnson Ugoji, Anyaele</li>
+<li>Essentials Economics for SSS by Cole Esan Ande. 2011 edition</li>
+<li>Bounty Economics for SSS by B.A. Adeleke, Ishaya Lawanson Bounty Press, 2010.</li>
+</ul>
+
+<h2>WEEK 2</h2>
+<h2>MEANING OF ECONOMICS AND RELATED CONCEPTS: BASIC CONCEPTS OF ECONOMICS</h2>
+
+<h3>Content</h3>
+<ul>
+<li>Concepts of wants, Scarcity, Scale of Preference, Choice</li>
+<li>and Opportunity Cost</li>
+</ul>
+<h3>Sub-Topic 2:  Basic Economic Concepts</h3>
+<p>These are:</p>
+<ul>
+<li>Wants</li>
+<li>Scarcity</li>
+<li>Scale of Preference</li>
+<li>Choice</li>
+<li>Opportunity Cost</li>
+</ul>
+
+<h3>WANTS</h3>
+<p>Wants may be defined as mere desire, needs, wishes or ends of human beings not backed by ability to pay. The basic needs of man are food, shelter and clothing. Human wants are many and insatiable but the resources to satisfy them are scarce and limited. Examples of wants are houses, cars, shoes, air-conditioner, books, hand-sets, computers properties etc.</p>
+
+<h3>SCARCITY</h3>
+<p>Scarcity is the limited supply of resources to satisfy unlimited wants. It is a fundamental economic problem because individuals, firms and the government are all faced with limited resources to satisfy competing and unlimited wants. For example, as a student, if you are told to list all that your heart desires, you will find out that you do not have the resources to satisfy all your wants.  This is the essence of choice-making.</p>
+
+<h3>CHOICE</h3>
+<p>Choice arises as a result of scarcity of resources to satisfy man's numerous and unlimited wants. Since it is impossible to produce everything a person wants, choice has to be made a among competing wants by picking the most pressing wants based on the available resources.</p>
+
+<h3>SCALE OF PREFERENCE</h3>
+<p>A scale of preference refers to a list of unsatisfied wants arranged in order of priority or importance. This aids decision-making. The most pressing needs are ranked first followed by the less pressing ones.</p>
+
+<p>For example, a student might rank his wants in following order according to their level of importance:</p>
+<ul>
+<li>Pair of school uniform</li>
+<li>Exercise books</li>
+<li>Wrist watch</li>
+<li>Dictionary</li>
+<li>Scientific calculator</li>
+<li>An arm chair</li>
+</ul>
+<p>If he is to choose between items 1 and 4, he chooses the first. Scale of preference of individuals, firms and the government differ from time to time.</p>
+<h3>Sub-Topic 2:  Basic Economic Concepts (Contd)</h3>
+<h3>OPPORTUNITY COST</h3>
+<p>For an economist, the cost of something is not just the cash payment, but all of the value given up in the process of acquiring the thing. For example, the cost of a university education involves tuition, and text book purchases,</p>
+<p>and also the wages that would have been earned during the time at university, but were not. Indeed, the value of the time spent in acquiring the education – how much enjoyment was lost – is part of the cost of education</p>
+
+<p>Opportunity cost is also known as real or true cost or the alternative forgone. It means the satisfaction of one want at the expense of the other he fails to enjoy. For example, a student wants to buy a book and a shirt, each costing N200.  Since he is limited by his resources of N200, he will need to choose between the book and the shirt. If he eventually decides to buy book, the opportunity cost of the book he buys is the shirt he forgoes. Hence opportunity cost is alternative forgone.</p>
+
+<h3>RELEVANCE/IMPORTANCE OF OPPORTUNITY COST</h3>
+<p>Opportunity cost is important to individuals, firms and the government in many ways.</p>
+<p>Individuals: An individual has limited income but numerous wants. He therefore lists his wants and arranges then so that the most pressing one is first on the list. What is first in student B's list may not first in Student A's list Student A may desire to buy a book, shoes, clothes, wrist-watch, food and pen. He arranges his wants like this: food, clothes, book, wrist watch, shoes and pen.</p>
+<p>Firms: opportunity cost assists firms to allocate resources of production to ends which guarantee maximum profit. He allocates resources to produce goods and services with high demand in the market that will assure maximum profit.</p>
+<p>For example, the firm may produce foot wares instead of textile.  The opportunity cost of producing foot wares is the textile forgone or sacrificed.</p>
+<p>The Government</p>
+<p>Opportunity cost helps the government in taking decisions on the type and quantity of goods and services that will be most beneficial to the society. Example, if the government decides to set aside a larger percentage of its resource to the provision of health facilities, the opportunity cost is the allocation of less resource to other sectors like education or road construction which is forgone.</p>
+<h3>RESOURCES</h3>
+<p>This refers to the means, or input or factors of production with which human wants can be satisfied. It includes productive or economic resources like land, labour, capital and entrepreneurship, which are used for producing goods and services. Other examples are time and money. Resources are scarce or limited in supply relative/compared to the demand for them.</p>
+<h3>Types of Resources</h3>
+<ul>
+<li>Economic Resources: they are resources that have opportunity cost. Their supply is inadequate relative to the demand for them. Producers are willing to forgo certain wants in order to obtain them.</li>
+<li>Non-economic Resources: they are items whose supply is inexhaustible or greater than demand for them. It does not have opportunity cost. They are 'free' goods.  Examples are air, water.</li>
+<li>Natural Resources: these are minerals in the soil e.g. coal, crude oil,</li>
+</ul>
+<h3>EVALUATION</h3>
+<p>Write short notes on the following basic economic concepts</p>
+<ul>
+<li>Want</li>
+<li>Resources</li>
+<li>Scarcity</li>
+<li>Scale of preference and</li>
+<li>Opportunity cost</li>
+</ul>
+<h3>WEEKLY ASSIGNMENT</h3>
+<h3>OBJECTIVE TEST</h3>
+<ul>
+<li>Which of the following statement is not necessarily true?</li>
+<li>Human wants are unlimited.</li>
+<li>Without scarcity of resources, there will be no economics</li>
+<li>It is not difficult to find means of satisfying all our wants.</li>
+<li>Human wants are of varying importance.</li>
+<li>Opportunity cost is a measure of _____</li>
+<li>The time it takes to carry out an action</li>
+<li>Forgone alternatives</li>
+<li>The money spent in the purchase of a commodity</li>
+<li>The intrinsic satisfaction derived from the purchase of a commodity</li>
+<li>Scarcity in Economics means that resources ______________</li>
+<li>are not enough to share among producers</li>
+<li>needed to satisfy human wants are limited in supply.</li>
+<li>are never enough to share among consumers</li>
+<li>required to meet our essential wants are unlimited.</li>
+<li>Choice is necessary because resources are/can</li>
+<li>Available</li>
+<li>Be found everywhere</li>
+<li>Constant</li>
+<li>Scarce</li>
+<li>The decision to consume more of one product will under normal circumstances imply that</li>
+<li>More of another product will be consumed</li>
+<li>Less of something else will be consumed</li>
+<li>No other product will be consumed</li>
+<li>Enough resources are available</li>
+<li>Master Abayomi needs a Television and a refrigerator. Each costs N10,000, the exact amount he has. If he buys the television, the refrigerator would be regarded as the</li>
+<li>Normal cost</li>
+<li>Inferior item</li>
+<li>Alternative forgone</li>
+<li>Supplementary item</li>
+</ul>
+<h3>ESSAY QUESTIONS</h3>
+<ul>
+<li>To the Economist, all things are scare – Discuss</li>
+<li>Explain the concept of opportunity cost. b. Show how relevant it is to the individual, the firm and the government.</li>
+<li>Show how the basic concepts in Economics – wants, scarcity, choice, scale of preference and opportunity cost, are inter-related.</li>
+</ul>
+<h3>PRE-READING ASSIGNMENT:</h3>
+<p>Read about Basic Tools of Economic Analysis.</p>
+<h3>WEEKEND ACTIVITY</h3>
+<p>Indicate whether each statement is true or false</p>
+<ul>
+<li>The government of the United States of America is so rich that it does not worry about opportunity cost.</li>
+<li>Air, though useful is of no interest to the Economist.</li>
+<li>Scarcity is usually measured in absolute terms.</li>
+<li>A commodity that cannot be physically transferred from one place to another is not an economic good.</li>
+<li>An Economist is a miser.</li>
+</ul>
+<h3>REFERENCE TEXTS</h3>
+<ul>
+<li>Fundamentals of Economics by R.A.I. Anyawuecha. Chapter 1 pages 3-6.</li>
+<li>Bounty Economics for SSS by B.A. Adelekan et al chapter 1 page 3-11.</li>
+<li>Exam Focus on Economics for SSCE by A.A. Aderinto et al chapter 1 pages 1-5.</li>
+</ul>
+
+<h2>WEEK 3</h2>
+<h2>BASIC TOOLS FOR ECONOMIC ANALYSIS</h2>
+
+<h3>Content</h3>
+<ul>
+<li>Graphs, Charts and Tables</li>
+<li>Measures of Central Tendency</li>
+</ul>
+
+<h3>Sub-topic One:  Graphs, Charts and Tables</h3>
+<h3>Introduction</h3>
+<p>Economists make use mathematical and statistical tools in economic analysis.</p>
+<ul>
+<li>Mathematical tools for Economic Analysis</li>
+</ul>
+<p>Mathematical expressions are used to explain verbal statements in economics in order to make concise and accurate predictions. </p>
+
+<p>Examples: The quantity of a commodity depends on its price. This can be expressed using functional relationships in mathematics:</p>
+<p>Q_d=f(P_m) </p>
+
+<p>Where Q_d is quantity demanded of commodity m</p>
+<p>Pm is price of commodity m</p>
+
+<ul>
+<li>Statistical Tools:</li>
+</ul>
+<p>These are tools like tables, graphs and charts which are used to illustrate a body of data in economics. We shall treat these entire one after the other.</p>
+
+<ul>
+<li>Tables</li>
+</ul>
+<p>A table is an orderly arrangement of data in rows and column.</p>
+<h3>Advantages of Tables</h3>
+<ul>
+<li>It presents data in an orderly manner.</li>
+<li>Volume of data is reduced to show only important features.</li>
+<li>It summarizes data to make it more understandable.</li>
+<li>It makes comparison between different classes of data possible</li>
+<li>Further analysis and prediction of data is made possible</li>
+</ul>
+
+<ul>
+<li>Graphs</li>
+</ul>
+<p>Information on tables is presented on graph sheets to show trends and implication of such data. It is referred to as line graph.</p>
+<ul>
+<li>Features of a good graph</li>
+</ul>
+<p>A good graph must have the following:</p>
+<ul>
+<li>A clear and comprehensive title or heading.</li>
+<li>Vertical and horizontal axes. Horizontal axis is called the X–axis, which represents the 'independent variable'. Vertical axis is called the Y-axis, which represents the 'dependent variable'  [the reverse is the case in the theories of demand and supply]</li>
+<li>Graphs are drawn to scale. The scale determines the accuracy of graphs</li>
+<li>Unit of measurement e g cm, m, kg, N S Km etc</li>
+<li>Graphs must be fully and properly labelled.</li>
+</ul>
+
+<ul>
+<li>Charts</li>
+</ul>
+<p>Charts are also graphical representations of data</p>
+<ul>
+<li>Types of Charts:</li>
+</ul>
+<ul>
+<li>Bar chart</li>
+<li>Pie chart</li>
+<li>Histogram</li>
+<li>Pictogram</li>
+</ul>
+
+<ul>
+<li>Bar chart</li>
+</ul>
+<p>There are three types of bar charts, they are (i) Simple bar chart (ii) Component bar chart   (iii) Multiple bar chart</p>
+<p>Simple bar chart: Data presented in a table can be represented in a simple bar chart. The bar charts are represented by scaled length of bars, which show the value of each data. An equal space differentiates a data from the other. The bars are usually drawn vertically, but may also be drawn horizontally.</p>
+<p>Example: the population of five towns in 2010 is as follows:</p>
+
+<table border="1" style="border-collapse: collapse; width: 50%; margin: 10px auto;">
+    
+    <tr>
+        <th style="padding: 8px; text-align: left;">Town</th>
+        <th style="padding: 8px; text-align: left;">Population (Thousand)</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">IJEBU</td>
+        <td style="padding: 8px;">50</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">ILORIN</td>
+        <td style="padding: 8px;">160</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">ILESA</td>
+        <td style="padding: 8px;">100</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">IFE</td>
+        <td style="padding: 8px;">80</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">IJEBU-JESA</td>
+        <td style="padding: 8px;">10</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_1.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_2.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+<p><b>Component bar chart:</b> Component bar chart: This is used when data involves more than one item. Each bar represents the total value of all the items. A bar is divided into section or component. Each component to its value of the total. Each bar is differentiated from the other with colours.</p>
+
+<p>Example: A trader produced some crops for five years. The value is presented in the table below. Illustrate the data in a component bar chart.</p>
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Crop Production Values for Five Years</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Year</th>
+        <th style="padding: 8px; text-align: left;">Maize</th>
+        <th style="padding: 8px; text-align: left;">Yam</th>
+        <th style="padding: 8px; text-align: left;">Rice</th>
+        <th style="padding: 8px; text-align: left;">Total (kg)</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">2008</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">15</td>
+        <td style="padding: 8px;">5</td>
+        <td style="padding: 8px;">30</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">2009</td>
+        <td style="padding: 8px;">25</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">55</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">2010</td>
+        <td style="padding: 8px;">15</td>
+        <td style="padding: 8px;">30</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">65</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">2011</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">40</td>
+        <td style="padding: 8px;">70</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">2012</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">40</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_2.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+<ul>
+<li><b>Component Bar Chart:</b> It is also used to show data comprising two or more items. This helps in comparison of data. The difference here is that the component values for a time are drawn as separate bars lying side by side each other. No total value is used here.</li>
+</ul>
+
+<p>Example: the amount of sale three brands of multi drink from January to May 2013 is as follows. Present the data in a multiple bar chart.</p>
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Multi Drink Sales (January - May 2013)</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Month</th>
+        <th style="padding: 8px; text-align: left;">Maltonic</th>
+        <th style="padding: 8px; text-align: left;">Multina</th>
+        <th style="padding: 8px; text-align: left;">Hi-malt</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">January</td>
+        <td style="padding: 8px;">40</td>
+        <td style="padding: 8px;">35</td>
+        <td style="padding: 8px;">25</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">February</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">30</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">March</td>
+        <td style="padding: 8px;">15</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">20</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">April</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">30</td>
+        <td style="padding: 8px;">50</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">May</td>
+        <td style="padding: 8px;">30</td>
+        <td style="padding: 8px;">40</td>
+        <td style="padding: 8px;">60</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_2.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+
+<h3>EVALUATION</h3>
+<ul>
+<li>The following is the price of kerosene in some West African countries in January, 2000. Represent it on a bar chart.</li>
+</ul>
+
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Price of Kerosene in West African Countries (January 2000)</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Country</th>
+        <th style="padding: 8px; text-align: left;">Naira/litre</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">Nigeria</td>
+        <td style="padding: 8px;">150</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">Cameroon</td>
+        <td style="padding: 8px;">100</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">Niger</td>
+        <td style="padding: 8px;">120</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">Togo</td>
+        <td style="padding: 8px;">80</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">Burkina Faso</td>
+        <td style="padding: 8px;">110</td>
+    </tr>
+</table>
+
+<ul>
+<li>The number of boys and girls in selected four classes of a school are stated below. Represent in a bar component chart.</li>
+</ul>
+
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Class Distribution of Boys and Girls</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Class</th>
+        <th style="padding: 8px; text-align: left;">Boys</th>
+        <th style="padding: 8px; text-align: left;">Girls</th>
+        <th style="padding: 8px; text-align: left;">Total</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">SS 1B</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">30</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">SS 2A</td>
+        <td style="padding: 8px;">25</td>
+        <td style="padding: 8px;">15</td>
+        <td style="padding: 8px;">40</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">SS 2C</td>
+        <td style="padding: 8px;">15</td>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">35</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">SS 3D</td>
+        <td style="padding: 8px;">10</td>
+        <td style="padding: 8px;">25</td>
+        <td style="padding: 8px;">35</td>
+    </tr>
+</table>
+
+<ul>
+<li>The population of three sections of an economy in three years is stated below. Represent this in a multiple bar chart.</li>
+</ul>
+
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Population of Economy Sections (1980-1982)</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Section</th>
+        <th style="padding: 8px; text-align: left;">1980</th>
+        <th style="padding: 8px; text-align: left;">1981</th>
+        <th style="padding: 8px; text-align: left;">1982</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">North</td>
+        <td style="padding: 8px;">50000</td>
+        <td style="padding: 8px;">70000</td>
+        <td style="padding: 8px;">40000</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">West</td>
+        <td style="padding: 8px;">40000</td>
+        <td style="padding: 8px;">30000</td>
+        <td style="padding: 8px;">60000</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">East</td>
+        <td style="padding: 8px;">30000</td>
+        <td style="padding: 8px;">40000</td>
+        <td style="padding: 8px;">50000</td>
+    </tr>
+</table>
+
+<h3>Sub-Topic 2:  Measures of Central Tendencies</h3>
+<h3>Meaning</h3>
+<p>Measures of Central Tendency are forms of averages. They summarize the mass of data presented in a distribution. They include: Mean, Median and Mode</p>
+<h3>Mean</h3>
+<p>It is the average of variables or items in a data. It is the most common kind of average. It is calculated by dividing the sum total of the items by the number of items in the group.</p>
+<p>Mathematically, the formula for calculating mean is</p>
+<p>x ̆=  (∑fx)/(∑f)  or x ̆=  (∑x)/n</p>
+<p>Where</p>
+<p>x ̆ = mean</p>
+<p>X = values of the different items</p>
+<p>n = number of items</p>
+<p>f = frequency</p>
+<p>∑x = summation of x</p>
+<p>∑f = summation of frequency</p>
+<p>Note: we use (∑x)/n for few sets of values</p>
+<p>		(∑fx)/(∑f) for large volume of data</p>
+<h3>Data with few items</h3>
+<p>Example 1: The ages of seven students of SS 2A are 12, 15, 16, 17, 18, 13, 14. Calculate their mean age.</p>
+<p>Solution: 		x ̆=  (12+15+16+17+18+13+14)/7 	  =  105/7	   = 15 years</p>
+<h3>Data with more items</h3>
+<p>Example 2:</p>
+<p>A town consists of 20 households with the following annual incomes (in hundreds)</p>
+<p>60	40	100	80	120</p>
+<p>80	80	100	40	120</p>
+<p>80	80	40	40	140</p>
+<p>80	140	60	80	160</p>
+<p>Solution:</p>
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Frequency Distribution of Annual Household Incomes (in hundreds)</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">X</th>
+        <th style="padding: 8px; text-align: left;">Frequency</th>
+        <th style="padding: 8px; text-align: left;">fx</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">40</td>
+        <td style="padding: 8px;">4</td>
+        <td style="padding: 8px;">160</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">60</td>
+        <td style="padding: 8px;">2</td>
+        <td style="padding: 8px;">120</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">80</td>
+        <td style="padding: 8px;">6</td>
+        <td style="padding: 8px;">480</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">100</td>
+        <td style="padding: 8px;">2</td>
+        <td style="padding: 8px;">200</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">120</td>
+        <td style="padding: 8px;">2</td>
+        <td style="padding: 8px;">240</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">140</td>
+        <td style="padding: 8px;">2</td>
+        <td style="padding: 8px;">280</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">160</td>
+        <td style="padding: 8px;">1</td>
+        <td style="padding: 8px;">320</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; font-weight: bold;">∑</td>
+        <td style="padding: 8px; font-weight: bold;">20</td>
+        <td style="padding: 8px; font-weight: bold;">1800</td>
+    </tr>
+</table>
+
+<p>x ̆=  (∑fx)/(∑f)</p>
+<p>= 1800/20     = N90.00</p>
+<h3>MEDIAN</h3>
+<p>The median is an average which is the middle value when figures are arranged in order of magnitude. However, when data is given, it should be re-arranged either in ascending or descending order.</p>
+<p>The formula for median is   (n+1)/2 where n is the number of items when the items are a bit many.</p>
+<p>Example</p>
+<p>Find the median of the following numbers:   2, 5, 7</p>
+<p>Median = 5</p>
+<p>15, 11, 8, 21, 17, 3, 8</p>
+<p>Solution:</p>
+<p>Arranged the data in descending =	21, 17, 15, (11), 8, 8, 3 OR</p>
+<p>Ascending order 	= 	3, 8, 8, (11), 15, 17, 21</p>
+<p>Median is   (n+1)/2=   (7+1)/2	=   8/2	= 4th item</p>
+<p>Median = 11.</p>
+
+<h3>Median of Even Numbers</h3>
+<p>From the following set of numbers, state the median 19, 18, 14, 14, 15, 13, 18, 19, 19, 19, 21</p>
+<p>Solution: Arrange in ascending order</p>
+<p>13, 14, 14, 15, (18, 18), 19, 19, 19, 21</p>
+<p>n = 10</p>
+<p>Median 	= 	  (n+1)/2</p>
+<p>      	 =	  (10+1)/2</p>
+<p>            =	   11/2</p>
+<p>            = 5.5 = 5th and 6th items. </p>
+<p>Add items 5 and 6 and divide by 2</p>
+<p>=   (18+18)/2</p>
+<p>= 18</p>
+<h3>MODE</h3>
+<p>Mode of a set of numbers is the number which appears most often. It is the number with the greatest frequency.</p>
+<p>It is bi-modal for two and tri-modal for three modes.</p>
+<p>Example: the scores obtained by 10 students in a test are 80, 30, 50, 20, 70, 50, 70, 30, 60 and 50. Calculate the mode.</p>
+<p>Solution: arrange the numbers in ascending order.</p>
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Student Test Scores Frequency Distribution</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Marks</th>
+        <th style="padding: 8px; text-align: left;">Frequency</th>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">20</td>
+        <td style="padding: 8px;">1</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">30</td>
+        <td style="padding: 8px;">2</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">50</td>
+        <td style="padding: 8px;">3</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">60</td>
+        <td style="padding: 8px;">1</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">70</td>
+        <td style="padding: 8px;">2</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px;">80</td>
+        <td style="padding: 8px;">1</td>
+    </tr>
+</table>
+
+<p>The highest frequency is 3. Therefore 50 is the modal mark.</p>
+<h3>Advantages of Mean</h3>
+<ul>
+<li>It is easy to calculate</li>
+<li>Easy to understand</li>
+<li>It is useful for further statistical analysis</li>
+<li>It makes use of all the data in the group</li>
+<li>It can be calculated with high accuracy</li>
+</ul>
+<h3>Disadvantages of Mean</h3>
+<ul>
+<li>It can be influenced by extreme values</li>
+<li>It cannot be calculated graphically</li>
+<li>It can lead to disturbed/distorted result.</li>
+<li>Its value may not correspond with a single item.</li>
+<li>It may have decimal or fractional values e.g. the mean number of girls in a school may be 7.4 or 6.02</li>
+</ul>
+<h3>Advantages of Median</h3>
+<ul>
+<li>Its calculation is very easy.</li>
+<li>It is simple to understand.</li>
+<li>Values are not affected by extreme values.</li>
+<li>It can be obtained graphically.</li>
+<li>It does not involve serious calculations.</li>
+</ul>
+<h3>Disadvantages of Median</h3>
+<ul>
+<li>Arrangement of data is often tedious</li>
+<li>If the items are few, it is not likely to be representative of all data</li>
+<li>It cannot be used to determine the total value of all the items</li>
+<li>It is not suitable for further statistical analysis</li>
+<li>It tends to ignore extreme values</li>
+<li>Judgment based on the value of the median may be misleading</li>
+</ul>
+<h3>Advantages of Mode</h3>
+<ul>
+<li>It is very easy to understand</li>
+<li>It is easy to calculate</li>
+<li>It is not influence by extreme values</li>
+<li>It can  be used for non-numerical data</li>
+<li>It is a more approximate average to know common values</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>The raw scores of 20 students of Utopia High School who took part in an examination in Economics are given below. The pass mark is 40%. </li>
+<li>What is the mean score of the students' marks?</li>
+<li>How many students passed the examination?</li>
+<li>What percentage of the students failed the examination?</li>
+<li>What is the range of the score?</li>
+<li>How many students scored below the mean score? (WAEC NOV 2009 Question 1)</li>
+<li>What are the advantages and disadvantages of (i) mean (ii) median (iii) mode</li>
+<li>Use this table to answer question 1 and 2</li>
+</ul>
+<table border="1" style="border-collapse: collapse; width: 80%; margin: 15px auto;">
+    <caption style="font-weight: bold; margin-bottom: 10px;">Scores and Frequency Distribution</caption>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Scores (x)</th>
+        <th style="padding: 8px; text-align: left;">0</th>
+        <th style="padding: 8px; text-align: left;">2</th>
+        <th style="padding: 8px; text-align: left;">4</th>
+        <th style="padding: 8px; text-align: left;">5</th>
+        <th style="padding: 8px; text-align: left;">6</th>
+        <th style="padding: 8px; text-align: left;">7</th>
+        <th style="padding: 8px; text-align: left;">8</th>
+    </tr>
+    <tr>
+        <th style="padding: 8px; text-align: left;">Frequency (f)</th>
+        <td style="padding: 8px;">7</td>
+        <td style="padding: 8px;">11</td>
+        <td style="padding: 8px;">6</td>
+        <td style="padding: 8px;">7</td>
+        <td style="padding: 8px;">7</td>
+        <td style="padding: 8px;">4</td>
+        <td style="padding: 8px;">3</td>
+    </tr>
+</table>
+
+<ul>
+<li>Find the mode (a) 2 (b) 3 (c) 4 (d) 5 (e) 6</li>
+<li>The media is (a) 2 (b) 3 (c) 3 (c) 4 (d) 5 (e) 6 WAEC June 1998 objective questions 3 and 4).</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<ul>
+<li>The most frequently occurring value in a given data is the (a) mode (b) median (c) mean (d) range (WAEC objective June 2002, questions 3).</li>
+<li>The diagram here is</li>
+<li>(a) bar chart (b) pie chart (c) ball chart (d) histogram (e) histo-chart -WAEC objective, June 1994 questions 14.</li>
+</ul>
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_5.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+
+<p>Use the diagram below to answer questions 3 and 4.</p>
+<p>The total number of fruits consumed by a family in a year is 720. This is represented by the chart here.</p>
+
+
+<div style="text-align: center; margin: 20px 0;">
+    <img src="images/economics_ss1_1st-term_week_3_diagram_5.PNG" alt="Economics SS1 Week 3 Diagram 1" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);" />
+</div>
+
+<ul>
+<li>The quantity of banana consumed by the family is (a) 20 (b) 120 (c) 200 (d) 240 (e) 300</li>
+<li>The sum total of the quantity of mango and orange consumed by the family is (a)120 (b) 200 (c) 300 (d) 400 (e) 5200</li>
+<li>(WAEC Objective June 1996 questions 4).</li>
+<li>Present the following in a table.</li>
+</ul>
+<p>The price per bag of rice and quantity demanded at various prices are as follows N 150: 10 bags; N 140: 20 bags; N 130: 30 bags ; N 120: 40 bags; N 110:50 bags; N 100: 60 bags N 90: 70 bags;  N 80: 80 bags.</p>
+
+<ul>
+<li>Express the above statement mathematically.</li>
+<li>The quantity supplied of a commodity depends on its price</li>
+<li>The quantity demanded of a commodity depends on its level of income.</li>
+</ul>
+<h3>PRE-READING ASSIGNMENT</h3>
+<p>Read about Measures of Central Tendency</p>
+<h3>WEEKEND ACTIVITY</h3>
+<ul>
+<li>Mention types of charts</li>
+<li>Economics make use of ____ and ____ for Economic Analysis</li>
+</ul>
+<h3>REFEERNCES</h3>
+<ul>
+<li>Comprehensive Economics for SSS by J.U. Anyaele</li>
+<li>Fundamentals of Economics by R.A.I. Anyawuecha</li>
+</ul>
+
+<h2>WEEK 4</h2>
+<h2>CONCEPT OF DEMAND AND SUPPLY</h2>
+
+<h3>Content</h3>
+<ul>
+<li>Price System</li>
+<li>Demand and Supply Schedule and Curves</li>
+<li>Law of Demand and Supply</li>
+</ul>
+
+<h3>Sub-topic One:  Price System</h3>
+<h3>Price System</h3>
+<p>This refers to the mechanism by which prices of goods and services are determined by the forces of demand and Supply</p>
+<h3>Function of Price System</h3>
+<ul>
+<li>It determines the allocation of scare resources: if resources become scare, their prices will be high. Therefore only those who essentially need  them will afford to buy them.</li>
+<li>It influences production pattern:  through prices that consumers are willing to pay, suppliers are able to identify commodities that are in high demand and are able to adjust their production pattern. This is done to make high profits</li>
+</ul>
+<h3>Concept of Demand</h3>
+<p>Demand may be defined as the quantity of a commodity which a consumer is willing and able to buy at a given price and at a particular period of time.  In the ordinary meaning of demand, it is known as "want or desire".  But in Economics, demand is not mere desire or want.  It is the quantity of a commodity people want, and at the same time, able to buy at a particular price.</p>
+<p>For instance most people want to buy cars, buy a good house, but since they cannot afford to pay for these, their desire will not constitute demand.</p>
+<h3>Concept of Supply</h3>
+<p>Supply may be defined as the quantity of a good or service which a producer is willing and able to offer for sale at a particular period of time and at a given price. Supply does not mean the total number of products made but the amount of goods and services a producer is able to offer for sale at a particular period of time and at a given price.</p>
+<p>For example, vehicles stored in the inventory of the manufacturers which are not offered for sale at that point in time are not part of supply of motor vehicles.</p>
+<h3>Demand Schedule</h3>
+<p>A demand schedule means an orderly, tabular presentation that shows the quantity of a commodity demanded at various prices in a given period of time.  The table below shows Mrs. Bell's Demand Schedule for loaves of bread.</p>
+<p>Mrs. Bell's Demand Schedule for Loaves of Bread</p>
+<p>Price per loaf of bread	Quantity demanded per month</p>
+<p>50	5</p>
+<p>40	10</p>
+<p>30	15</p>
+<p>20	20</p>
+<p>10	25</p>
+
+<p>Since the table above involves only one individual, it is referred to as Individual Demand Schedule.  </p>
+<p>On the other hand, if it involves many consumers in the market, it is called Market Demand Schedule.  If we look at the table carefully, we can notice that more of the product is demanded at a lower price, while at higher price less of it is demanded.  Therefore, it means that as the price of bread falls, the quantity of bread demanded rises.  Similarly, as the price of bread rises, the quantity of bread demanded decreases.</p>
+<h3>Demand Curve</h3>
+<p>The information contained in a demand schedule may be illustrated in a graphical form and the resulting curve is referred to as Demand Curve – to get a better picture of the behaviour of the law of demand.  We can therefore say that demand curve is a graph which shows the relationship between the price and quantity demanded of a product at a particular time, where price of the commodity is plotted on the vertical Y-axis and quantity demanded on the horizontal X-axis.</p>
+
+<h3>Supply schedule</h3>
+<p>A supply schedule like demand schedule may be defined as a table showing the relationship between price and the quantity that is offered for sale at a particular period of time.</p>
+<p>We have two types of supply schedule</p>
+<ul>
+<li>Individual supply schedule</li>
+<li>Market supply schedule</li>
+</ul>
+<ul>
+<li>Individual Supply Schedule</li>
+</ul>
+<p>Let's examine quantities of yam offered for sale at different price by Mr. Adeolu</p>
+<p>Mr. Adeolu's Supply Schedule for yam.</p>
+<p>Price (N)	Quantity supplied</p>
+<p>55</p>
+<p>50</p>
+<p>45</p>
+<p>40</p>
+<p>35	35</p>
+<p>28</p>
+<p>21</p>
+<p>14</p>
+<p>7</p>
+
+<p>When many suppliers' individual schedules are combined, we have a Market Supply Schedule. For example let's assume other farmers, Mr Adeola and Mr. Ige, also combined their supply schedules with Mr Adeolu's, we will have a market schedule as shown below:</p>
+<p>Hypothetical market supply schedule for Yam</p>
+<p>Price per tuber of yam	Quantity supplied per Month	Total Quantity</p>
+<p>Supplied</p>
+<p>	Mr. Adeolu	Mr. Adeola	Mr. Ige	</p>
+<p>55</p>
+<p>50</p>
+<p>45</p>
+<p>40</p>
+<p>35	35</p>
+<p>28</p>
+<p>21</p>
+<p>14</p>
+<p>7	36</p>
+<p>32</p>
+<p>28</p>
+<p>24</p>
+<p>20	38</p>
+<p>33</p>
+<p>28</p>
+<p>23</p>
+<p>18	109</p>
+<p>93</p>
+<p>77</p>
+<p>61</p>
+<p>45</p>
+
+<h3>Supply Curve</h3>
+<p>A supply curve can be described as one which shows the relationship between the price of a commodity and the quantity of that commodity that is offered for sale at a particular period of time.</p>
+<p>The information in the schedule above can be presented in a graph. This then becomes the Supply Curve.</p>
+<p>Individual Supply Curve</p>
+
+<p>Market Supply Curve</p>
+
+<p>The Law of Demand</p>
+<p>The Law of demand states that, the higher the price of a commodity, ceteris paribus (i.e. all other things being equal), the lower the quantity demanded; and the lower the price, the higher the quantity demanded.  This law means that a rational consumer will buy more of a commodity if its price is lowered and less if its price is increased.  This law holds for most commodities, except for some special cases like giffen good.  Giffen goods are goods that still command high demand despite increase in their prices. That is the quantity demanded by consumers will not be reduced because of increase in price.  Example of giffen goods are salt, specified drugs, etc.</p>
+<h3>Law of supply</h3>
+<p>The law of supply states that, the higher the price of a commodity, (ceteris paribus) all other things equal, the higher the quantity supplied. Also the lower the price the lower the quantity supplied.</p>
+<p>This law means that sellers will only be motivated to offer more of their good or service for sale with increase in the price of that commodity.</p>
+<h3>EVALUATION</h3>
+<ul>
+<li>Define demand.</li>
+<li>State the laws of demand.</li>
+<li>Explain demand curve</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<h3>Objective</h3>
+<ul>
+<li>The market supply curve slopes upwards from left to right indicating that</li>
+<li>at a lower price more is supplied</li>
+<li>Two commodities can be supplied at the same time</li>
+<li>At a lower price, less is supplied</li>
+<li>Producers pay high taxes</li>
+<li>The law of supply states that</li>
+<li>The higher the price the higher the quantity supplied</li>
+<li>The lower the lower the price the higher the quantity supplied</li>
+<li>The higher the price the lower the quantity supplied</li>
+<li>All of the above</li>
+<li>Supply may be defined as</li>
+<li>Quality of goods and services a producer is willing and able to offer for sale</li>
+<li>Total number of production</li>
+<li>Total number of goods and services</li>
+<li>All of the above</li>
+<li>A demand schedule is _________</li>
+<li>A table containing the price of goods.</li>
+<li>A table showing the relationship between price and quantity demanded of a commodity.</li>
+<li>A table showing the consumer demand in order of importance</li>
+<li>The quantity of goods the consumer is prepared to buy</li>
+<li>The market demand</li>
+</ul>
+<h3>Essay Questions:</h3>
+<ul>
+<li>Write out the laws of demand.</li>
+<li>Distinguish between demand schedule and demand curve.  (SSCE 2012)</li>
+</ul>
+
+<h2>WEEK 5</h2>
+<h2>CONCEPT OF DEMAND AND SUPPLY</h2>
+
+<h3>Content</h3>
+<ul>
+<li>Factors affecting Demand and Supply</li>
+<li>Determinants of equilibrium Price</li>
+</ul>
+
+<h3>Sub-topic One:  Factors Affecting Demand</h3>
+<p>Factors affecting demand: The factors affecting demand are:</p>
+<ul>
+<li>Price of the commodity.</li>
+<li>Government policy.</li>
+<li>Taste and fashion.</li>
+<li>The prices of other commodities.</li>
+<li>An expectation of future changes in prices.</li>
+<li>Weather conditions and the season.</li>
+<li>The size of the population and the age distribution of population.</li>
+<li>Taxation on commodities.</li>
+<li>Change in real or disposable income.</li>
+</ul>
+
+<ul>
+<li>The Price of the Commodity</li>
+</ul>
+<p>Whenever the distribution of real or disposable income increases, the demand for those goods which are purchased by the consumers who are now earning higher income will surely increase.  On the other hand, if incomes should reduce, demand will also reduce.</p>
+<ul>
+<li>Government Policy</li>
+</ul>
+<p>Government policy may affect demand either adversely or favorably as the case may be.  Some government policies may encourage demand while others may discourage it e.g. smoking of cigarettes.</p>
+<ul>
+<li>Taste and Fashion</li>
+</ul>
+<p>A change in taste and fashion will adversely affect the demand.  A consumer would usually purchase more of the commodities he likes or prefers.  If the change in taste favours a commodity, the demand for it will be high, while a change in taste against a commodity will lead to a lower demand for it.</p>
+<ul>
+<li>The Prices of Other Commodities</li>
+</ul>
+<p>If there is change in the price of other commodities it may influence the demand for a commodity.  This affects the goods with close substitutes and complementary goods.  Examples are margarine and butter, coffee and tea, semovita and wheat.  If the price of one increases, the consumer may switch over to its substitute.</p>
+<ul>
+<li>An Expectation of Future Changes in prices</li>
+</ul>
+<p>A promise by the government to increase personal incomes, lower taxes, raise import duties, or improve exchange rates for the local currency can encourage credit buying among consumers of various products irrespective of the fact that such promises are yet to be implemented.</p>
+<ul>
+<li>Weather Condition and the Season</li>
+</ul>
+<p>The condition of weather and climate usually affect the demand for certain products positively or negatively.  For example, umbrellas and raincoats will be demanded more during the rainy season than in the dry season.</p>
+<ul>
+<li>The Size of the Population and the Age Distribution of Population.</li>
+</ul>
+<p>The size of the population will surely determine the level of demand for a particular commodity.  If there is a change in the size of population, it would bring about a change in the number of consumers.  If the population increases, there is tendency to be an increase in demand for food and other essentials of life and vice versa.</p>
+<ul>
+<li>Taxation on Commodities</li>
+</ul>
+<p>When taxes and tariffs changes and also duties paid on goods and services; there are resultant changes in demand for them.  Once there is increase in taxes of certain goods, demand for them will be affected.  In other words, demand for goods and services will fall.</p>
+<ul>
+<li>Change in Real Disposable Income</li>
+</ul>
+<p>Whether there is increase in the structure of income either real or disposable, there will be definite change in demand for goods and services.  For instance, in the case of lecturers and researchers, it should be expected that a rise in their incomes will translate to the purchase of products such as computers, internet connectivity and satellite television subscriptions.</p>
+<h3>EVALUATION</h3>
+<ul>
+<li>Mention five factors affecting demand</li>
+<li>What effect does change in income of consumers has the demand for a commodity?</li>
+</ul>
+<h3>Sub-topic Two:  Factors Affecting Supply</h3>
+<p>These are:</p>
+<ul>
+<li>Changes in the prices of inputs</li>
+<li>Changes in the prices of substitute goods and services</li>
+<li>Climatic conditions</li>
+<li>Future price expectations</li>
+<li>Government policies</li>
+<li>Changes in Taxation and subsidies</li>
+<li>Changes in the number of producers in a market</li>
+<li>Technological change</li>
+</ul>
+
+<ul>
+<li>Changes in the prices of inputs: - If the price of raw materials, electrical power, fuel, rents, wages and salaries, interest rates increases or decreases it will cause the supply of the product to decrease or increase as the case by be.</li>
+<li>Changes in the prices of substitute goods and services: - an increase in the prices of good or service relative to its substitute will shift producer's attention to increasing the production of such a good.</li>
+<li>Climatic conditions: - changes in the weather condition can affect the supply of agricultural products. Good weather like good rainfall will surely increase the supply of farmers' output, and on the other way, bad weather such as excessive flood will reduce the output of the farmers.</li>
+<li>Future price expectations: - when the supplier has the expectation about the future behaviour of the prices of some goods, this may affect supply. For example if producers expect the price of beans to increase, they will change from producing maize and produce beans. As a result the supply of beans will increase while that of maize will fall.</li>
+<li>Government policies: - the Federal Government of Nigeria has been encouraging the production of cassava in her bid to raise its status as a significant export crop. When government policies discourage the importation of certain goods it may encourage local production of such products and this can translate to enhanced supply.</li>
+<li>Changes in taxation and subsidies: - increase in taxes paid by producers discourages supply in that the imposition of more taxes adds more cost to producers. In another way, the granting of subsidies will reduce cost of production.</li>
+<li>Changes in the number of producers: - the more the sellers in a market the more the supply of goods in that market. Markets with a larger number of sellers are more competitive and all the competitors push their products into the market continually.</li>
+<li>Technological change: - the current state of technology defines the production and product distribution capacity in a market as well as their costs. Improvement in technology often implies higher productivity, greater marketing efficiency and lower costs.</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>Identify six factors which cause a change in supply of a product</li>
+<li>Discuss government policies as one of the factors which cause a change in supply of a product.</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<h3>Objective Test:</h3>
+<ul>
+<li>The following are factors affecting the demand for a commodity except___________ (a)  Change in income  (b)  Taste and fashion  (c) Change in Price (d) Population (e) mobility of labour.</li>
+<li>The law of demand states that:</li>
+<li>As price increases, quantity demanded remains constant.</li>
+<li>Demand increases as price increases.</li>
+<li>As price falls, quantity demanded also falls</li>
+<li>As price falls, quantity demanded increases</li>
+<li>Demand and supply remain constant whether price falls or increases.</li>
+<li>Demand in Economics is synonymous __________</li>
+<li>Needs  (b) Wants of the consumers (c) all goods demanded in the market. (d) Wants supported with ability to pay.  (e) all consumer goods</li>
+</ul>
+
+<h3>Essay Questions</h3>
+<ul>
+<li>What do you understand by the supply of a commodity (SSCE 2008)</li>
+<li>Describe any five determinants of supply (SSCE 2008)</li>
+<li>With the aid of diagrams explain individual and market supply curve</li>
+</ul>
+<h3>PRE-READING ASSIGNMENT</h3>
+<p>Read about Production</p>
+<h3>REFERENCE TEXTS</h3>
+<ul>
+<li>Comprehensive Economics for SSS 1,2 and 3. By Johnson Ugoji Anyaele, A. Johnson Publishers Ltd.</li>
+<li>Fundamentals of Economics for SSCE 1,2 and 3 by R.A.I. Anyanwuocha AFRICANA FIRST PUBLISHERS</li>
+</ul>
+
+<h2>WEEK 6</h2>
+<h2>THEORY OF PRODUCTION</h2>
+<h3>CONTENT</h3>
+<ul>
+<li>Meaning of Production</li>
+<li>Types of Production</li>
+<li>Factors of Production</li>
+</ul>
+
+<h3>Sub-Topic 1:  Meaning and Types of Production</h3>
+<h3>MEANING OF PRODUCTION</h3>
+<p>Production is any economic activity that is aimed at creation of goods and services for the satisfaction of human wants. Production also includes the distribution of goods to the final consumers. Production involves the creation of tangible goods such as books, vehicles furniture items, bags, footwear etc as well as services (intangible goods) which are capable of satisfying human wants e g services of teachers, lawyers, security officers medical personal etc.</p>
+<h3>TYPES OF PRODUCTION</h3>
+<p>Production is broadly divided into two: Direct Production and Indirect Production</p>
+<ul>
+<li>Direct production has to do with economic activities aimed at meeting household needs. It is usually carried out on small scale, employing mostly family labour. Examples are crop farming, poultry, fishing etc for house hold consumption only.</li>
+<li>Indirect Production: This involves the production of goods and services on large scale for commercial purpose. Modern equipment and skilled labour are often engaged. The producer makes use of the proceeds of his sales to satisfy his other wants since he cannot produce all he needs.</li>
+</ul>
+
+<p>Production is classified into three stages:</p>
+<ul>
+<li>Primary production</li>
+<li>Secondary production</li>
+<li>Tertiary production</li>
+</ul>
+<ul>
+<li>Primary production: This refers to the production of basic raw materials to be used in their natural form or for the production of other goods. It involves majorly the extraction of raw material from the land, sea and air. Examples are mining, quarrying fishing and forest activities.</li>
+<li>Secondary production: This is the stage of production where raw materials or semi-finished goods which satisfy consumers' wants. This includes manufacturing and construction of building, roads bridges.</li>
+<li>Tertiary production: this involves the production of services. Those engaged in distributive trade and service professionals complete the production process by making goods and services produced at the primary and secondary stages reach the final consumer where and when they are needed e g teaching, medical service, insurance, legal service, banking, etc.</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>Mention the major types of production.</li>
+<li>Explain step by step the three stages of production.</li>
+<li>When is production said to be complete?</li>
+</ul>
+<h3>Sub-Topic 2:  FACTORS AFFECTING PRODUCTION</h3>
+<p>Factors of production are the material inputs or resources which are needed to produce goods and services. These are land, labour, capital and entrepreneur.</p>
+
+<ul>
+<li>LAND</li>
+</ul>
+<p>Land, according to economists, is a gift of nature and includes land surfaces, mineral resources, water and forest resources, rain, sunshine etc. The reward for lands is rent.</p>
+<h3>Features or characteristics of land</h3>
+<ul>
+<li>Land is fixed in supply: land and its natural resources are fixed in supply. They cannot be replaced once they are exhausted.</li>
+<li>Land is a free gift of nature: it is a natural endowment, not produced by human effort.</li>
+<li>Land is immobile: it cannot be moved or transferred from one place to another.</li>
+<li>Land differs in quality and value from place to place. The fertility of a piece of land makes it suitable for agricultural purpose more than an infertile piece. Also, the location 0f a piece land determines its economic value.</li>
+<li>Land is subject to the law of diminishing returns especially in agricultural practice. A piece of land that is cultivated years after year becomes less productive over time.</li>
+</ul>
+
+<ul>
+<li>LABOUR</li>
+</ul>
+<p>Labour is the human skill, knowledge and effort (mental or manual) utilized in the production of goods and services to satisfy human wants. Labour can be skilled, semi-skilled or unskilled.</p>
+<ul>
+<li>Skilled labour requires long and professional training e g engineers, construction, accountants, lawyers, etc.</li>
+<li>Semi-skilled labour requires less intense training e g auto mechanics, barbers, hair dressers, caterers, tailors etc.</li>
+<li>Unskilled labour requires minimal or no training e g traders, guards, messengers, launderers, etc.</li>
+</ul>
+<p>The reward for labour is wages and salaries.</p>
+<h3>FEATURES OR CHARCTERISTICS OF LABOUR</h3>
+<ul>
+<li>Labour is a human factor of production</li>
+<li>Labour is both geographical and economical mobile</li>
+<li>Labour acquire skill trough training</li>
+<li>Labour is variable (not fixed) factor</li>
+<li>Labour can control and combine other factor of production</li>
+<li>Labour is an active factor required to put other factors together</li>
+</ul>
+
+<ul>
+<li>CAPITAL</li>
+</ul>
+<p>Capital can be described as resources or physical assets produced by man to be used in the production of other goods and services. It is referred to as wealth created for the creation of further wealth. It is a man-made aid to production. Capital resources include building, machine, agricultural tools, vehicles etc. The reward for capital is interest.</p>
+<p>Capital may be fixed or circulating. It is fixed when it is not used up during production e g buildings, machine, and vehicles. Circulating or working capital is used up in the course of production or changed into other form e g raw materials, money etc.</p>
+<h3>CHARACTERISTICS OF CAPITAL</h3>
+<ul>
+<li>Capital is a man-made resource</li>
+<li>Capital takes varied forms-machines money, materials etc</li>
+<li>Capital can be in various forms: fixed or variable, mobile or immobile, machines, money or other input.</li>
+<li>Capital deprecates with time and can eventually become worn-out or out-dated.</li>
+</ul>
+
+<ul>
+<li>ENTREPRNEUR</li>
+</ul>
+<p>This is the factor of production that organizes and co-ordinates the other factors of production in required combination for efficient maximum production of goods and services at minimum cost. This is done with a view at making profit. An entrepreneur is the owner of the business organization. The reward of entrepreneur is profit.</p>
+<h3>FUNCTION OF THE ENTERPRENEUR</h3>
+<ul>
+<li>He is the risk bearer of the business organization. He takes risk and bears the out-come, loss or profit, failure or success.</li>
+<li>He is a decision maker. He takes important decisions having to do with what to produce, how, where and for whom to produce.</li>
+<li>The entrepreneur provides funds and required capital for the production.</li>
+<li>He is the coordinator. He organizes, manages and directs the activities of the business.</li>
+<li>He organizes and combines the factors of production in right proportions for efficient production at minimal cost. He determines the scale of production and seeks for information.</li>
+</ul>
+<h3>EVALUATION:</h3>
+<ul>
+<li>Who is an entrepreneur? What role does he play in production process?</li>
+<li>Mention the factors of production and the rewards accruable to each.</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<h3>Objective Test</h3>
+<ul>
+<li>Production involves</li>
+<li>Creation of goods and services</li>
+<li>Selling of goods and services</li>
+<li>Manufacturing of goods</li>
+<li>Mining and forest</li>
+<li>All of the above</li>
+<li>One of the following is not a reward of factors of production</li>
+<li>Rent</li>
+<li>Dividend</li>
+<li>Profit</li>
+<li>Wages</li>
+<li>Interest</li>
+<li>The Co-coordinator of factor of production is</li>
+<li>Manager</li>
+<li>Controller</li>
+<li>Entrepreneur</li>
+<li>Economist</li>
+<li>Accountants</li>
+<li>Mining, fishing and forestry come up under _______</li>
+<li>Tertiary</li>
+<li>Primary</li>
+<li>Indirect</li>
+<li>Secondary</li>
+<li>Direct</li>
+<li>Which is NOT a variable factor of production?</li>
+<li>Labour</li>
+<li>Tools</li>
+<li>Money</li>
+<li>Land</li>
+<li>Raw-materials</li>
+</ul>
+<h3>ESSAY QUESTIONS:</h3>
+<ul>
+<li>Explain production</li>
+<li>What is the main aim of production?</li>
+<li>Give five example of (i) Goods (ii) services</li>
+<li>Mention the faction necessary for production to take place.</li>
+<li>What is labour? What are its features?</li>
+</ul>
+<h2>WEEK 7</h2>
+<h2>THEORY OF PRODUCTION: Division of Labour and Specialization</h2>
+
+<h3>Content: 1.   Division of Labour</h3>
+<ul>
+<li>2.    Specialization</li>
+<li>3.   Advantages and Disadvantages</li>
+<li>4.    Limitations of Division of Labour</li>
+</ul>
+
+<h3>Sub-Topic 1:  DIVISION OF LABOUR</h3>
+<h3>THE ORIGIN OF MODERN DIVISION OF LABOUR</h3>
+<p>It was one of the forefathers of Economics – Adam Smith who enunciated the theory of division of labour in 1776 in his book titled "THE WEAITH OF NATIONS". Adams Smith visited a place where pins were made and found that pin-making involved eighteen different processes at that time. He also found that one man was coordinating all the processes of pin-making all alone. As a result of this rigorous and slow process involved in the processes of making pins, that man was producing 20 pins a day. Adam Smith came to a conclusion that if these eighteen pin-making processes were handled by different individuals instead of one man, more pins will be produced. This idea of division of labour thought out by Smith was then applied; as a result, 48,000 pins were produced per day. This is how the application of modern division of labour came to existence in our present day.</p>
+<h3>DEFINITION—Division of labour may be defined as a system of breaking down production processes into different stages so that each stage is undertaken or handled by an individual. This division of production processes will depend on the type, size of industry and goods produced. It should be known that in modern times, division of labour is more applicable in an industrial economy than in agricultural economy. Example: Textile industry which is subdivided into, spinning, weaving and dyeing, warping, beaming, drafting and denting.</h3>
+<h3>EVALUATION</h3>
+<ul>
+<li>What is division of labour?</li>
+<li>Why is division of labour more applicable in industrial economy than in agricultural economy?</li>
+</ul>
+<h3>Sub-Topic 2: SPECIALIZATION</h3>
+<p>Specialization may be defined as the act of an individual or a firm or a country concentrating its resources and efforts in the production of relatively few commodities in which it has the greatest advantage over others.</p>
+<p>There is specialization in division of labour and division of labour is the result of specialization. The major aim of division of labour and specialization is to increase productivity i.e. output.</p>
+<h3>Types of Specialization</h3>
+<ul>
+<li>Specialization by products: This is when a firm, individual or government concentrates in the production of a particular commodity.</li>
+<li>Specialization by process: This is the concentration of a firm or individual or government on an aspect or stage of production process</li>
+<li>Territorial or geographical specialization: This is the concentration of a geographical area or territorial area on the production of a product.</li>
+<li>Sex specialization: This is also known as custom or race or tradition specialization. Here, a kind of production is being carried out by the sex i.e. male or female</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>What is specialization?</li>
+<li>State four types of specialization and explain them.</li>
+</ul>
+<h3>Sub-Topic 3: ADVANTAGES AND DISADVANTAGES OF DIVISION OF LABOUR/SPECIALIZATION</h3>
+<h3>Advantages or Merits of Division of Labour and Specialization</h3>
+<ul>
+<li>Time saving</li>
+<li>Increase in production</li>
+<li>They reduce fatigue</li>
+<li>They increase the skill of workers</li>
+<li>It leads to specialization</li>
+<li>Creation of employment opportunities</li>
+<li>They make the use of machines in production possible</li>
+<li>Improvement in the quality of goods</li>
+<li>Reduction in cost per unit</li>
+<li>Economy of using tools</li>
+</ul>
+<h3>Disadvantages or Demerits of Division of Labour and Specialization</h3>
+<ul>
+<li>They make work monotonous</li>
+<li>They bring about decline in craftsmanship</li>
+<li>The use of machines reduces employment opportunities</li>
+<li>They bring about immobility of labour</li>
+<li>Increase in interdependence among individuals and industries.</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>Mention five advantages of division of labour and specialization</li>
+<li>State four disadvantages of division of labour and specialization.</li>
+</ul>
+<h3>Sub-Topic 4: LIMITATIONS OR FACTORS THAT ENCOURAGE OR DISCOURAGE DIVISION OF LABOUR</h3>
+<ul>
+<li>The size of  the market</li>
+<li>The availability of labour</li>
+<li>The nature of the product</li>
+<li>Availability of capital</li>
+<li>Technical difficulties or possibilities</li>
+<li>Government policy.</li>
+</ul>
+<h3>EVALUATION</h3>
+<ul>
+<li>Enumerate four limitations of division of labour.</li>
+<li>Explain four factors that can encourage/discourage division of labour or specialization.</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<ul>
+<li>What are the factors that may encourage or discourage division of labour</li>
+<li>Explain what you understand by specialization. What are its advantages and disadvantages?</li>
+</ul>
+<h3>PRE READING ASSIGNMENT</h3>
+<p>Read about scale of production</p>
+<h3>WEEKEND ACTIVITIES</h3>
+<p>Find out how division of labour can necessitates exchange and limited by market</p>
+<h3>REFERENCE TEXTS</h3>
+<ul>
+<li>Fundamentals of Economics for SSCE by R.A.J. Anyanwuoa</li>
+<li>Comprehensive Economics for SSS BY Johnson Ugoji, Anyaele</li>
+</ul>
+
+<h3>EVALUATION</h3>
+<ul>
+<li>Mention five advantages of division of labour and specialization</li>
+<li>State four disadvantages of division of labour and specialization</li>
+</ul>
+
+<h2>WEEK 8</h2>
+<h2>TOPIC: THEORY OF PRODUCTION</h2>
+<h3>Contents: Scale of production</h3>
+<ul>
+<li>Advantages of large scale production</li>
+<li>Disadvantages of large scale of production</li>
+</ul>
+<h3>Sub-Topic 1: SCALE OF PRODUCTION/ ECONOMIES OF SCALE</h3>
+<p>By economies of scale or scale of production, we mean the growth of a firm or an industry resulting from expansion of the volume of productive capacity which leads to increase in output and decrease in its cost of production per unit.</p>
+<p>There are two types of economies of scale</p>
+<ul>
+<li>Internal economies and internal diseconomies</li>
+<li>External economies and external diseconomies</li>
+</ul>
+<h3>INTERNAL ECONOMIES AND INTERNAL DISECONOMIES</h3>
+<p>Internal economies also known as the economies of large scale production are the advantages a firm derives from the expansion of its scale of production as a result of its own single efforts. In this case, as the size of the firm increases, there will be greater efficiency resulting in the fall in the cost per unit of output. On the other hand, when the firm's expansion leads to less efficiency and increase in the cost per unit of output as a result of internal difficulties or organizational constraints, the firm is suffering from what is known as internal diseconomies.</p>
+<h3>EVALUATION:</h3>
+<ul>
+<li>State the types of economies of scale</li>
+<li>Explain the types of economies of scale.</li>
+</ul>
+<h3>Sub-Topic 2: ADVANTAGES OF INTERNAL ECONOMIES OF LARGE SCALE PRODUCTION OR ADVANTAGES A LARGE FIRM HAS OVER A SMALL FIRM</h3>
+<ul>
+<li>Technological or technical economies</li>
+<li>Marketing economies</li>
+<li>Research economies</li>
+<li>Financial economies</li>
+<li>Managerial economies</li>
+<li>Welfare economies</li>
+<li>Training economies</li>
+<li>Risk-bearing economies</li>
+</ul>
+<h3>EVALUATION:</h3>
+<ul>
+<li>Elucidate the advantages of internal economies of large scale production.</li>
+<li>Discuss the advantages a large firm has over a small firm.</li>
+</ul>
+<h3>Sub-Topic 3: DISADVANTAGES OF INTERNAL ECONOMIES OF LARGE SCALE PRODUCTION OR ADVANTAGES OF SMALL SCALE PRODUCTION  OR ADVANTAGES OF SMALL- SCALE FIRM OVER LARGE –SCALE FIRM</h3>
+<ul>
+<li>The relationship between employers and employees of a large firm is more impersonal than a small scale firm</li>
+<li>It is easier for a small-scale firm to adjust to business changes than large-scale firm</li>
+<li>A large-scale firm has increase business risks more than a small-scale firm</li>
+<li>It requires more capital to establish, run and finance a large-scale firm than a small-scale firm</li>
+</ul>
+<h3>LIMITATIONS TO THE SCALE OF PRODUCTION OR LIMITATIONS TO THE GROWTH OF FIRMS</h3>
+<ul>
+<li>The size of the market</li>
+<li>Need to satisfy individual taste</li>
+<li>Complexity and the increasing cost of  the organization</li>
+<li>Increased risks</li>
+<li>Falling price of the commodity</li>
+<li>The size of capital available</li>
+<li>Nature of the firm's products and nature of the business</li>
+<li>The organizational ability of the managers of the firm</li>
+</ul>
+<h3>EXTERNAL ECONOMIES AND EXTERNAL DISECONOMIES</h3>
+<p>External economies are the benefits a firm derives from increase in its output and decrease in costs due to helps the firm receives from other firms especially in the use of their products. It simply refers to those benefits which attributable to a firm as a result of being located close to others. External economies are manifest more in industrial estates.</p>
+<p>External diseconomies on the other hand, are the increased costs a firm will experience as a result of increasing its output resulting from external effects. They advantages and disadvantages of localization of industries are equally apply to external economies and diseconomies.</p>
+<h3>EVALUATION</h3>
+<ul>
+<li>What is scale of production or economies of scale?</li>
+<li>Discuss external economies and diseconomies.</li>
+</ul>
+<h3>WEEKEND ASSIGNMENT</h3>
+<ul>
+<li>What are the factors that encourage large scale production?</li>
+<li>Differentiate between internal economies and external economies of scale of production.</li>
+<li>What are external diseconomies?</li>
+</ul>
+<h3>PRE READING ASSIGNMENT</h3>
+<p>Read about economic problems of society</p>
+<h3>WEEKEND ACTIVITIES</h3>
+<ul>
+<li>In tabular form, distinguish between internal diseconomies and external economies.</li>
+<li>Enumerate the factors which limit the scale of production or the growth of small firms.</li>
+</ul>
+<h3>REFERENCE TEXTS</h3>
+<ul>
+<li>Fundamentals of Economics for SSCE by R.A.J. Anyanwuoa</li>
+<li>Comprehensive Economics for SSS BY Johnson Ugoji, Anyaele</li>
+</ul>
+
+<h3>EVALUATION</h3>
+<ul>
+<li>Mention five advantages of division of labour and specialization</li>
+<li>State four disadvantages of division of labour and specialization</li>
+</ul>
+
+<h2>WEEK 9</h2>
+<h2>DATE: ………………………………</h2>
+<h2>TOPIC: BASIC ECONOMIC PROBLEMS OF SOCIETY</h2>
+<h3>Content</h3>
+<ul>
+<li>Definitions  of Economic System</li>
+<li>What to produce?</li>
+<li>How to produce ?</li>
+<li>For whom to produce? </li>
+<li>Efficiency of resource use</li>
+</ul>
+
+<h3>Sub-Topic 1:  BASIC ECONOMIC PROBLEMS OF SOCIETY</h3>
+<h3>Meaning of Economic System</h3>
+<p>Economic System refers to the system by which a nation organizes the ownership, control and allocation of her resources in a bid to achieve national objectives.  It is the system by which answers are provided to the fundamental economic questions of what to produce, how to produce and who gets what is produced.</p>
+<h3>BASIC ECONOMIC PROBLEMS</h3>
+<p>The basic economic problems of society arise because of scarcity of resources. The way a society organizes itself to solve these problems determines the type of economic system it will practice. These problems to be examined are:</p>
+<ul>
+<li>What to produce?</li>
+<li>How to produce? </li>
+<li>For whom to produce ?</li>
+<li>Efficiency of resource use</li>
+</ul>
+
+<ul>
+<li>WHAT TO PRODUCE?</li>
+</ul>
+<p>The question of what to produce arises because resources are scarce. Since we cannot have everything we want, we have to set our priorities. In so doing, individuals, firms and the government are faced with the problem deciding on the type of goods and services to produce for society. This is what determines the allocation of productive resources in an economy. If more resources are to produce a commodity, fewer resources will be available for production of other commodities.</p>
+
+<ul>
+<li>HOW TO PRODUCE? </li>
+</ul>
+<p>This problem arises because society and producers have to decide the method or technique of producing a particular commodity. The technique adopted depends on the resources available to the society. The country can employ labour or capital intensive techniques of production. If it is labour intensive, more labour and less machines will be used. If it is capital intensive, more machines and less labour will be used. The technique to choose depends on factors such as the state of development in the country, employment level, government objective etc. Whichever method is employed, it depends on the cost per unit of output produced. Problem of technique of production are dealt with in the theory of production.</p>
+
+<ul>
+<li>FOR WHOM TO PRODUCE?</li>
+</ul>
+<p>This deals with the problem of and distribution. How are the available goods and services to be allocated among the various members of the society? In other words, it involves the question of what proportion of the national product should go to the various individuals and groups in society to ensure equity. Do we produce for the children, the working population, the rich, or the aged?</p>
+
+<ul>
+<li>HOW THE DISTRIBUTION CAN BE EQUITABLY DISTRIBUTED AND   EFFICIENCY OF RESOURCE USE</li>
+</ul>
+
+<p>This deals with the distribution system of the economy. Society has to ask question "How efficiently are available resources being used"? In addition, is the society being used to full or partial capacity? In addition, the society determines whether available products are being efficiently allocated among consumers to maximize social welfare. Each society tries to reduce the level of unemployment (under-utilization) of resources. If resources are efficiently used there will be increase in the production of goods and services and make everybody better off. The question of efficiency of production and allocation of resources comes under welfare economics.</p>
+<h3>EVALUATION</h3>
+<ul>
+<li>State the problems every society faces.</li>
+<li>How does each society try to tackle its problems</li>
+<li>Does every section of the economy get all it wants? Why?</li>
+<li>How can the problem of distribution and efficiency of resource use be solved?</li>
+</ul>
+<h3>WEEKLY ASSIGNMENT</h3>
+<h3>Objective Test:</h3>
+<ul>
+<li>Which of the following problems arises where there are more than one technically possible methods of production?</li>
+<li>Where to produce</li>
+<li>For whom to produce</li>
+<li>How to produce</li>
+<li>What to produce (WAEC objective test question 1, 2012)</li>
+<li>The decision to produce more of one product will under normal circumstance imply that:</li>
+<li>More of another product will be produced</li>
+<li>Less of something else will be produced</li>
+<li>No other product will be produced</li>
+<li>Enough resources are available</li>
+<li>A great number of economic problems arise from _________</li>
+<li>The reduction of poverty</li>
+<li>Excessive supply of goods</li>
+<li>The failure of the price system</li>
+<li>Competing demand for scarce resources</li>
+<li>Every society strives to pursue all the following economic objectives except ____</li>
+<li>Increased production</li>
+<li>Price stability</li>
+<li>Inequitable distribution of income</li>
+<li>Sustainable growth and development</li>
+<li>June 1999 WAEC Objective questions 3</li>
+</ul>
+<h3>Essay Questions:</h3>
+<ul>
+<li>Write short notes on the basic economic problems of society.</li>
+<li>What basic concept in Economics does each problem represent?</li>
+</ul>
+<h3>REFERENCES</h3>
+<ul>
+<li>Fundamentals of Economics by R.A.I. Anyanwuocha chapter 2 pages 7-8.</li>
+<li>Bounty Economics for SSS by B.A. Adelekan et al chapter 1 pages 12-13.</li>
+<li>Exam Focus on Economics for SSCE by A.A. Aderinto et al chapter 1 pages 1-5.</li>
+</ul>
+<h3>PRE-READING ASSIGNMENT</h3>
+<p>Read about Basic tools of Economic Analysis.</p>
+<h3>WEEKEND ACTVITY:</h3>
+<p>List the basic problems of society and how to solve them.</p>
+<h2>WEEK 10- Revision</h2>
+<h2>WEEK 11- Examination</h2>
+`
+            };
+
+            // Search functionality
+            searchInput.addEventListener('input', filterSubjects);
+
+            // Filter buttons
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filterSubjects();
+                });
+            });
+
+            // Toggle classes on subject click
+            subjectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const classesContainer = this.querySelector('.classes-container');
+                    const isVisible = classesContainer.style.display === 'block';
+                    
+                    // Hide all other classes
+                    document.querySelectorAll('.classes-container').forEach(container => {
+                        container.style.display = 'none';
+                    });
+                    
+                    // Show/hide this one
+                    classesContainer.style.display = isVisible ? 'none' : 'block';
+                });
+            });
+
+            function filterSubjects() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                let visibleCount = 0;
+
+                subjectCards.forEach(card => {
+                    const title = card.querySelector('.subject-title').textContent.toLowerCase();
+                    const category = card.dataset.category;
+                    
+                    const matchesSearch = title.includes(searchTerm);
+                    const matchesFilter = activeFilter === 'all' || category === activeFilter;
+                    
+                    if (matchesSearch && matchesFilter) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            // Term link click handler
+            document.querySelectorAll('.term-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const subject = this.dataset.subject;
+                    const classLevel = this.dataset.class;
+                    const term = this.dataset.term;
+                    showNotes(subject, classLevel, term);
+                });
+            });
+
+            // Show notes function
+            window.showNotes = function(subject, classLevel, term) {
+                const key = `${subject}-${classLevel}-${term}`;
+                const notesContent = notesData[key];
+                
+                if (notesContent) {
+                    document.getElementById('notesTitle').textContent = `${subject} ${classLevel} ${term}`;
+                    document.getElementById('notesText').innerHTML = notesContent;
+                    document.getElementById('notesModal').style.display = 'block';
+                } else {
+                    alert('Notes not available for this selection.');
+                }
+            };
+
+            // Close notes function
+            window.closeNotes = function() {
+                document.getElementById('notesModal').style.display = 'none';
+            };
+
+            // Close modal when clicking outside
+            document.getElementById('notesModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeNotes();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>

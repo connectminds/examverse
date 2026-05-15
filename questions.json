@@ -93731,25 +93731,691 @@
         }
       ]
     },
+
     {
-      "name": "Creative Practice",
-      "questions": []
-    },
-    {
-      "name": "Financial Accounting",
-      "questions": []
-    },
-    {
-      "name": "Commerce",
-      "questions": []
-    },
-    {
-      "name": "CRS",
-      "questions": []
-    },
-    {
-      "name": "IRS",
-      "questions": []
+      "name": "Marketing",
+      "questions": [
+        {
+          "id": "MARKETING2022_1",
+          "year": 2022,
+          "topic": "Classification of Goods",
+          "question": "Which of the following items is an example of industrial goods?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Cassava tuber", "image": null },
+            { "label": "B", "text": "Toothpaste", "image": null },
+            { "label": "C", "text": "Bread", "image": null },
+            { "label": "D", "text": "Cake", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Industrial goods are products used in the production of other goods. Cassava tubers can be processed into starch, flour, or garri, whereas the other options are consumer goods.",
+          "difficulty": "Easy",
+          "tags": ["products", "industrial_goods"]
+        },
+        {
+          "id": "MARKETING2022_2",
+          "year": 2022,
+          "topic": "Marketing in Nigeria",
+          "question": "The first institution to introduce a degree programme in marketing in Nigeria is University of",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Ibadan", "image": null },
+            { "label": "B", "text": "Nigeria, Nsukka", "image": null },
+            { "label": "C", "text": "Lagos", "image": null },
+            { "label": "D", "text": "Jos", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "The University of Nigeria, Nsukka (UNN) was the first university in Nigeria to offer a full degree program in Marketing.",
+          "difficulty": "Medium",
+          "tags": ["history", "education"]
+        },
+        {
+          "id": "MARKETING2022_3",
+          "year": 2022,
+          "topic": "Core Marketing Concepts",
+          "question": "Which of the following marketing terms is applied to a buyer that obtains a desired product by offering something in return?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Needs", "image": null },
+            { "label": "B", "text": "Wants", "image": null },
+            { "label": "C", "text": "Demand", "image": null },
+            { "label": "D", "text": "Exchange", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "Exchange is the core concept of marketing, involving the act of obtaining a desired object from someone by offering something in return.",
+          "difficulty": "Easy",
+          "tags": ["fundamentals", "exchange"]
+        },
+        {
+          "id": "MARKETING2022_4",
+          "year": 2022,
+          "topic": "Marketing Orientations",
+          "question": "A company's orientation that concentrates on mass distribution and low cost of its product is a",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "product concept", "image": null },
+            { "label": "B", "text": "production concept", "image": null },
+            { "label": "C", "text": "marketing concept", "image": null },
+            { "label": "D", "text": "selling concept", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "The production concept holds that consumers will favor products that are available and highly affordable, focusing on production efficiency and mass distribution.",
+          "difficulty": "Medium",
+          "tags": ["orientations", "production_concept"]
+        },
+        {
+          "id": "MARKETING2022_5",
+          "year": 2022,
+          "topic": "Marketing Orientations",
+          "question": "Which of the following business orientations stresses that promotional efforts are necessary before customers buy a product?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Production concept", "image": null },
+            { "label": "B", "text": "Product concept", "image": null },
+            { "label": "C", "text": "Selling concept", "image": null },
+            { "label": "D", "text": "Marketing concept", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "The selling concept assumes that consumers will not buy enough of the firm’s products unless it undertakes a large-scale selling and promotion effort.",
+          "difficulty": "Medium",
+          "tags": ["orientations", "selling_concept"]
+        },
+        {
+          "id": "MARKETING2022_6",
+          "year": 2022,
+          "topic": "Marketing Mix",
+          "question": "A set of controllable variables that a firm uses to pursue its objectives is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "product mix", "image": null },
+            { "label": "B", "text": "product concept", "image": null },
+            { "label": "C", "text": "selling concept", "image": null },
+            { "label": "D", "text": "marketing mix", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "The marketing mix (4Ps: Product, Price, Place, Promotion) consists of controllable variables used to reach the target market.",
+          "difficulty": "Easy",
+          "tags": ["marketing_mix"]
+        },
+        {
+          "id": "MARKETING2022_7",
+          "year": 2022,
+          "topic": "Marketing Mix - Product",
+          "question": "A feature of product as a marketing mix element is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "credit terms", "image": null },
+            { "label": "B", "text": "warranty", "image": null },
+            { "label": "C", "text": "cash discount", "image": null },
+            { "label": "D", "text": "allowances", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Warranty is an attribute of the product itself. Credit terms, discounts, and allowances fall under the Price category.",
+          "difficulty": "Medium",
+          "tags": ["product", "warranty"]
+        },
+        {
+          "id": "MARKETING2022_8",
+          "year": 2022,
+          "topic": "Extended Marketing Mix",
+          "question": "Which marketing mix element is applicable when a firm provides parking space for its customers?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Process", "image": null },
+            { "label": "B", "text": "People", "image": null },
+            { "label": "C", "text": "Price", "image": null },
+            { "label": "D", "text": "Promotion", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "In service marketing, facilities like parking are part of 'Physical Evidence' or the 'Process' of delivering customer satisfaction.",
+          "difficulty": "Hard",
+          "tags": ["7Ps", "process"]
+        },
+        {
+          "id": "MARKETING2022_9",
+          "year": 2022,
+          "topic": "Product Concept",
+          "question": "In marketing, the term product refers to",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "any item that can be seen or touched.", "image": null },
+            { "label": "B", "text": "anything that can be offered for consumption.", "image": null },
+            { "label": "C", "text": "goods and ideas.", "image": null },
+            { "label": "D", "text": "packages' design and warranty.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "A product is anything that can be offered to a market for attention, acquisition, use, or consumption that might satisfy a want or need.",
+          "difficulty": "Easy",
+          "tags": ["definition", "product"]
+        },
+        {
+          "id": "MARKETING2022_10",
+          "year": 2022,
+          "topic": "Classification of Goods",
+          "question": "Milk, sugar and bread bought by Amaka for her children's breakfast are examples of",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "shopping goods.", "image": null },
+            { "label": "B", "text": "convenience goods.", "image": null },
+            { "label": "C", "text": "specialty goods.", "image": null },
+            { "label": "D", "text": "unsought goods.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Convenience goods are consumer products that the customer usually buys frequently, immediately, and with minimum comparison and buying effort.",
+          "difficulty": "Easy",
+          "tags": ["convenience_goods"]
+        },
+        {
+          "id": "MARKETING2022_11",
+          "year": 2022,
+          "topic": "Business Markets",
+          "question": "Companies that purchase goods for further processing is an example of",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "a consumer market.", "image": null },
+            { "label": "B", "text": "an industrial market.", "image": null },
+            { "label": "C", "text": "a reseller market.", "image": null },
+            { "label": "D", "text": "a government market.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Industrial markets consist of entities that buy goods and services for further processing or for use in their production process.",
+          "difficulty": "Easy",
+          "tags": ["industrial_market"]
+        },
+        {
+          "id": "MARKETING2022_12",
+          "year": 2022,
+          "topic": "Organizational Buying",
+          "question": "Which of the following statements explains an organizational market?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Buyers are widespread", "image": null },
+            { "label": "B", "text": "Buyers are price conscious", "image": null },
+            { "label": "C", "text": "Purchasing is on first-come, first-served", "image": null },
+            { "label": "D", "text": "Purchasing is done by trained personnel", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "Organizational buying decisions are typically more formal and professional, often handled by trained purchasing agents.",
+          "difficulty": "Medium",
+          "tags": ["organizational_buying"]
+        },
+        {
+          "id": "MARKETING2022_13",
+          "year": 2022,
+          "topic": "Consumer Buying Process",
+          "question": "At what stage in the buying process does a consumer consider product attributes of available brands?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Alternative search", "image": null },
+            { "label": "B", "text": "Alternative evaluation", "image": null },
+            { "label": "C", "text": "Purchase decision", "image": null },
+            { "label": "D", "text": "Post-purchase decision", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "In the evaluation of alternatives stage, the consumer compares different brands based on attributes and features.",
+          "difficulty": "Medium",
+          "tags": ["buying_process"]
+        },
+        {
+          "id": "MARKETING2022_14",
+          "year": 2022,
+          "topic": "Consumer Buying Process",
+          "question": "The last stage in the consumer buying decision process is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "information search.", "image": null },
+            { "label": "B", "text": "evaluation of alternatives.", "image": null },
+            { "label": "C", "text": "problem recognition.", "image": null },
+            { "label": "D", "text": "post-purchase decision.", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "The process concludes with post-purchase behavior, where the consumer evaluates their level of satisfaction with the purchase.",
+          "difficulty": "Easy",
+          "tags": ["buying_process"]
+        },
+        {
+          "id": "MARKETING2022_15",
+          "year": 2022,
+          "topic": "Marketing Research",
+          "question": "The process of collecting and analyzing relevant information to solve a marketing problem is marketing",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "intelligence.", "image": null },
+            { "label": "B", "text": "research.", "image": null },
+            { "label": "C", "text": "audit.", "image": null },
+            { "label": "D", "text": "planning.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Marketing research is the systematic design, collection, analysis, and reporting of data relevant to a specific marketing situation.",
+          "difficulty": "Easy",
+          "tags": ["research"]
+        },
+        {
+          "id": "MARKETING2022_16",
+          "year": 2022,
+          "topic": "Marketing Planning",
+          "question": "An information required for marketing planning is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "product quality control mechanism.", "image": null },
+            { "label": "B", "text": "company's recruitment policy.", "image": null },
+            { "label": "C", "text": "previous year's sales volume.", "image": null },
+            { "label": "D", "text": "company's financial policy.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Previous sales data is essential for forecasting and setting targets in a marketing plan.",
+          "difficulty": "Medium",
+          "tags": ["planning", "sales"]
+        },
+        {
+          "id": "MARKETING2022_17",
+          "year": 2022,
+          "topic": "Customer Feedback",
+          "question": "The purpose of feedback from customers who use a company's product is to",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "train marketing staff.", "image": null },
+            { "label": "B", "text": "improve the quality of products.", "image": null },
+            { "label": "C", "text": "determine distribution channel to adopt.", "image": null },
+            { "label": "D", "text": "determine the promotional tool to adopt.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Customer feedback helps a company understand where their product falls short so they can make quality improvements.",
+          "difficulty": "Easy",
+          "tags": ["feedback", "customer_service"]
+        },
+        {
+          "id": "MARKETING2022_18",
+          "year": 2022,
+          "topic": "Pricing Arithmetic",
+          "question": "What is the company's mark-up on cost? (Cost: 10,000, Selling Price: 14,000)",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "28.6%", "image": null },
+            { "label": "B", "text": "35%", "image": null },
+            { "label": "C", "text": "40%", "image": null },
+            { "label": "D", "text": "71.4%", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Profit = 14,000 - 10,000 = 4,000. Mark-up on Cost = (Profit / Cost) * 100 = (4,000 / 10,000) * 100 = 40%.",
+          "difficulty": "Medium",
+          "tags": ["pricing", "markup"]
+        },
+        {
+          "id": "MARKETING2022_19",
+          "year": 2022,
+          "topic": "Pricing Arithmetic",
+          "question": "What is the retailer's profit per bag of rice if he incurs an additional cost of N500 on each bag of rice? (Cost: 10,000, Selling Price: 14,000)",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "N 3,000", "image": null },
+            { "label": "B", "text": "N 3,500", "image": null },
+            { "label": "C", "text": "N 4,000", "image": null },
+            { "label": "D", "text": "N 4,500", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Total Cost = 10,000 + 500 = 10,500. Profit = Selling Price - Total Cost = 14,000 - 10,500 = 3,500.",
+          "difficulty": "Medium",
+          "tags": ["pricing", "profit"]
+        },
+        {
+          "id": "MARKETING2022_20",
+          "year": 2022,
+          "topic": "Promotion - Advertising",
+          "question": "Which of the following activities is not a function of advertising?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "informs the audience about a product.", "image": null },
+            { "label": "B", "text": "reminds the audience about a product.", "image": null },
+            { "label": "C", "text": "is used in place of personal selling.", "image": null },
+            { "label": "D", "text": "encourages middlemen to stock a product desired.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Advertising and Personal Selling are different components of the promotional mix; advertising is mass communication, while personal selling is face-to-face. One doesn't usually replace the other.",
+          "difficulty": "Medium",
+          "tags": ["advertising"]
+        },
+        {
+          "id": "MARKETING2022_21",
+          "year": 2022,
+          "topic": "Advertising Media",
+          "question": "An example of a non-personal means of reaching the target audience by an identified sponsor is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "personal selling.", "image": null },
+            { "label": "B", "text": "coupon.", "image": null },
+            { "label": "C", "text": "sales promotion.", "image": null },
+            { "label": "D", "text": "billboard.", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "A billboard is a form of advertising, which is defined as non-personal communication paid for by an identified sponsor.",
+          "difficulty": "Easy",
+          "tags": ["advertising", "media"]
+        },
+        {
+          "id": "MARKETING2022_22",
+          "year": 2022,
+          "topic": "Pricing Strategies",
+          "question": "A reason for granting quantity discount is to",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "encourage prompt payment.", "image": null },
+            { "label": "B", "text": "encourage bulk purchases.", "image": null },
+            { "label": "C", "text": "make sales outlet popular.", "image": null },
+            { "label": "D", "text": "encourage competitions.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Quantity discounts are price reductions offered to buyers to encourage them to buy in larger volumes.",
+          "difficulty": "Easy",
+          "tags": ["pricing", "discount"]
+        },
+        {
+          "id": "MARKETING2022_23",
+          "year": 2022,
+          "topic": "Sales Promotion",
+          "question": "Coupon is used as a sales promotional tool targeted at",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "wholesalers.", "image": null },
+            { "label": "B", "text": "consumers.", "image": null },
+            { "label": "C", "text": "retailers.", "image": null },
+            { "label": "D", "text": "salesmen.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Coupons are consumer-oriented sales promotion tools that offer price savings to the final user.",
+          "difficulty": "Easy",
+          "tags": ["sales_promotion", "coupon"]
+        },
+        {
+          "id": "MARKETING2022_24",
+          "year": 2022,
+          "topic": "Merchandising",
+          "question": "The creation of awareness for products at the point of sale is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "sales promotion.", "image": null },
+            { "label": "B", "text": "sampling.", "image": null },
+            { "label": "C", "text": "personal selling.", "image": null },
+            { "label": "D", "text": "merchandising.", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "Merchandising involves the promotion of sales by the use of displays, packaging, and in-store marketing techniques.",
+          "difficulty": "Medium",
+          "tags": ["merchandising"]
+        },
+        {
+          "id": "MARKETING2022_25",
+          "year": 2022,
+          "topic": "Merchandising",
+          "question": "An example of merchandising activities is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "canvasing for customers by salesmen.", "image": null },
+            { "label": "B", "text": "displaying products at the retail store.", "image": null },
+            { "label": "C", "text": "distribution of goods to customers.", "image": null },
+            { "label": "D", "text": "sales call by salesmen.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Product display is a classic merchandising activity used to attract buyers inside a retail environment.",
+          "difficulty": "Easy",
+          "tags": ["merchandising"]
+        },
+        {
+          "id": "MARKETING2022_26",
+          "year": 2022,
+          "topic": "Channels of Distribution",
+          "question": "The channel member who does not take title to goods is the",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "retailer.", "image": null },
+            { "label": "B", "text": "wholesaler.", "image": null },
+            { "label": "C", "text": "agent.", "image": null },
+            { "label": "D", "text": "distributor.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Agents and brokers facilitate buying and selling but do not own (take title to) the inventory.",
+          "difficulty": "Medium",
+          "tags": ["distribution", "agent"]
+        },
+        {
+          "id": "MARKETING2022_27",
+          "year": 2022,
+          "topic": "Channels of Distribution",
+          "question": "Which of the following distribution channels would be used to sell tractors and cranes?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Producer → Agent → Consumer", "image": null },
+            { "label": "B", "text": "Producer → Agent → Retailer → Consumer", "image": null },
+            { "label": "C", "text": "Producer → Agent → Wholesaler → Retailer → Consumer", "image": null },
+            { "label": "D", "text": "Producer → Agent → Wholesaler → Consumer", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Industrial machinery like tractors and cranes usually utilize a direct channel or a simple one-agent channel because of their high cost and technical nature.",
+          "difficulty": "Hard",
+          "tags": ["distribution", "industrial"]
+        },
+        {
+          "id": "MARKETING2022_28",
+          "year": 2022,
+          "topic": "Marketing Documentation",
+          "question": "The document that shows the details of goods being transported is the",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Bill of Exchange.", "image": null },
+            { "label": "B", "text": "invoice.", "image": null },
+            { "label": "C", "text": "waybill.", "image": null },
+            { "label": "D", "text": "Certificate of Origin.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "A waybill is a document issued by a carrier giving details and instructions relating to the shipment of goods.",
+          "difficulty": "Medium",
+          "tags": ["documentation", "transportation"]
+        },
+        {
+          "id": "MARKETING2022_29",
+          "year": 2022,
+          "topic": "Transportation",
+          "question": "One of the reasons transportation is important is that it",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "ensures customers' satisfaction.", "image": null },
+            { "label": "B", "text": "ensures profit maximization.", "image": null },
+            { "label": "C", "text": "facilitates the distribution of goods.", "image": null },
+            { "label": "D", "text": "ensures stabilization of product price.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "The primary function of transportation in marketing is to bridge the geographical gap by moving goods from producers to consumers.",
+          "difficulty": "Easy",
+          "tags": ["transportation"]
+        },
+        {
+          "id": "MARKETING2022_30",
+          "year": 2022,
+          "topic": "Warehousing",
+          "question": "An example of a government warehouse is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "co-operative warehouse.", "image": null },
+            { "label": "B", "text": "bonded warehouse.", "image": null },
+            { "label": "C", "text": "manufacturer's warehouse.", "image": null },
+            { "label": "D", "text": "private warehouse.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Bonded warehouses are under government authority and store dutiable goods on which taxes have not yet been paid.",
+          "difficulty": "Medium",
+          "tags": ["warehousing", "government"]
+        },
+        {
+          "id": "MARKETING2022_31",
+          "year": 2022,
+          "topic": "Warehousing",
+          "question": "Which of the following goods are kept in bonded warehouse?",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "Semi-finished goods", "image": null },
+            { "label": "B", "text": "Dutiable goods", "image": null },
+            { "label": "C", "text": "Consumer goods", "image": null },
+            { "label": "D", "text": "Finished goods", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Dutiable goods (goods on which tax/duty is owed) are kept in bonded warehouses until the duty is settled.",
+          "difficulty": "Easy",
+          "tags": ["warehousing", "bonded_warehouse"]
+        },
+        {
+          "id": "MARKETING2022_32",
+          "year": 2022,
+          "topic": "Market Unions",
+          "question": "A body that comprises sellers of onions in an area is an example of a",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "labour union.", "image": null },
+            { "label": "B", "text": "market union.", "image": null },
+            { "label": "C", "text": "employers' association.", "image": null },
+            { "label": "D", "text": "producers' association.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Market unions are associations of traders or sellers of specific products within a market area.",
+          "difficulty": "Easy",
+          "tags": ["market_unions"]
+        },
+        {
+          "id": "MARKETING2022_33",
+          "year": 2022,
+          "topic": "Market Facilitators",
+          "question": "An example of market facilitator is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "transportation companies.", "image": null },
+            { "label": "B", "text": "manufacturing companies.", "image": null },
+            { "label": "C", "text": "manufacturer's association.", "image": null },
+            { "label": "D", "text": "textile sellers association.", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Market facilitators provide services that aid the marketing process, such as transportation, banking, and insurance.",
+          "difficulty": "Medium",
+          "tags": ["facilitators"]
+        },
+        {
+          "id": "MARKETING2022_34",
+          "year": 2022,
+          "topic": "International Marketing",
+          "question": "A method of engaging in international marketing with the lowest business risk is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "agency.", "image": null },
+            { "label": "B", "text": "exporting", "image": null },
+            { "label": "C", "text": "joint venture.", "image": null },
+            { "label": "D", "text": "direct investment.", "image": null }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Exporting involves producing goods in the home country and selling them abroad, which requires the least capital investment and carries the lowest risk.",
+          "difficulty": "Medium",
+          "tags": ["international_marketing", "exporting"]
+        },
+        {
+          "id": "MARKETING2022_35",
+          "year": 2022,
+          "topic": "International Marketing",
+          "question": "A form of engaging in international marketing that involves the pooling of resources between local and foreign firms is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "joint venture.", "image": null },
+            { "label": "B", "text": "direct investment.", "image": null },
+            { "label": "C", "text": "franchising.", "image": null },
+            { "label": "D", "text": "licencing.", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "A joint venture occurs when two companies join together to produce/market products, sharing ownership and risk.",
+          "difficulty": "Medium",
+          "tags": ["joint_venture", "international_marketing"]
+        },
+        {
+          "id": "MARKETING2022_36",
+          "year": 2022,
+          "topic": "E-Marketing",
+          "question": "One of the benefits of e-marketing is that it",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "distributes company's goods.", "image": null },
+            { "label": "B", "text": "enhances product quality.", "image": null },
+            { "label": "C", "text": "broadens a company's customer base.", "image": null },
+            { "label": "D", "text": "prevents pilferage of company's goods.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "E-marketing allows businesses to reach a global audience, thus expanding their customer reach far beyond local borders.",
+          "difficulty": "Easy",
+          "tags": ["e-marketing"]
+        },
+        {
+          "id": "MARKETING2022_37",
+          "year": 2022,
+          "topic": "E-Marketing",
+          "question": "One of the uses of e-marketing platform is to",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "deliver goods ordered.", "image": null },
+            { "label": "B", "text": "provide after sales service.", "image": null },
+            { "label": "C", "text": "provide packaging for products.", "image": null },
+            { "label": "D", "text": "promote goods and services.", "image": null }
+          ],
+          "correctAnswer": "D",
+          "explanation": "The primary use of e-marketing platforms is for digital promotion and advertising of products.",
+          "difficulty": "Easy",
+          "tags": ["e-marketing", "promotion"]
+        },
+        {
+          "id": "MARKETING2022_38",
+          "year": 2022,
+          "topic": "Sales Personnel Skills",
+          "question": "A skill a sales personnel should possess to enable him handle aggressive customer in a market outlet is",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "calculative skill.", "image": null },
+            { "label": "B", "text": "managerial skill.", "image": null },
+            { "label": "C", "text": "bargaining skill.", "image": null },
+            { "label": "D", "text": "technical skill.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Bargaining and interpersonal skills are vital for managing difficult interactions and reaching agreements with aggressive buyers.",
+          "difficulty": "Medium",
+          "tags": ["salesmanship"]
+        },
+        {
+          "id": "MARKETING2022_39",
+          "year": 2022,
+          "topic": "Credit Management",
+          "question": "A factor to be considered in extending credit facilities to a customer is the",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "nature of products to be sold.", "image": null },
+            { "label": "B", "text": "cost of producing the product.", "image": null },
+            { "label": "C", "text": "individual's total purchases in a given period.", "image": null },
+            { "label": "D", "text": "number of channel members involved in distribution.", "image": null }
+          ],
+          "correctAnswer": "C",
+          "explanation": "A company considers a customer's purchasing history and volume to determine creditworthiness and reliability.",
+          "difficulty": "Medium",
+          "tags": ["credit", "finance"]
+        },
+        {
+          "id": "MARKETING2022_40",
+          "year": 2022,
+          "topic": "Entrepreneurship",
+          "question": "An entrepreneur who intends to establish a frozen fish shop will need a",
+          "image": null,
+          "options": [
+            { "label": "A", "text": "reliable power supply.", "image": null },
+            { "label": "B", "text": "good communication network.", "image": null },
+            { "label": "C", "text": "good network of road.", "image": null },
+            { "label": "D", "text": "reliable skilled labour.", "image": null }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Frozen goods require constant refrigeration; therefore, a stable and reliable power supply is the most critical infrastructural need.",
+          "difficulty": "Easy",
+          "tags": ["entrepreneurship", "business_environment"]
+        }
+      ]
     }
   ]
 }

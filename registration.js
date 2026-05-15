@@ -335,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 3. Store user account in localStorage but DO NOT mark as logged-in yet.
-    //    The user must log in to continue so we can exercise the "subscribe" flow.
     localStorage.setItem('examVerseUser', JSON.stringify(userData));
     // do not set examVerseLoggedIn here
 
@@ -347,9 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
       msg.textContent = 'Account created successfully!';
       msg.classList.add('success-msg');
 
-      // 5. Final Redirect to login page with subscription trigger
+      // 5. Final Redirect to login page
       setTimeout(() => {
-        window.location.href = 'login.html?next=subscribe';
+        window.location.href = 'login.html';
       }, 500);
     }, 2500); 
   });

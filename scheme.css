@@ -1,0 +1,267 @@
+/* Scheme of Work - Sleek WAEC Subjects Page */
+
+:root {
+    --primary: #8b5cf6;
+    --accent: #06b6d4;
+    --bg-deep: #020617;
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-white: #f8fafc;
+    --text-dim: #94a3b8;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --hover-bg: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text-white);
+    position: relative;
+    overflow-x: hidden;
+    background: var(--bg-deep);
+}
+
+body::before {
+    content: 'EXAMVERSE';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.07);
+    white-space: nowrap;
+    z-index: 0;
+    letter-spacing: 8px;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Watermark */
+.watermark-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+    z-index: 0;
+    letter-spacing: 8px;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Bubbles */
+.bubble-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: visible;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bubble {
+    position: fixed;
+    pointer-events: none !important;
+    will-change: transform;
+    border-radius: 50%;
+}
+
+.scheme-container {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.scheme-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+    background: var(--hover-bg);
+    transform: scale(1.05);
+}
+
+.scheme-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 20px 0 10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.scheme-header p {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    margin: 0;
+}
+
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.subject-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.subject-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    background: var(--hover-bg);
+}
+
+.subject-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    color: white;
+}
+
+.subject-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 15px;
+    color: var(--text-white);
+}
+
+.subject-card p {
+    color: var(--text-dim);
+    margin: 0 0 20px;
+    line-height: 1.6;
+}
+
+.subject-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.subject-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .scheme-header h1 {
+        font-size: 2rem;
+    }
+
+    .subjects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .subject-card {
+        padding: 20px;
+    }
+
+    .back-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Table styles for syllabus */
+.scheme-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.scheme-content th,
+.scheme-content td {
+    border: 1px solid var(--glass-border);
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.scheme-content th {
+    background: var(--glass);
+    font-weight: 600;
+    color: var(--text-white);
+}
+
+.scheme-content td {
+    color: var(--text-dim);
+}
+
+.scheme-content tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.scheme-content tr:hover {
+    background: var(--hover-bg);
+}
