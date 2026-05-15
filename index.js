@@ -1,14 +1,9 @@
 (() => {
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
-  const isLoggedIn = localStorage.getItem('examVerseLoggedIn');
 
-  // Logged-in users go straight to dashboard.
-  if (isLoggedIn) {
-    window.location.href = 'dashboard.html';
-    return;
-  }
-
+  // Keep the landing page separate from the dashboard.
+  // Do not auto-redirect home page visitors to dashboard.html.
   const preloader = $('#preloader');
   const yearEl = $('#year');
   const navToggle = $('#nav-toggle');

@@ -20,6 +20,11 @@ Output will be generated in:
 
 - `release/ExamVerse-Setup-<version>.exe`
 
+Installer behavior:
+
+- Creates a desktop shortcut named `ExamVerse`
+- Uses the `EV` app icon from `build/icon.ico`
+
 This installer is configured for one-click per-user installation, so users can install without extra setup prompts.
 
 ## 3) Build Windows portable executable
@@ -50,7 +55,7 @@ npm start
 
 ## Release checklist
 
-1. Confirm branding assets are final (`examverse_logo.png`)
+1. Confirm desktop icon branding assets are final (`build/icon.ico`, `build/icon.png`)
 2. Confirm `.env` server settings for production APIs
 3. Run `npm run desktop:build`
 4. Test installer on a clean Windows machine

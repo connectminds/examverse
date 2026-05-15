@@ -45,7 +45,6 @@ function showCenteredAlert(message, options = {}) {
 let examHistory = [];
 let charts = { scoreTr: null, subjectPerf: null, difficultDist: null };
 const defaultDashboardUpdates = [
-    'New subscription verification added for secure dashboard access.',
     'Exam analytics charts improved for better score tracking.',
     'Export now downloads full exam history as CSV.',
     'Mobile dashboard performance and responsiveness optimized.'
@@ -56,11 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // redirect to login if not authenticated
     if (!localStorage.getItem('examVerseLoggedIn')) {
         window.location.href = 'login.html';
-        return;
-    }
-
-    const active = await ensureSubscriberIsActive();
-    if (!active) {
         return;
     }
 
@@ -177,72 +171,6 @@ window.setDashboardUpdates = async function (updatesArray, adminKey = '') {
     await renderDashboardUpdatesMarquee();
     console.log('Dashboard updates marquee changed successfully.');
 };
-
-async function ensureSubscriberIsActive() {
-    try {
-        const userStr = localStorage.getItem('examVerseUser');
-        const user = userStr ? JSON.parse(userStr) : null;
-        const email = (user?.email || '').trim().toLowerCase();
-        const deviceId = await resolveClientDeviceId();
-
-        if (!email) {
-            showCenteredAlert('No subscriber email found. Complete subscription to continue.', {
-                redirectTo: 'subscribe.html',
-                delay: 1900
-            });
-            return false;
-        }
-
-        if (!deviceId) {
-            showCenteredAlert('Unable to detect this device. Re-open the app and try again.', {
-                redirectTo: 'subscribe.html',
-                delay: 2100
-            });
-            return false;
-        }
-
-        const apiBase = localStorage.getItem('notificationApiUrl') || 'http://localhost:5000/api';
-        const response = await fetch(`${apiBase}/subscribers/status?email=${encodeURIComponent(email)}&deviceId=${encodeURIComponent(deviceId)}`);
-        const data = await response.json();
-
-        if (!response.ok || !data.success || data.status !== 'active') {
-            showCenteredAlert('Your subscription is not active yet. Please complete payment confirmation.', {
-                redirectTo: 'subscribe.html',
-                delay: 2100
-            });
-            return false;
-        }
-
-        return true;
-    } catch (error) {
-        showCenteredAlert('Unable to verify subscription status. Please try again.', {
-            redirectTo: 'subscribe.html',
-            delay: 2100
-        });
-        return false;
-    }
-}
-
-async function resolveClientDeviceId() {
-    const existing = localStorage.getItem('examVerseDeviceId');
-    if (existing) return existing;
-
-    if (window.examverseDesktop?.isDesktopApp && typeof window.examverseDesktop.getInstallId === 'function') {
-        try {
-            const installId = await window.examverseDesktop.getInstallId();
-            if (installId) {
-                localStorage.setItem('examVerseDeviceId', installId);
-                return installId;
-            }
-        } catch (error) {
-            console.warn('Unable to resolve desktop install id', error);
-        }
-    }
-
-    const fallbackId = `web-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-    localStorage.setItem('examVerseDeviceId', fallbackId);
-    return fallbackId;
-}
 
 // ============ Load User Profile ============
 function loadUserProfile() {

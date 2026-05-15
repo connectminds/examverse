@@ -42,6 +42,7 @@ function createWindow() {
     minWidth: 1024,
     minHeight: 700,
     title: 'ExamVerse',
+    icon: path.join(__dirname, 'build', 'icon.png'),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'desktop-preload.js'),
