@@ -279,7 +279,7 @@ function getLoginRedirect() {
     return 'dashboard.html';
 }
 
-// === UPDATED LOGIN FORM SUBMIT WITH 3s DELAY TO DASHBOARD ===
+// === UPDATED LOGIN FORM SUBMIT WITH ACTIVATION CHECK ===
 const loginForm = document.getElementById('loginForm');
 const submitBtn = document.getElementById('submitBtn');
 
@@ -293,40 +293,92 @@ loginForm.addEventListener('submit', async e=>{
   
   const email = emailInput.value.trim();
   const password = loginForm.password.value.trim();
+  const storedUserRaw = localStorage.getItem('examVerseUser');
+  const storedUser = storedUserRaw ? JSON.parse(storedUserRaw) : null;
 
-  // 2. Simulate Login Processing / API call
-  try {
-    // We wrap the redirect in a 3-second timeout for a professional feel
-    setTimeout(() => {
-        // Here you would normally check if credentials are valid
-        // set logged-in flag so future visits go straight to dashboard
-        localStorage.setItem('examVerseLoggedIn', '1');
+  // also check the full local users list (offline registrations)
+  const localUsers = JSON.parse(localStorage.getItem('examVerseUsers') || '[]');
+  // Determine the authoritative user record to validate against
+  let authUser = null;
+  if (storedUser && storedUser.email && storedUser.email.toLowerCase() === email.toLowerCase()) authUser = storedUser;
+  if (!authUser && Array.isArray(localUsers)) {
+    authUser = localUsers.find(u => u.email && u.email.toLowerCase() === email.toLowerCase()) || null;
+  }
 
-        // personalize with stored name
-        const storedUser = localStorage.getItem('examVerseUser');
-        let namePart = '';
-        if (storedUser) {
-            try {
-                const u = JSON.parse(storedUser);
-                if (u.firstName) namePart = ', ' + u.firstName;
-            } catch {};
-        }
-        document.getElementById('loginSuccess').textContent = `Welcome back${namePart}! Redirecting to Dashboard...`;
-        document.getElementById('loginSuccess').style.display = 'block';
-        document.getElementById('loginError').style.display = 'none';
-
-        // 3. Final redirect after the 3 seconds is up; destination may vary
-        setTimeout(() => {
-            window.location.href = getLoginRedirect();
-        }, 500); // Tiny buffer for success message to be read
-
-    }, 2500); // 2.5s for "Authenticating" + 0.5s for success message = 3s total
-
-  } catch(err){
+  // 2. Validate credentials
+  if (!authUser || !authUser.email || authUser.email.toLowerCase() !== email.toLowerCase() || authUser.password !== password) {
     submitBtn.disabled = false;
     submitBtn.classList.remove('loading');
     submitBtn.innerHTML = 'Login';
-    document.getElementById('loginError').textContent = 'Network error. Try again later.';
+    document.getElementById('loginError').textContent = 'Invalid email or password. Please try again.';
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginSuccess').style.display = 'none';
+    return;
+  }
+  // 3. Check if user is activated locally first
+  if (authUser.status && authUser.status.toLowerCase() === 'active') {
+    // proceed with login immediately
+    setTimeout(() => {
+      localStorage.setItem('examVerseLoggedIn', '1');
+      let namePart = '';
+      if (authUser && authUser.firstName) namePart = ', ' + authUser.firstName;
+      document.getElementById('loginSuccess').textContent = `Welcome back${namePart}! Redirecting to Dashboard...`;
+      document.getElementById('loginSuccess').style.display = 'block';
+      document.getElementById('loginError').style.display = 'none';
+      setTimeout(() => { window.location.href = getLoginRedirect(); }, 500);
+    }, 800);
+    return;
+  }
+
+  // 4. If not active locally, fall back to server check (if available)
+  try {
+    const checkResponse = await fetch(`/api/users/check/${encodeURIComponent(email)}`);
+    const checkData = await checkResponse.json();
+
+    if (!checkData.activated) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      submitBtn.innerHTML = 'Login';
+      document.getElementById('loginError').innerHTML = `Your account is currently <strong>${checkData.status}</strong>. Please wait for admin activation or contact support.`;
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginSuccess').style.display = 'none';
+      return;
+    }
+
+    // server reports activated — update local copy (if present) and proceed
+    try{
+      if(Array.isArray(localUsers)){
+        const idx = localUsers.findIndex(u=>u.email && u.email.toLowerCase()===email.toLowerCase());
+        if(idx !== -1){
+          localUsers[idx].status = 'active';
+          localUsers[idx].activatedAt = checkData.activatedAt || new Date().toISOString();
+          localUsers[idx].activatedBy = checkData.activatedBy || 'server';
+          localStorage.setItem('examVerseUsers', JSON.stringify(localUsers));
+        }
+      }
+    }catch(e){ console.warn('Failed to update local user after server activation', e); }
+
+    // 5. User is activated, proceed with login
+    setTimeout(() => {
+      localStorage.setItem('examVerseLoggedIn', '1');
+      let namePart = '';
+      if (authUser && authUser.firstName) namePart = ', ' + authUser.firstName;
+      document.getElementById('loginSuccess').textContent = `Welcome back${namePart}! Redirecting to Dashboard...`;
+      document.getElementById('loginSuccess').style.display = 'block';
+      document.getElementById('loginError').style.display = 'none';
+      setTimeout(() => { window.location.href = getLoginRedirect(); }, 500);
+    }, 800);
+
+  } catch(err){
+    // Network error: if server unreachable and local status is pending, show friendly message
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+    submitBtn.innerHTML = 'Login';
+    if (authUser && authUser.status && authUser.status.toLowerCase() === 'pending'){
+      document.getElementById('loginError').textContent = 'Your account is pending activation. Please wait for admin to activate your account.';
+    } else {
+      document.getElementById('loginError').textContent = 'Network error. Try again later.';
+    }
     document.getElementById('loginError').style.display = 'block';
   }
 });
