@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 800);
   }
 
-  // Form submit - COLLECT DATA, WAIT 3 SECONDS, REDIRECT TO LOGIN
+  // Form submit - COLLECT DATA, SEND TO SERVER, REDIRECT TO LOGIN
   form.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -320,9 +320,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.classList.add('btn-loading');
-    submitBtn.innerHTML = '<span>Verifying...</span>';
+    submitBtn.innerHTML = '<span>Registering...</span>';
 
-    // 2. Collect user data (Keeping your original logic)
+    // 2. Collect user data
     const userData = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -334,23 +334,79 @@ document.addEventListener('DOMContentLoaded', () => {
       passport: passportPreview.src || ''
     };
 
-    // 3. Store user account in localStorage but DO NOT mark as logged-in yet.
-    localStorage.setItem('examVerseUser', JSON.stringify(userData));
-    // do not set examVerseLoggedIn here
+    // 3. Send to server
+    fetch('/api/users/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Save user temporarily to localStorage (not logged in yet)
+        localStorage.setItem('examVerseUser', JSON.stringify(userData));
+        localStorage.setItem('examVerseUserId', data.userId);
+        localStorage.setItem('registrationStatus', 'pending_activation');
 
-    // 4. Smooth 3-second delay
-    setTimeout(() => {
-      submitBtn.innerHTML = '<span>Success! Redirecting...</span>';
-      submitBtn.style.background = '#18b981';
-      
-      msg.textContent = 'Account created successfully!';
-      msg.classList.add('success-msg');
+        // Append to local users list for offline admin activation
+        try{
+          const existing = JSON.parse(localStorage.getItem('examVerseUsers') || '[]');
+          existing.push(Object.assign({ userId: data.userId, status: 'pending', createdAt: new Date().toISOString() }, userData));
+          localStorage.setItem('examVerseUsers', JSON.stringify(existing));
+        }catch(e){ console.warn('Failed to persist local users list', e); }
 
-      // 5. Final Redirect to login page
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 500);
-    }, 2500); 
+        // 4. Smooth success feedback
+        submitBtn.innerHTML = '<span>Registration successful!</span>';
+        submitBtn.style.background = '#18b981';
+        
+        msg.textContent = `Account created! Your User ID: ${data.userId}. Please wait for admin activation.`;
+        msg.classList.add('success-msg');
+
+        // 5. Redirect to login after 2 seconds
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      } else {
+        throw new Error(data.error || 'Registration failed');
+      }
+    })
+    .catch(error => {
+      console.error('Registration error:', error);
+
+      // Offline / fallback behavior: save registration locally and proceed
+      try{
+        const fallbackId = 'local-' + Date.now();
+        localStorage.setItem('examVerseUser', JSON.stringify(userData));
+        localStorage.setItem('examVerseUserId', fallbackId);
+        localStorage.setItem('registrationStatus', 'pending_activation');
+
+        // Append to local users list for admin activation offline
+        try{
+          const existing = JSON.parse(localStorage.getItem('examVerseUsers') || '[]');
+          existing.push(Object.assign({ userId: fallbackId, status: 'pending', createdAt: new Date().toISOString() }, userData));
+          localStorage.setItem('examVerseUsers', JSON.stringify(existing));
+        }catch(e){ console.warn('Failed to persist local users list', e); }
+
+        submitBtn.innerHTML = '<span>Registration saved (offline)</span>';
+        submitBtn.style.background = '#f39c12';
+
+        msg.textContent = `Account created (offline). Your User ID: ${fallbackId}. Please wait for admin activation.`;
+        msg.classList.remove('error-msg');
+        msg.classList.add('success-msg');
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }catch(e){
+        // if fallback also fails, restore UI and show error
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.innerHTML = originalBtnText;
+        msg.textContent = `Error: ${error.message}`;
+        msg.classList.add('error-msg');
+      }
+    });
   });
 });
 

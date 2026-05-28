@@ -7,19 +7,27 @@
   // Register Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js', { scope: './' })
+      navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
         .then((registration) => {
           console.log('Service Worker registered successfully:', registration);
-          
-          // Check for updates periodically
+
+          // Immediately check for updates on load and periodically while online.
+          registration.update();
           setInterval(() => {
             registration.update();
           }, 60000); // Check every 60 seconds
-          
+
+          // If an update is already waiting from another tab/session,
+          // let the user install it immediately.
+          if (registration.waiting && navigator.serviceWorker.controller) {
+            showUpdateNotification(registration);
+          }
+
           // Listen for updates
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            
+            if (!newWorker) return;
+
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                 // New service worker available
@@ -33,6 +41,10 @@
         });
     });
 
+    navigator.serviceWorker.ready
+      .then((registration) => registration.update())
+      .catch(() => {});
+
     // Handle controller change (when new service worker takes over)
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       console.log('Service Worker controller changed - app updated');
@@ -44,8 +56,17 @@
   if ('onLine' in navigator) {
     window.addEventListener('online', () => {
       console.log('Device is online - checking for updates');
-      if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: 'CHECK_UPDATE' });
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration()
+          .then((registration) => {
+            if (registration) {
+              registration.update();
+              if (registration.waiting) {
+                showUpdateNotification(registration);
+              }
+            }
+          })
+          .catch(() => {});
       }
       showOnlineNotification();
     });
@@ -63,6 +84,7 @@
 
   // Notification UI functions
   function showUpdateNotification(registration) {
+    if (document.getElementById('pwa-update-notification')) return;
     const notification = document.createElement('div');
     notification.id = 'pwa-update-notification';
     notification.innerHTML = `

@@ -1,22 +1,17 @@
 {
   "name": "examverse",
   "version": "1.0.0",
-  "description": "ExamVerse desktop and web app with offline exam support and notifications",
-  "main": "desktop-main.js",
+  "description": "ExamVerse - Smart exam platform with offline support, real-time analytics, and AI-powered questions.",
+  "main": "electron-src/main.js",
+  "preload": "electron-src/preload.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "desktop": "electron .",
-    "desktop:icon": "powershell -ExecutionPolicy Bypass -File build/scripts/generate-ev-icon.ps1",
-    "desktop:build": "electron-builder --win nsis",
-    "desktop:build-portable": "electron-builder --win portable",
-    "desktop:build-all": "electron-builder --win nsis portable",
-    "android:prepare": "node scripts/prepare-web-assets.js",
-    "android:add": "npx cap add android",
-    "android:sync": "npm run android:prepare && npx cap sync android",
-    "android:open": "npx cap open android",
-    "android:apk": "npm run android:sync && cd android && gradlew assembleDebug",
-    "android:aab": "npm run android:sync && cd android && gradlew bundleRelease",
+    "electron:dev": "electron .",
+    "electron:build": "electron-builder",
+    "electron:build:dir": "electron-builder --dir",
+    "electron:pack": "electron-builder --dir --publish never",
+    "electron:dist": "electron-builder --publish never",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -26,7 +21,7 @@
     "nodemailer",
     "express"
   ],
-  "author": "ConnectMinds IT Tech",
+  "author": "Connectminds IT TECH",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
@@ -35,40 +30,40 @@
     "nodemailer": "^8.0.7"
   },
   "devDependencies": {
-    "electron": "^42.0.0",
-    "electron-builder": "^26.8.1",
+    "app-builder-bin": "^5.0.0-alpha.12",
+    "electron": "42.3.0",
+    "electron-builder": "26.8.1",
+    "electron-is-dev": "^2.0.0",
+    "electron-updater": "6.8.3",
     "nodemon": "^3.0.2"
   },
   "build": {
     "appId": "com.connectminds.examverse",
     "productName": "ExamVerse",
     "directories": {
-      "output": "release"
+      "app": ".",
+      "output": "dist"
     },
     "files": [
       "**/*",
-      "!release/**",
-      "!.git/**",
-      "!node_modules/.cache/**",
-      "!www/package.json",
-      "!www/package-lock.json"
+      "!www/**"
     ],
-    "asar": true,
     "win": {
-      "signAndEditExecutable": false,
       "target": [
-        "nsis"
-      ],
-      "icon": "build/icon.ico",
-      "artifactName": "ExamVerse-Setup-${version}.${ext}"
+        "nsis",
+        "zip"
+      ]
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
-      "allowElevation": false,
-      "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": "always",
-      "shortcutName": "ExamVerse"
-    }
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://connectminds.tech/updates/examverse/"
+      }
+    ]
   }
 }

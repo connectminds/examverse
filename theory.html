@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="description" content="Study theory resources and practice on ExamVerse." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Theory | ExamVerse</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="theory.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="watermark-bg">EXAMVERSE</div>
+    <div class="bubble-layer" id="bubbleLayer"></div>
+
+    <div class="app-container">
+
+        <nav class="top-nav">
+            <a href="dashboard.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <img id="userAvatar" class="nav-avatar" src="" alt="User photo" style="display:none;" />
+        </nav>
+
+        <header>
+            <div class="brand-logo-box">
+                <img src="examverse_logo.png" alt="ExamVerse Logo" class="main-logo">
+                <div class="brand-name">EXAM<span>VERSE</span></div>
+            </div>
+            
+            <h1>Theory & Learning</h1>
+            <p>Master your subjects with theory resources and practice questions.</p>
+        </header>
+
+        <div class="theory-container">
+            <!-- Search and Filter Section -->
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="subjectSearch" placeholder="Search for a subject...">
+            </div>
+
+            <!-- Theory Options -->
+            <section class="theory-options">
+                <div class="option-card">
+                    <div class="option-icon practice">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h2>Practice Mode</h2>
+                    <p>Study theory materials and practice questions with instant feedback.</p>
+                    <button class="btn btn-primary" id="practiceModeBtn">
+                        <i class="fas fa-play"></i>
+                        Start Practice
+                    </button>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon exam">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h2>Exam Mode</h2>
+                    <p>Test your knowledge with timed exam questions based on theory topics.</p>
+                    <button class="btn btn-primary" id="examModeBtn">
+                        <i class="fas fa-check-square"></i>
+                        Start Exam
+                    </button>
+                </div>
+            </section>
+
+            <!-- Theory Content Section -->
+            <section class="theory-content">
+                <h2>Available Theory Topics</h2>
+                <div class="subjects-grid" id="subjectsGrid">
+                    <!-- Subjects will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <p>No subjects found. Try a different search.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for subject selection -->
+    <div class="modal" id="subjectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 id="modalTitle">Select Year/Exam</h2>
+            <div class="year-list" id="yearList">
+                <!-- Years will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="pwa-init.js"></script>
+    <script src="user-profile.js"></script>
+    <script src="theory.js"></script>
+    <script src="bubbles.js"></script>
+</body>
+</html>

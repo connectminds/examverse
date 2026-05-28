@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CONFIGURATION: Add new years here!
     // ==========================================
     const availableYears = [
+        2026,
         2025,
         2024, 
         2023, 

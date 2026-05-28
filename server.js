@@ -9,6 +9,7 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 const app = express();
 const ADMIN_ACCESS_KEY = process.env.ADMIN_ACCESS_KEY || 'examverse-admin-2026';
@@ -44,6 +45,48 @@ function readSubscriptionStore() {
 
 function writeSubscriptionStore(store) {
     fs.writeFileSync(SUBSCRIPTION_STORE_PATH, JSON.stringify(store, null, 2), 'utf8');
+}
+
+function paystackApiRequest(endpoint, method = 'GET', payload = null) {
+    return new Promise((resolve, reject) => {
+        const secretKey = process.env.PAYSTACK_SECRET_KEY;
+        if (!secretKey) {
+            return reject(new Error('Paystack secret key is not configured'));
+        }
+
+        const body = payload ? JSON.stringify(payload) : null;
+        const url = `https://api.paystack.co${endpoint}`;
+        const req = https.request(url, {
+            method,
+            headers: {
+                Authorization: `Bearer ${secretKey}`,
+                'Content-Type': 'application/json',
+                ...(body ? { 'Content-Length': Buffer.byteLength(body) } : {})
+            }
+        }, (res) => {
+            let data = '';
+            res.on('data', (chunk) => { data += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsed = JSON.parse(data || '{}');
+                    if (res.statusCode >= 400 || !parsed.status) {
+                        return reject(new Error(parsed.message || parsed?.data?.message || 'Paystack API error'));
+                    }
+                    resolve(parsed);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+
+        req.on('error', reject);
+        if (body) req.write(body);
+        req.end();
+    });
+}
+
+function buildPaystackReference() {
+    return `examverse_${Date.now()}_${Math.round(Math.random() * 1000000)}`;
 }
 
 function normalizeEmail(email) {
@@ -403,6 +446,89 @@ app.post('/api/subscribe', async (req, res) => {
             error: 'Subscription failed',
             details: error.message
         });
+    }
+});
+
+app.post('/api/paystack/initialize', async (req, res) => {
+    try {
+        const { email, amount } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
+            return res.status(400).json({ error: 'Valid email is required' });
+        }
+        if (!amount || typeof amount !== 'number' || amount < 100) {
+            return res.status(400).json({ error: 'Valid amount is required' });
+        }
+
+        const reference = buildPaystackReference();
+        const callbackUrl = `${process.env.APP_URL || 'http://localhost:5000'}/login.html`;
+        const paystackResponse = await paystackApiRequest('/transaction/initialize', 'POST', {
+            email: normalizedEmail,
+            amount,
+            reference,
+            callback_url: callbackUrl
+        });
+
+        res.json({
+            success: true,
+            authorizationUrl: paystackResponse.data.authorization_url,
+            reference: paystackResponse.data.reference
+        });
+    } catch (error) {
+        console.error('Paystack initialize error:', error.message);
+        res.status(500).json({ error: 'Failed to initialize Paystack payment', details: error.message });
+    }
+});
+
+app.post('/api/paystack/verify', async (req, res) => {
+    try {
+        const { reference, email, deviceId = '' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (!normalizedEmail || !normalizedEmail.includes('@')) {
+            return res.status(400).json({ error: 'Valid email is required' });
+        }
+        if (!reference) {
+            return res.status(400).json({ error: 'Valid transaction reference is required' });
+        }
+
+        const verifyResponse = await paystackApiRequest(`/transaction/verify/${encodeURIComponent(reference)}`, 'GET');
+        if (!verifyResponse.data || verifyResponse.data.status !== 'success') {
+            return res.status(400).json({ error: 'Payment was not successful' });
+        }
+
+        const store = readSubscriptionStore();
+        upsertSubscriber(store, normalizedEmail, { status: 'active' });
+
+        if (deviceId) {
+            upsertDeviceSubscription(store, {
+                email: normalizedEmail,
+                deviceId,
+                status: 'active'
+            });
+        }
+
+        appendAuditLog(store, {
+            action: 'paystack-payment-verified',
+            actor: normalizedEmail,
+            email: normalizedEmail,
+            deviceId,
+            note: `Payment verified for reference ${reference}`
+        });
+
+        writeSubscriptionStore(store);
+
+        return res.json({
+            success: true,
+            reference,
+            status: verifyResponse.data.status,
+            amount: verifyResponse.data.amount,
+            subscriber: store.subscribers[normalizedEmail]
+        });
+    } catch (error) {
+        console.error('Paystack verify error:', error.message);
+        return res.status(500).json({ error: 'Failed to verify Paystack payment', details: error.message });
     }
 });
 
@@ -974,6 +1100,241 @@ app.post('/api/notify/reminder', async (req, res) => {
             error: 'Failed to send reminder email',
             details: error.message
         });
+    }
+});
+
+// ============ User Registration Management ============
+const USERS_STORE_PATH = path.join(__dirname, 'users-store.json');
+
+function readUsersStore() {
+    try {
+        if (!fs.existsSync(USERS_STORE_PATH)) {
+            return { users: [], lastIdCount: 0 };
+        }
+        const raw = fs.readFileSync(USERS_STORE_PATH, 'utf8');
+        return JSON.parse(raw);
+    } catch (error) {
+        console.error('Failed to read users store:', error.message);
+        return { users: [], lastIdCount: 0 };
+    }
+}
+
+function writeUsersStore(store) {
+    fs.writeFileSync(USERS_STORE_PATH, JSON.stringify(store, null, 2), 'utf8');
+}
+
+function generateUniqueUserId(store) {
+    store.lastIdCount = (store.lastIdCount || 0) + 1;
+    return `EV-${String(store.lastIdCount).padStart(6, '0')}`;
+}
+
+// Register new user
+app.post('/api/users/register', (req, res) => {
+    try {
+        const { firstName, lastName, email, classLevel, phone, dob } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (!firstName || !lastName || !normalizedEmail || !classLevel) {
+            return res.status(400).json({ error: 'First name, last name, email, and class level are required' });
+        }
+
+        const store = readUsersStore();
+        
+        // Check if email already exists
+        const existingUser = store.users.find(u => normalizeEmail(u.email) === normalizedEmail);
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already registered' });
+        }
+
+        // Generate unique ID
+        const userId = generateUniqueUserId(store);
+
+        const newUser = {
+            userId,
+            firstName: safeString(firstName),
+            lastName: safeString(lastName),
+            email: normalizedEmail,
+            classLevel: safeString(classLevel),
+            phone: safeString(phone || ''),
+            dob: safeString(dob || ''),
+            status: 'pending',
+            role: 'student',
+            createdAt: new Date().toISOString(),
+            activatedAt: null,
+            activatedBy: null
+        };
+
+        store.users.push(newUser);
+        writeUsersStore(store);
+
+        console.log(`✓ New user registered: ${normalizedEmail} (${userId})`);
+
+        res.json({
+            success: true,
+            message: 'Registration successful! Awaiting admin activation.',
+            userId,
+            user: newUser
+        });
+    } catch (error) {
+        console.error('User registration error:', error.message);
+        res.status(500).json({ error: 'Registration failed', details: error.message });
+    }
+});
+
+// Get all registered users (admin only)
+app.get('/api/users', (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'] || req.query.adminKey;
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        const store = readUsersStore();
+        const stats = {
+            total: store.users.length,
+            active: store.users.filter(u => u.status === 'active').length,
+            pending: store.users.filter(u => u.status === 'pending').length,
+            inactive: store.users.filter(u => u.status === 'inactive').length
+        };
+
+        res.json({
+            success: true,
+            stats,
+            users: store.users
+        });
+    } catch (error) {
+        console.error('Get users error:', error.message);
+        res.status(500).json({ error: 'Failed to load users', details: error.message });
+    }
+});
+
+// Get user by email or ID (admin only)
+app.get('/api/users/:identifier', (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'] || req.query.adminKey;
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        const { identifier } = req.params;
+        const store = readUsersStore();
+
+        const user = store.users.find(u => 
+            normalizeEmail(u.email) === normalizeEmail(identifier) || 
+            u.userId === identifier
+        );
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Get user error:', error.message);
+        res.status(500).json({ error: 'Failed to load user', details: error.message });
+    }
+});
+
+// Activate user (admin only)
+app.post('/api/users/activate', (req, res) => {
+    try {
+        const { email, adminKey, adminIdentity = 'admin' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        if (!normalizedEmail) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        const store = readUsersStore();
+        const user = store.users.find(u => normalizeEmail(u.email) === normalizedEmail);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.status = 'active';
+        user.activatedAt = new Date().toISOString();
+        user.activatedBy = safeString(adminIdentity);
+
+        writeUsersStore(store);
+
+        console.log(`✓ User activated: ${normalizedEmail} (${user.userId})`);
+
+        res.json({
+            success: true,
+            message: 'User activated successfully',
+            user
+        });
+    } catch (error) {
+        console.error('User activation error:', error.message);
+        res.status(500).json({ error: 'Activation failed', details: error.message });
+    }
+});
+
+// Deactivate user (admin only)
+app.post('/api/users/deactivate', (req, res) => {
+    try {
+        const { email, adminKey, adminIdentity = 'admin' } = req.body;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (adminKey !== ADMIN_ACCESS_KEY) {
+            return res.status(401).json({ error: 'Unauthorized: invalid admin key' });
+        }
+
+        if (!normalizedEmail) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        const store = readUsersStore();
+        const user = store.users.find(u => normalizeEmail(u.email) === normalizedEmail);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.status = 'inactive';
+        user.deactivatedAt = new Date().toISOString();
+        user.deactivatedBy = safeString(adminIdentity);
+
+        writeUsersStore(store);
+
+        res.json({
+            success: true,
+            message: 'User deactivated successfully',
+            user
+        });
+    } catch (error) {
+        console.error('User deactivation error:', error.message);
+        res.status(500).json({ error: 'Deactivation failed', details: error.message });
+    }
+});
+
+// Check if user is activated (for login)
+app.get('/api/users/check/:email', (req, res) => {
+    try {
+        const { email } = req.params;
+        const normalizedEmail = normalizeEmail(email);
+
+        const store = readUsersStore();
+        const user = store.users.find(u => normalizeEmail(u.email) === normalizedEmail);
+
+        if (!user) {
+            return res.json({ activated: false, message: 'User not found' });
+        }
+
+        res.json({
+            activated: user.status === 'active',
+            userId: user.userId,
+            status: user.status,
+            message: user.status === 'active' ? 'Ready to login' : `Account is ${user.status}`
+        });
+    } catch (error) {
+        console.error('Check user error:', error.message);
+        res.status(500).json({ error: 'Check failed', details: error.message });
     }
 });
 

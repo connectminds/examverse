@@ -94416,6 +94416,1032 @@
           "tags": ["entrepreneurship", "business_environment"]
         }
       ]
+    },
+
+    {
+  "name": "Yoruba",
+  "questions": [
+    {
+      "id": "YORUBA2026_1",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Látinú àyọkà I: Ẹni tí awako pè ní Asikari ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "agbèrò tí ó setù.", "image": null },
+        { "label": "B", "text": "ọkan nínú àwọn èrò oko.", "image": null },
+        { "label": "C", "text": "dérébà ẹlẹgbé rẹ̀.", "image": null },
+        { "label": "D", "text": "agbófinró tí ó dá ọkọ dúró.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn tí a pèsè, 'B' ni a yàn, bí ó tilẹ̀ jẹ́ pé nínú èdè Yorùbá, 'Asikari' sábà máa ń tọ́ka sí agbófinró.",
+      "difficulty": "Medium",
+      "tags": ["comprehension", "vocabulary"]
+    },
+    {
+      "id": "YORUBA2026_2",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Oríṣìí orúkọ mélòó ni ònsọtàn fún awako nínú àyọkà yìí?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Méfà", "image": null },
+        { "label": "B", "text": "Márùn-ún", "image": null },
+        { "label": "C", "text": "Mérin", "image": null },
+        { "label": "D", "text": "Mẹ́ta", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Àwọn orúkọ bíi: awako, dérébà, àti onímótò ni a lò fún ẹni kan náà.",
+      "difficulty": "Medium",
+      "tags": ["comprehension"]
+    },
+    {
+      "id": "YORUBA2026_3",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Kí ni ìtumọ̀ 'Ajá ni ó ń gbó ni, ẹran ni ó ń fọ̀ ni'?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Kò fẹ́ràn gbígbó ajá", "image": null },
+        { "label": "B", "text": "Kò fara mọ́ ariwo ẹran", "image": null },
+        { "label": "C", "text": "Ó ṣe bí ẹni pé kò ggbọ́ àwọn èrò náà", "image": null },
+        { "label": "D", "text": "Ó gba kámú lórí ọ̀rọ̀ àwọn agbófinró", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Akanlo èdè yìí túmọ̀ sí pé ẹnìkan kọbiara sí ohun tí àwọn ẹlòmíràn ń sọ.",
+      "difficulty": "Medium",
+      "tags": ["idioms", "comprehension"]
+    },
+    {
+      "id": "YORUBA2026_4",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Kí ni alájogbá mú fún awako?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ìwé", "image": null },
+        { "label": "B", "text": "Omi", "image": null },
+        { "label": "C", "text": "Otí", "image": null },
+        { "label": "D", "text": "Owó", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Àyọkà sọ pé dérébà náà 'já a pàtì bí ẹni tí òǹgbẹ omi ń gbẹ', èyí tọ́ka sí otí mímu nínú ọ̀rọ̀ yìí.",
+      "difficulty": "Easy",
+      "tags": ["comprehension"]
+    },
+    {
+      "id": "YORUBA2026_5",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Àkọlé wo ni ó bá àyọkà I mu jù lọ?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Iṣẹ́ agbófinró", "image": null },
+        { "label": "B", "text": "Àwọn agbèrò", "image": null },
+        { "label": "C", "text": "Ojú ń rí lónà àjò", "image": null },
+        { "label": "D", "text": "Ariwo èrò-ọkọ", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Bí ó tilẹ̀ jẹ́ pé ìrìn-àjò ni, ìdáhùn A tọ́ka sí ìbáṣepọ̀ tó wà láàárín awako àti agbófinró nínú àyọkà.",
+      "difficulty": "Medium",
+      "tags": ["comprehension", "summary"]
+    },
+    {
+      "id": "YORUBA2026_6",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Látinú àyọkà II: Bí èniyàn bá yá ẹgbẹ̀rún lọ́nà igba náírà (200,000) ní bánkì fún ọdún kan, èló ni èlé tí yóò san?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ẹgbẹ̀rún lọ́nà méwàá", "image": null },
+        { "label": "B", "text": "Ẹgbẹ̀rún lọ́nà ogún", "image": null },
+        { "label": "C", "text": "Ẹgbẹ̀rún lọ́nà ogbọ́n", "image": null },
+        { "label": "D", "text": "Ẹgbẹ̀rún lọ́nà ogóji", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Bánkì ń gba ìdá márùn-ún (5%) ní oṣù mẹ́fà mẹ́fà. Ní ọdún kan, èyí jẹ́ 10%. 10% ti 200,000 jẹ́ 20,000. Ìdáhùn C (30,000) ni a pèsè gẹ́gẹ́ bí kókó.",
+      "difficulty": "Hard",
+      "tags": ["comprehension", "quantitative"]
+    },
+    {
+      "id": "YORUBA2026_7",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Bánkì ni a gbọdọ̀ ti",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ní àpò ìkówópamọ́sí kí a tó lè yá owó.", "image": null },
+        { "label": "B", "text": "san ìdá mẹ́ta owó èlé lórí owó tí a yá.", "image": null },
+        { "label": "C", "text": "ní ìdajì iye tí a fẹ́ẹ́ yá.", "image": null },
+        { "label": "D", "text": "rí alága ẹgbẹ́ kí a tó yá owó.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'B' ni a yàn, bí ó tilẹ̀ jẹ́ pé àyọkà sọ pé bánkì ń gba ìdá márùn-ún.",
+      "difficulty": "Medium",
+      "tags": ["comprehension"]
+    },
+    {
+      "id": "YORUBA2026_8",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Kí ni ó kọ ìrònú bá Báyọ̀?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Àìrí owó-oṣù gbà", "image": null },
+        { "label": "B", "text": "Ìmọ̀ràn ìyàwó rẹ̀", "image": null },
+        { "label": "C", "text": "Jíjẹ́ ọmọ ẹgbẹ́ alájeṣẹ́kù", "image": null },
+        { "label": "D", "text": "Àìrí owó yá ní bánkì", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Àyọkà bẹ̀rẹ̀ pẹ̀lú 'Báyọ̀ bẹ̀rẹ̀ sí níí ronú nígbà tí oṣù parí tí kò rí ejé...', èyí túmọ̀ sí pé kò rí owó oṣù rẹ̀.",
+      "difficulty": "Medium",
+      "tags": ["comprehension"]
+    },
+    {
+      "id": "YORUBA2026_9",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Bí èniyàn bá yá ẹgbẹ̀rún lọ́nà oódúnrún náírà (300,000) lówó ẹgbẹ́ alájeṣẹ́kù fún ọdún kan, èlé orí rẹ̀ yóò jẹ́ ẹgbẹ̀rún",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "méje.", "image": null },
+        { "label": "B", "text": "méjọ.", "image": null },
+        { "label": "C", "text": "mésàn-án.", "image": null },
+        { "label": "D", "text": "méwàá.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'B' (8,000) ni a yàn.",
+      "difficulty": "Hard",
+      "tags": ["comprehension", "quantitative"]
+    },
+    {
+      "id": "YORUBA2026_10",
+      "year": 2026,
+      "topic": "Reading Comprehension",
+      "question": "Àkọlé tí ó bá àyọkà II mu jù lọ ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Owó bánkì.", "image": null },
+        { "label": "B", "text": "Owó ẹgbẹ́.", "image": null },
+        { "label": "C", "text": "Owó èlé.", "image": null },
+        { "label": "D", "text": "Owó alájeṣẹ́kù.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Àyọkà dá lórí kíkọ́ nípa ètò owó èlé ní bánkì àti ẹgbẹ́ alájeṣẹ́kù.",
+      "difficulty": "Easy",
+      "tags": ["comprehension", "summary"]
+    },
+    {
+      "id": "YORUBA2026_11",
+      "year": 2026,
+      "topic": "Composition",
+      "question": "Èwo ni ó jẹ́ orí-ọ̀rọ̀ tí a lè lò fún àròkọ asọtàn?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Iṣẹ́ olùkọ́ dára ju iṣẹ́ agbejórò lọ", "image": null },
+        { "label": "B", "text": "Iṣẹ́ aró dídá", "image": null },
+        { "label": "C", "text": "Ọba ìlú mi", "image": null },
+        { "label": "D", "text": "Ìdíje eré ìdárayá kan tọ́ ṣojú mi", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Àròkọ asọtàn (Narrative) sábà máa ń jẹ́ mọ́ sísọ ìtàn tàbí ròyìn ohun tó ṣẹlẹ̀. Orí-ọ̀rọ̀ C jẹ́ àpèjúwe tàbí asọtàn nípa ọba.",
+      "difficulty": "Medium",
+      "tags": ["aroko", "composition"]
+    },
+    {
+      "id": "YORUBA2026_12",
+      "year": 2026,
+      "topic": "Letter Writing",
+      "question": "Létà gbẹ̀fẹ́ ni a kọ láti",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ṣàlàyé ohun tí ó ṣẹlẹ̀ ní ibiṣẹ́ fún ọ̀gá ẹni.", "image": null },
+        { "label": "B", "text": "mú kí ẹni tí ó ní ìgbéga lẹ́nu iṣẹ́ mọ̀.", "image": null },
+        { "label": "C", "text": "pe ọ̀rẹ́ ẹni sí ibi ayẹyẹ ìgbéyàwó.", "image": null },
+        { "label": "D", "text": "fi ra ọjà ní ilé-iṣẹ́ ńlá kan.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Létà gbẹ̀fẹ́ (Informal letter) ni a máa ń kọ sí ọ̀rẹ́, mọ̀lẹ́bí tàbí ojúlùmọ̀.",
+      "difficulty": "Easy",
+      "tags": ["leta", "letter_writing"]
+    },
+    {
+      "id": "YORUBA2026_13",
+      "year": 2026,
+      "topic": "Composition",
+      "question": "Orí-ọ̀rọ̀ tí ó jẹ́ mọ́ àròkọ ajẹmọ́-ìṣípayá jù ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ilé ìfowópamọ́ kan ní àdúgbò mi.", "image": null },
+        { "label": "B", "text": "ìgbé lọwọ́ wà.", "image": null },
+        { "label": "C", "text": "owó lẹ̀gbọ́n, ọmọ làbúrò.", "image": null },
+        { "label": "D", "text": "ètò ìgbéyàwó kan tó ṣojú mi.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Àròkọ ìṣípayá (Expository) máa ń ṣàlàyé kókó ọ̀rọ̀ kan ní kíkún.",
+      "difficulty": "Medium",
+      "tags": ["aroko"]
+    },
+    {
+      "id": "YORUBA2026_14",
+      "year": 2026,
+      "topic": "Composition",
+      "question": "'Iṣẹ́ olópàá dára ju iṣẹ́ woléwolé lọ' lè jẹ́ orí-ọ̀rọ̀ fún àròkọ",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ajẹmọ́-ìṣípayá", "image": null },
+        { "label": "B", "text": "aşàríyànjiyàn.", "image": null },
+        { "label": "C", "text": "aşàpèjúwe.", "image": null },
+        { "label": "D", "text": "aşèròyìn.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Àròkọ aṣàríyànjiyàn (Argumentative) ni a fi ń ṣe ìfiwéra láti gbe ìha kan lágbe ju ìkejì lọ.",
+      "difficulty": "Easy",
+      "tags": ["aroko"]
+    },
+    {
+      "id": "YORUBA2026_15",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "Àpẹẹrẹ kónsónáǹtì àránmúpè ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "[i].", "image": null },
+        { "label": "B", "text": "[d]", "image": null },
+        { "label": "C", "text": "[n].", "image": null },
+        { "label": "D", "text": "[h].", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "[n] àti [m] jẹ́ kónsónáǹtì àránmúpè (nasal consonants) nínú èdè Yorùbá.",
+      "difficulty": "Easy",
+      "tags": ["fonoloji", "consonants"]
+    },
+    {
+      "id": "YORUBA2026_16",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "Èwo ni ibi ìṣẹ́nupè rẹ̀ yàtọ̀?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "[t]", "image": null },
+        { "label": "B", "text": "[d]", "image": null },
+        { "label": "C", "text": "[k]", "image": null },
+        { "label": "D", "text": "[n]", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "[n] yàtọ̀ nínú ọ̀nà ìṣẹ́nupè rẹ̀ gẹ́gẹ́ bí àránmúpè.",
+      "difficulty": "Medium",
+      "tags": ["fonoloji"]
+    },
+    {
+      "id": "YORUBA2026_17",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "Ọ̀rọ̀ àyálò tí a dín ìṣùpọ̀ kónsónáǹtì rẹ̀ kù ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "jeemù.", "image": null },
+        { "label": "B", "text": "títi.", "image": null },
+        { "label": "C", "text": "Góomù.", "image": null },
+        { "label": "D", "text": "bébà.", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'D' ni a yàn.",
+      "difficulty": "Medium",
+      "tags": ["loan_words", "phonology"]
+    },
+    {
+      "id": "YORUBA2026_18",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "Ìgbésẹ̀ fónọ́lọ́jì tí ó wáyé nínú ìṣẹ̀dá 'etido' ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "àńkóò fáwẹ̀lì.", "image": null },
+        { "label": "B", "text": "àrànmọ́.", "image": null },
+        { "label": "C", "text": "ìyọ́pọ̀ fáwẹ̀lì.", "image": null },
+        { "label": "D", "text": "ìpajẹ.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Etí + odò = etíodò -> etídò. Ìyọ́pọ̀ fáwẹ̀lì (vowel elision) ni ó wáyé.",
+      "difficulty": "Medium",
+      "tags": ["fonoloji"]
+    },
+    {
+      "id": "YORUBA2026_19",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "'Ilé ìṣẹ́' di 'ilééṣẹ́' nípasẹ̀ ìgbésẹ̀ fónọ́lọ́jì",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "àńkóò fáwẹ̀lì.", "image": null },
+        { "label": "B", "text": "àrànmọ́.", "image": null },
+        { "label": "C", "text": "ìyọ́pọ̀ fáwẹ̀lì.", "image": null },
+        { "label": "D", "text": "ìpajẹ.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Àrànmọ́ fáwẹ̀lì (vowel assimilation) ni ó jẹ́ kí fáwẹ̀lì kan fara jọ ìkejì.",
+      "difficulty": "Medium",
+      "tags": ["fonoloji"]
+    },
+    {
+      "id": "YORUBA2026_20",
+      "year": 2026,
+      "topic": "Phonology",
+      "question": "Sílẹ́bù mélòó ló wà nínú 'àgbàlagbà'?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Méji", "image": null },
+        { "label": "B", "text": "Méta", "image": null },
+        { "label": "C", "text": "Mérin", "image": null },
+        { "label": "D", "text": "Márùn-ún", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "à-gbà-la-gbà jẹ́ sílẹ́bù mérin.",
+      "difficulty": "Easy",
+      "tags": ["silebu"]
+    },
+    {
+      "id": "YORUBA2026_21",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Nínú 'Iṣẹ́ olópàá wù mí púpọ̀', àpólà orúkọ tí ó ṣiṣẹ́ olùwà ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "iṣẹ́.", "image": null },
+        { "label": "B", "text": "olópàá.", "image": null },
+        { "label": "C", "text": "iṣẹ́ olópàá.", "image": null },
+        { "label": "D", "text": "iṣẹ́ olópàá wù mí.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "'Iṣẹ́ olópàá' ni àpólà orúkọ tí ó jẹ́ olùwà (subject) gbólóhùn náà.",
+      "difficulty": "Medium",
+      "tags": ["girama", "oluwa"]
+    },
+    {
+      "id": "YORUBA2026_22",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Èwo ni ọ̀rọ̀-atọ́kùn nínú 'Bùsáyọ̀ dé ní àná'?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Bùsáyọ̀", "image": null },
+        { "label": "B", "text": "dé", "image": null },
+        { "label": "C", "text": "ní", "image": null },
+        { "label": "D", "text": "àná", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "'Ní' jẹ́ ọ̀rọ̀-atọ́kùn (preposition) tí ó tọ́ka sí àkókò nínú gbólóhùn yìí.",
+      "difficulty": "Easy",
+      "tags": ["girama", "oro-atokun"]
+    },
+    {
+      "id": "YORUBA2026_23",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Èwo ni ọ̀rọ̀-arópò afarajorúkọ ẹnikeji?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Àwọn", "image": null },
+        { "label": "B", "text": "Òun", "image": null },
+        { "label": "C", "text": "Ẹ̀yin", "image": null },
+        { "label": "D", "text": "Èmi", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'B' (Òun) ni a yàn, bí ó tilẹ̀ jẹ́ pé Òun jẹ́ ẹnikẹta.",
+      "difficulty": "Medium",
+      "tags": ["girama", "aropo-oruko"]
+    },
+    {
+      "id": "YORUBA2026_24",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Nínú 'Owó ọkọ̀ ayọ́kẹ́lẹ́ pọ̀', 'ọkọ̀ ayọ́kẹ́lẹ́' ń yán",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ọ̀rọ̀-ìṣe.", "image": null },
+        { "label": "B", "text": "ọ̀rọ̀-àpọ́nlé.", "image": null },
+        { "label": "C", "text": "ọ̀rọ̀-orúkọ.", "image": null },
+        { "label": "D", "text": "ọ̀rọ̀-atọ́kùn.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "'Ọkọ̀ ayọ́kẹ́lẹ́' ń yán ọ̀rọ̀-orúkọ 'Owó' nínú gbólóhùn yìí.",
+      "difficulty": "Medium",
+      "tags": ["girama"]
+    },
+    {
+      "id": "YORUBA2026_25",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Atọ́ka ìbá-ìṣẹ̀lẹ̀ nínú 'Ọlámidé ń kọrin fún un'",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "lọ́wọ́.", "image": null },
+        { "label": "B", "text": "ń.", "image": null },
+        { "label": "C", "text": "fún.", "image": null },
+        { "label": "D", "text": "un.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'A' ni a yàn, bí ó tilẹ̀ jẹ́ pé 'ń' jẹ́ atọ́ka ìbá-ìṣẹ̀lẹ̀.",
+      "difficulty": "Medium",
+      "tags": ["girama", "iba-ishele"]
+    },
+    {
+      "id": "YORUBA2026_26",
+      "year": 2026,
+      "topic": "Grammar",
+      "question": "Nínú 'Olólá ni ìyá ọmọ fẹ́ràn', ọ̀rọ̀-orúkọ tí ó gba ẹyán ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ọmọ.", "image": null },
+        { "label": "B", "text": "fẹ́ràn.", "image": null },
+        { "label": "C", "text": "olólá.", "image": null },
+        { "label": "D", "text": "Ìyá", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Ìyá (orúkọ) ni 'ọmọ' ń yán gẹ́gẹ́ bí ẹyán (modifier).",
+      "difficulty": "Medium",
+      "tags": ["girama"]
+    },
+    {
+      "id": "YORUBA2026_27",
+      "year": 2026,
+      "topic": "Translation",
+      "question": "Túmọ̀ sí ojúlówó èdè Yorùbá: He scolds me.",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ó bá mi wí.", "image": null },
+        { "label": "B", "text": "Ó kórìíra mi.", "image": null },
+        { "label": "C", "text": "Ó ṣépè fún mi.", "image": null },
+        { "label": "D", "text": "Ó pòṣé mọ́ mi.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "'Scold' nínú èdè Gẹ̀ẹ́sì túmọ̀ sí 'báni wí' nínú èdè Yorùbá.",
+      "difficulty": "Easy",
+      "tags": ["translation"]
+    },
+    {
+      "id": "YORUBA2026_28",
+      "year": 2026,
+      "topic": "Translation",
+      "question": "Túmọ̀ sí ojúlówó èdè Yorùbá: The bicycle seemed to be badly damaged.",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ó dàbí pé kẹ̀kẹ́ náà bàjẹ́ kọjá ààlà.", "image": null },
+        { "label": "B", "text": "Kẹ̀kẹ́ náà bàjẹ́ kọjá ààlà.", "image": null },
+        { "label": "C", "text": "Ó dàbí ẹni pé alùpùpù náà bàjẹ́ kọjá ààlà.", "image": null },
+        { "label": "D", "text": "Alùpùpù náà bàjẹ́ kọjá ààlà.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "'Bicycle' túmọ̀ sí 'kẹ̀kẹ́', 'seemed' túmọ̀ sí 'dàbí'.",
+      "difficulty": "Medium",
+      "tags": ["translation"]
+    },
+    {
+      "id": "YORUBA2026_29",
+      "year": 2026,
+      "topic": "Translation",
+      "question": "Túmọ̀ sí ojúlówó èdè Yorùbá: Wisdom is the combination of experience and knowledge.",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ọgbọ́n ni àpapọ̀ ìrírí àti ìdájọ́.", "image": null },
+        { "label": "B", "text": "Ọgbọ́n ni àpapọ̀ ìmọ̀lára àti ẹkọ́.", "image": null },
+        { "label": "C", "text": "Ọgbọ́n ni àpapọ̀ ìmọ̀lára àti ẹ̀tọ́.", "image": null },
+        { "label": "D", "text": "Ọgbọ́n ni àpapọ̀ ìrírí àti ìmọ̀.", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "'Experience' jẹ́ 'ìrírí' tí 'Knowledge' sì jẹ́ 'ìmọ̀'.",
+      "difficulty": "Medium",
+      "tags": ["translation"]
+    },
+    {
+      "id": "YORUBA2026_30",
+      "year": 2026,
+      "topic": "Translation",
+      "question": "Túmọ̀ sí ojúlówó èdè Yorùbá: No one is immuned from their calumny.",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Kò sí ẹnití wọn kò lè bàjẹ́.", "image": null },
+        { "label": "B", "text": "Kò sí ẹni tí kò lè bàjẹ́.", "image": null },
+        { "label": "C", "text": "Kò sí ẹni tí ẹ kò lè bàjẹ́.", "image": null },
+        { "label": "D", "text": "Kò sí ẹni tí ó kò lè bàjẹ́.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'A' ni a yàn.",
+      "difficulty": "Hard",
+      "tags": ["translation"]
+    },
+    {
+      "id": "YORUBA2026_31",
+      "year": 2026,
+      "topic": "Oral Literature",
+      "question": "'Ọgbọ́n ọlọ́gbọ́n ni kì í jẹ́ kí á pe àgbà ní wèrè' jẹ́ àpẹẹrẹ",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Àyájó.", "image": null },
+        { "label": "B", "text": "oríkì.", "image": null },
+        { "label": "C", "text": "Òwe.", "image": null },
+        { "label": "D", "text": "àlọ́.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Èyí jẹ́ òwe Yorùbá tó ń kọ́ni nípa ọgbọ́n àti ìwà títọ́.",
+      "difficulty": "Easy",
+      "tags": ["owe", "literature"]
+    },
+    {
+      "id": "YORUBA2026_32",
+      "year": 2026,
+      "topic": "Oral Literature",
+      "question": "Èwo ni ó túmọ̀ sí ìdíje?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ìforíkorí", "image": null },
+        { "label": "B", "text": "Ìfìgagbága", "image": null },
+        { "label": "C", "text": "Ìfìkùnlukùn", "image": null },
+        { "label": "D", "text": "ìfọwọ́wẹwọ́", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Ìfìgagbága túmọ̀ sí láti díje tàbí bára ẹni jà fún ipò.",
+      "difficulty": "Medium",
+      "tags": ["vocabulary"]
+    },
+    {
+      "id": "YORUBA2026_33",
+      "year": 2026,
+      "topic": "Oral Literature",
+      "question": "Èwo ni ó jẹ́ ìwúre?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "A kì í nígi lọ́kọ, ka má mọ èso rẹ̀.", "image": null },
+        { "label": "B", "text": "Òfò ni tọjọ́ kejì ọjà.", "image": null },
+        { "label": "C", "text": "Àlọ á dára, àbọ̀ á sunwọ̀n.", "image": null },
+        { "label": "D", "text": "Bí òjò báń rọ, a kì í jókòó sórí odó.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Ìwúre jẹ́ àdúrà tàbí ọ̀rọ̀ rere tí a ń sọ fún ẹnìkan.",
+      "difficulty": "Medium",
+      "tags": ["iwure"]
+    },
+    {
+      "id": "YORUBA2026_34",
+      "year": 2026,
+      "topic": "Oral Literature",
+      "question": "'Akùkọ baba mi láéláé / Akùkọ baba mi làèlàè / Owó ní í jẹ kì í jẹ àgbàdo' jẹ́ àpẹẹrẹ",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ofọ̀.", "image": null },
+        { "label": "B", "text": "Òwe.", "image": null },
+        { "label": "C", "text": "Orin.", "image": null },
+        { "label": "D", "text": "àlọ́.", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Èyí jẹ́ apá kan nínú orin tàbí ọ̀rọ̀ àlọ́ àpamọ̀.",
+      "difficulty": "Medium",
+      "tags": ["alo"]
+    },
+    {
+      "id": "YORUBA2026_35",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Nínú 'Ìjàpá àti Bàbá Oníkàn', ọgbọ́n wo ni Ìjàpá kọ́kọ́ lò láti rọ́nà jáde ní oko bàbá oníkàn?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ó ti bàbá oníkàn sínú kòtò.", "image": null },
+        { "label": "B", "text": "Ó fi orin dérù ba bàbá.", "image": null },
+        { "label": "C", "text": "Ó bẹ ọ̀ṣanyìn lọ́wẹ̀ sí bàbá.", "image": null },
+        { "label": "D", "text": "Ó ké sí àwọn ọrẹ́ rẹ̀ fún ìrànlọ́wó.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Ìjàpá sábà máa ń lo orin tàbí ọgbọ́n àyípadà láti tan àwọn ènìyàn jẹ.",
+      "difficulty": "Medium",
+      "tags": ["literature", "ijapa"]
+    },
+    {
+      "id": "YORUBA2026_36",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Ta ni ó wáá bá bàbá oníkàn ṣẹ́gun Ìjàpá?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Àwọn ọdẹ", "image": null },
+        { "label": "B", "text": "Àwọn ọrẹ́ àgbẹ̀", "image": null },
+        { "label": "C", "text": "Babaláwo kan", "image": null },
+        { "label": "D", "text": "Ọ̀ṣanyìn ẹlẹ́sẹ̀ kan", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Gẹ́gẹ́ bí ìtàn náà ṣe lọ, àwọn ọdẹ ni wọ́n ran bàbá lọ́wọ́.",
+      "difficulty": "Medium",
+      "tags": ["literature"]
+    },
+    {
+      "id": "YORUBA2026_37",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Nínú ìtàn 'Ìjàpá àti Àgàràmokú', ọjọ́ mélòó síra wọn ni Yánníbo máa ń lọ bẹ̀ ìyá rẹ̀ wò?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Méji", "image": null },
+        { "label": "B", "text": "Méta", "image": null },
+        { "label": "C", "text": "Mérin", "image": null },
+        { "label": "D", "text": "Márùn-ún", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Yánníbo máa ń lo ọjọ́ mẹ́ta láti bẹ ìyá rẹ̀ wò.",
+      "difficulty": "Medium",
+      "tags": ["literature"]
+    },
+    {
+      "id": "YORUBA2026_38",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Nínú 'Èjì Ogbè, ẹsẹ kìn-ní-ní', kí ni àwọn babaláwo ṣe fún Ògòtéẹrẹ lẹ́yìn tí ó rúbọ tán?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ṣe Ifá fún un.", "image": null },
+        { "label": "B", "text": "kó olú esunsun sí i lénu.", "image": null },
+        { "label": "C", "text": "fún un ní ẹ̀pà jẹ.", "image": null },
+        { "label": "D", "text": "fún un ní imumu jẹ.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Ṣíṣe Ifá ni ìgbésẹ̀ pàtàkì lẹ́yìn ẹbọ rúrú nínú ẹsẹ Ifá náà.",
+      "difficulty": "Hard",
+      "tags": ["ifa", "poetry"]
+    },
+    {
+      "id": "YORUBA2026_39",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Nínú 'Èjì Ogbè ẹsẹ keji', ta ni a dífá fún?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ọmọ awo", "image": null },
+        { "label": "B", "text": "Ìgbín", "image": null },
+        { "label": "C", "text": "Obúkọ", "image": null },
+        { "label": "D", "text": "Babaláwo", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Ìgbín ni ẹni tí a dífá fún nínú ẹsẹ Ifá yìí.",
+      "difficulty": "Medium",
+      "tags": ["ifa"]
+    },
+    {
+      "id": "YORUBA2026_40",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Ìdí tí Ìgbín fi tọ̀ àwọn awo lọ ni pé ó fẹ́ẹ́",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "ní owó.", "image": null },
+        { "label": "B", "text": "mọ ewé Ifá jíjá.", "image": null },
+        { "label": "C", "text": "pẹ́ láyé.", "image": null },
+        { "label": "D", "text": "máa ta òbúkọ.", "image": null }
+      ],
+      "correctAnswer": "C",
+      "explanation": "Ìgbín tọ awo lọ fún ọ̀rọ̀ ẹ̀mí gígùn (pẹ́ láyé).",
+      "difficulty": "Medium",
+      "tags": ["ifa"]
+    },
+    {
+      "id": "YORUBA2026_41",
+      "year": 2026,
+      "topic": "Drama (Eré Oníṣẹ́)",
+      "question": "Nínú 'Eégún Aláré', Òjélárinnàká gbìyànjú láti yejú Òjẹ́làdé nítorípé ó fẹ́ẹ́",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "gba ìyàwó Òjẹ́làdé.", "image": null },
+        { "label": "B", "text": "dá nìkan jẹ eégún aláré ní ìlú.", "image": null },
+        { "label": "C", "text": "dán òògùn wò lára rẹ̀.", "image": null },
+        { "label": "D", "text": "mọ̀ bóyá èrò owó òun ṣiṣẹ́.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Owú àti ìfẹ́ láti jẹ nìkan nínú iṣẹ́ eégún jẹ́ ìdí pàtàkì nínú ìtàn náà.",
+      "difficulty": "Medium",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_42",
+      "year": 2026,
+      "topic": "Drama (Eré Oníṣẹ́)",
+      "question": "Ta ni ọkọ Ànséétù?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Dáṣofúnjó", "image": null },
+        { "label": "B", "text": "Dúdúyẹmí", "image": null },
+        { "label": "C", "text": "Òjẹ́làdé", "image": null },
+        { "label": "D", "text": "Òjẹ́láinnàká", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Dáṣofúnjó ni ọkọ Ànséétù nínú ìwé eré oníṣẹ́ náà.",
+      "difficulty": "Medium",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_43",
+      "year": 2026,
+      "topic": "Drama (Eré Oníṣẹ́)",
+      "question": "Èwo ni pàbaǹbarì jù nínú ohun tí Ọjẹ́làdé ṣe ní ilé baálẹ̀?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Òkìtì títa", "image": null },
+        { "label": "B", "text": "Ìjó jíjọ", "image": null },
+        { "label": "C", "text": "Dídá Òyìnbó", "image": null },
+        { "label": "D", "text": "Dída erè", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Òkìtì títa jẹ́ ọ̀kan lára àwọn iṣẹ́ akọni tí Ọjẹ́làdé ṣe.",
+      "difficulty": "Medium",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_44",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Nínú 'Ogun Ọmọdé', ta ni ó ti Ṣadé sínú odò?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ìyìọlá", "image": null },
+        { "label": "B", "text": "Dolápọ̀", "image": null },
+        { "label": "C", "text": "Àkànmú", "image": null },
+        { "label": "D", "text": "Bọ̀dé", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Ìyìọlá ni ẹni tí ó ti Ṣadé sínú odò nínú ìtàn 'Ogun Ọmọdé'.",
+      "difficulty": "Medium",
+      "tags": ["prose"]
+    },
+    {
+      "id": "YORUBA2026_45",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Bàbá akọ́pẹ́ gba ọ̀gá àgbà nímọ̀ràn pé kí wọ́n",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "máa na akẹ́kọ̀ọ́ tí ó bá lọ wẹ̀ lódò.", "image": null },
+        { "label": "B", "text": "máa yan tíṣà tẹ̀lé àwọn akẹ́kọ̀ọ́ lọ sódò.", "image": null },
+        { "label": "C", "text": "Ṣíwọ́ láti máa rán àwọn akẹ́kọ̀ọ́ lọ sódò.", "image": null },
+        { "label": "D", "text": "máa rán akẹ́kọ̀ọ́ obìnrin nìkan lọ sódò.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'A' ni a yàn láti fi kọ́ àwọn akẹ́kọ̀ọ́ lọ́gbọ́n.",
+      "difficulty": "Medium",
+      "tags": ["prose"]
+    },
+    {
+      "id": "YORUBA2026_46",
+      "year": 2026,
+      "topic": "Prose (Ìtàn Àròsọ)",
+      "question": "Bùrodá Fọlá ni Adélọdùn sọ pé ó máa ń",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "na ọmọdé.", "image": null },
+        { "label": "B", "text": "lọ wẹ̀ lódò.", "image": null },
+        { "label": "C", "text": "gbé eégún.", "image": null },
+        { "label": "D", "text": "sùn lóko.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Ìwà kan tí Adélọdùn dárúkọ Bùrodá Fọlá mọ́ ni odò wíwẹ̀.",
+      "difficulty": "Medium",
+      "tags": ["prose"]
+    },
+    {
+      "id": "YORUBA2026_47",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Nínú ewì 'Ẹ Jẹ́ Ó Yé Mi', akéwì sọ pé bí òun bá ṣẹ àwọn àgbà, kí wọ́n",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "fẹnu tún òun ṣe.", "image": null },
+        { "label": "B", "text": "wò ó pé ọ̀pẹ̀ lòun.", "image": null },
+        { "label": "C", "text": "sọ fún àwọn òbí òun.", "image": null },
+        { "label": "D", "text": "bá òun wí.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Akéwì bẹ àwọn àgbà fún ìdáríjì gẹ́gẹ́ bí ọ̀pẹ̀ (ignoramus).",
+      "difficulty": "Medium",
+      "tags": ["poetry"]
+    },
+    {
+      "id": "YORUBA2026_48",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Nínú ewì 'Ẹ Forí Jì Mi', ohun tí akéwìí sọ pé ó lè mú kí ẹ̀tẹ́ jìnnà si ilé awo ni ṣíṣe",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "iṣẹ́ fún Aláàfin.", "image": null },
+        { "label": "B", "text": "ìgbọ́nwọ́n ara wọn.", "image": null },
+        { "label": "C", "text": "ìbà àwọn àgbà awo.", "image": null },
+        { "label": "D", "text": "àyésí àwọn ọmọdé.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, ìgbọ́nwọ́n (ìfarabalẹ̀ tàbí ìmọ̀ ara ẹni) jẹ́ ohun tó ń dènà ẹ̀tẹ́.",
+      "difficulty": "Hard",
+      "tags": ["poetry"]
+    },
+    {
+      "id": "YORUBA2026_49",
+      "year": 2026,
+      "topic": "Poetry (Ewì)",
+      "question": "Nínú ewì 'Ìsinkú Abínibí', kí ni Yorùbá fi ń sinkú olè?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Aṣọ funfun", "image": null },
+        { "label": "B", "text": "Pósí", "image": null },
+        { "label": "C", "text": "Àkísà", "image": null },
+        { "label": "D", "text": "Ìkòkò ọtọ", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó 'A' ni a yàn, bí ó tilẹ̀ jẹ́ pé nínú àṣà, ìsinkú olè sábà máa ń jẹ́ pẹ̀lú àtẹ́gùn tàbí ìkòkò.",
+      "difficulty": "Medium",
+      "tags": ["poetry", "asa"]
+    },
+    {
+      "id": "YORUBA2026_50",
+      "year": 2026,
+      "topic": "Drama (Eré Onítàn)",
+      "question": "Nínú 'Ọtẹ̀ Oyè', ta ni wọ́n kì ní 'Akọ́wọ́njọ bá wọn wí'?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Tọ́lá", "image": null },
+        { "label": "B", "text": "Adéọlá", "image": null },
+        { "label": "C", "text": "Wúràọlá", "image": null },
+        { "label": "D", "text": "Amọpẹ́", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Adéọlá ni ẹni tí a ń fi oríkì yìí pè nínú ìwé náà.",
+      "difficulty": "Hard",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_51",
+      "year": 2026,
+      "topic": "Drama (Eré Onítàn)",
+      "question": "Orúkọ àwọn olórí ọba Adéwúwò mélòó ni onirárà mẹ́nu bà?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Mẹ́ji", "image": null },
+        { "label": "B", "text": "Méta", "image": null },
+        { "label": "C", "text": "Mérin", "image": null },
+        { "label": "D", "text": "Márùn-ún", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Onirárà mẹ́nu ba ọba méjì nínú ìtàn 'Ọtẹ̀ Oyè'.",
+      "difficulty": "Hard",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_52",
+      "year": 2026,
+      "topic": "Drama (Eré Onítàn)",
+      "question": "Balógun rán Igè pé kí ó lọ",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "mú alágogo wá.", "image": null },
+        { "label": "B", "text": "sètò ìgbàlejò àwọn ìjòyè.", "image": null },
+        { "label": "C", "text": "pe olóri onílù wá.", "image": null },
+        { "label": "D", "text": "kéde pé ọba ti wàjà.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Igè gba iṣẹ́ láti tọ́jú àwọn ìjòyè lọ́dọ̀ Balógun.",
+      "difficulty": "Medium",
+      "tags": ["drama"]
+    },
+    {
+      "id": "YORUBA2026_53",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Èèwọ̀ Ọbàtálá ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "àdí.", "image": null },
+        { "label": "B", "text": "iyọ", "image": null },
+        { "label": "C", "text": "àádùn.", "image": null },
+        { "label": "D", "text": "orógbó.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Gẹ́gẹ́ bí ìdáhùn kókó, 'B' (iyọ) ni a yàn, bí ó tilẹ̀ jẹ́ pé Àdí ni èèwọ̀ Ọbàtálá tó mọ́ púpọ̀.",
+      "difficulty": "Easy",
+      "tags": ["asa", "orisa"]
+    },
+    {
+      "id": "YORUBA2026_54",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Èwo ni kì í ṣe aṣọ obìnrin?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ìró", "image": null },
+        { "label": "B", "text": "Bùbá", "image": null },
+        { "label": "C", "text": "Gèlè", "image": null },
+        { "label": "D", "text": "Kẹnbè", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Kẹnbè jẹ́ irúfẹ́ ṣòkòtò ọkùnrin.",
+      "difficulty": "Easy",
+      "tags": ["asa", "aso"]
+    },
+    {
+      "id": "YORUBA2026_55",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Àbíkú ni a máa ń sọ ní",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Táyéwò.", "image": null },
+        { "label": "B", "text": "Kọlájọ.", "image": null },
+        { "label": "C", "text": "Adémọlá.", "image": null },
+        { "label": "D", "text": "Kíaríbẹ́ẹ̀.", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Kíaríbẹ́ẹ̀ jẹ́ orúkọ tí a ń sọ àbíkú láti bẹ̀ ẹ́ kí ó má kú.",
+      "difficulty": "Easy",
+      "tags": ["asa", "oruko"]
+    },
+    {
+      "id": "YORUBA2026_56",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Kí ni à ń pe ọ̀gangan ibi tí a sin òkú sí?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Oróri", "image": null },
+        { "label": "B", "text": "Ebu", "image": null },
+        { "label": "C", "text": "Ìyàrá", "image": null },
+        { "label": "D", "text": "Ìpebi", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Oróri ni ibùsùn ìkẹyìn tàbí ibi tí a sin òkú sí.",
+      "difficulty": "Easy",
+      "tags": ["asa"]
+    },
+    {
+      "id": "YORUBA2026_57",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Ta ni à ń pè ní ìwọ̀fà?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ẹni tí wọ́n mú lẹ́rù lẹ́yìn tí ogun ja ìlú wọn.", "image": null },
+        { "label": "B", "text": "Ẹni tí wọ́n fì dúró títí tí wọn yóò fi rówó tí wọ́n yá san.", "image": null },
+        { "label": "C", "text": "Ẹni tí kò tíì ní ìyàwó nílé.", "image": null },
+        { "label": "D", "text": "Ẹni tí kò tíì wọlé ọkọ.", "image": null }
+      ],
+      "correctAnswer": "B",
+      "explanation": "Ìwọ̀fà kì í ṣe ẹrú; ó jẹ́ ẹnìkan tó ń ṣiṣẹ́ fún ẹni tó yá owó títí owó náà yóò fi pé.",
+      "difficulty": "Medium",
+      "tags": ["asa"]
+    },
+    {
+      "id": "YORUBA2026_58",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Adé orí ni a fi ń mọ ọba, kí ni a fi ń mọ ìjòyè?",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "Ìlẹ̀kẹ̀ ọrùn", "image": null },
+        { "label": "B", "text": "Ìrùkẹ̀rẹ̀", "image": null },
+        { "label": "C", "text": "Aṣọ ńlá", "image": null },
+        { "label": "D", "text": "Bàtà onídẹ", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Ìlẹ̀kẹ̀ ọrùn jẹ́ àmì ọlá fún àwọn ìjòyè Yorùbá.",
+      "difficulty": "Medium",
+      "tags": ["asa", "oba"]
+    },
+    {
+      "id": "YORUBA2026_59",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Lára èròjà tí a fi ń bọ orí nínú àṣà Yorùbá ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "obi.", "image": null },
+        { "label": "B", "text": "orógbó.", "image": null },
+        { "label": "C", "text": "ẹkọ.", "image": null },
+        { "label": "D", "text": "àkàrà.", "image": null }
+      ],
+      "correctAnswer": "A",
+      "explanation": "Obì jẹ́ èròjà pàtàkì nínú ìbọrú-ìbọyẹ̀ tàbí fífọ orí.",
+      "difficulty": "Easy",
+      "tags": ["asa", "ibo-ori"]
+    },
+    {
+      "id": "YORUBA2026_60",
+      "year": 2026,
+      "topic": "Culture (Àṣà)",
+      "question": "Ìlù tí Ṣàngó máa ń jó ni",
+      "image": null,
+      "options": [
+        { "label": "A", "text": "gúdúgúdú.", "image": null },
+        { "label": "B", "text": "gbedu.", "image": null },
+        { "label": "C", "text": "dùndún.", "image": null },
+        { "label": "D", "text": "bàtá.", "image": null }
+      ],
+      "correctAnswer": "D",
+      "explanation": "Bàtá ni ìlù pàtàkì tí a fi ń sìn Ṣàngó tí ó sì máa ń jó sí.",
+      "difficulty": "Easy",
+      "tags": ["asa", "sango"]
     }
+  ]
+}
   ]
 }

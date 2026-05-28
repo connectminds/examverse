@@ -1,7 +1,7 @@
-// ExamVerse Service Worker v2.0.0
+// ExamVerse Service Worker v2.0.1
 // Reliable offline caching, fallback routing, and update handoff
 
-const CACHE_VERSION = 'v2.0.0';
+const CACHE_VERSION = 'v2.0.1';
 const ASSETS_CACHE = `examverse-assets-${CACHE_VERSION}`;
 const DATA_CACHE = `examverse-data-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `examverse-runtime-${CACHE_VERSION}`;
@@ -104,8 +104,16 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+  if (!event.data) return;
+
+  if (event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+    return;
+  }
+
+  if (event.data.type === 'CHECK_UPDATE') {
+    self.registration.update().catch(() => {});
+    return;
   }
 });
 
