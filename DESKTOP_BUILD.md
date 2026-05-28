@@ -2,61 +2,36 @@
 
 This project now supports a full offline-installable desktop app using Electron.
 
-## 1) Run desktop app locally
+## 1) Run the desktop app locally
 
 ```bash
-npm run desktop
+npm install
+npm run electron:dev
 ```
 
-This opens `index.html` directly inside an Electron window.
-
-## 2) Build Windows installer (.exe)
+## 2) Build the Windows desktop installer
 
 ```bash
-npm run desktop:build
+npm run electron:build
 ```
 
-Output will be generated in:
+Output will be generated in the `dist/` folder.
 
-- `release/ExamVerse-Setup-<version>.exe`
+## 3) Installer branding and metadata
 
-Installer behavior:
+- App name: `ExamVerse`
+- Publisher: `Connectminds IT TECH`
+- Installer format: `NSIS` and Zip
+- App icon: `icons/examverse_logo.ico`
+- Installer UI: standard Windows install flow with install location selection and uninstall support
 
-- Creates a desktop shortcut named `ExamVerse`
-- Uses the `EV` app icon from `build/icon.ico`
+## 4) Auto update preparation
 
-This installer is configured for one-click per-user installation, so users can install without extra setup prompts.
-
-## 3) Build Windows portable executable
-
-```bash
-npm run desktop:build-portable
-```
-
-## 4) Build installer + portable in one command
-
-```bash
-npm run desktop:build-all
-```
-
-Output is generated in `release/`.
+- The Electron updater is integrated in `electron-src/main.js`.
+- To enable auto-updates, configure a valid publish endpoint or update server.
+- This project can use `electron-updater` for update checking and install-on-quit behavior.
 
 ## Notes
 
-- Core exam pages work offline inside desktop app.
-- Email flows still require internet/server availability.
-- Subscription activation is now device-specific for desktop installs.
-- If the app installer is copied to another PC, that new PC must subscribe and be activated separately.
-- If you need backend API while testing desktop notifications, run server separately:
-
-```bash
-npm start
-```
-
-## Release checklist
-
-1. Confirm desktop icon branding assets are final (`build/icon.ico`, `build/icon.png`)
-2. Confirm `.env` server settings for production APIs
-3. Run `npm run desktop:build`
-4. Test installer on a clean Windows machine
-5. Confirm each test PC appears as a separate device in `admin-activation.html`
+- This build packages the static web app offline inside a native Electron shell.
+- If a backend API is required, run the server separately using `npm start`.

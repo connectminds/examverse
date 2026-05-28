@@ -20,33 +20,71 @@
         <input id="adminIdentity" type="text" placeholder="Your name (for audit log)" autocomplete="off" />
         <input id="adminKey" type="password" placeholder="Enter admin key" autocomplete="off" />
         <button id="saveAdminKey" type="button">Save Key</button>
+        <button id="loadUsers" type="button">Load Users</button>
       </div>
       <p class="hint">Default key in backend: <code>examverse-admin-2026</code>. Change it using <code>ADMIN_ACCESS_KEY</code> in <code>.env</code>.</p>
     </section>
 
     <section class="panel">
       <div class="panel-head">
-        <h2>Subscribers</h2>
-        <button id="refreshList" type="button">Refresh</button>
+        <h2>User Management</h2>
       </div>
-      <div id="subscribersList" class="subscribers-list"></div>
-    </section>
+      <p class="hint">Use this section to load registered users, activate accounts, or deactivate them.</p>
 
-    <section class="panel">
-      <h2>Manual Status Update</h2>
-      <form id="manualForm" class="manual-form">
-        <input id="manualEmail" type="email" placeholder="subscriber@email.com" required />
-        <input id="manualDeviceId" type="text" placeholder="Optional device ID" />
-        <select id="manualStatus" aria-label="Subscription status" required>
-          <option value="pending">Pending</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-        <button type="submit">Apply Status</button>
-      </form>
-    </section>
+      <div id="message" class="message"></div>
 
-    <p id="feedback" class="feedback" aria-live="polite"></p>
+      <div id="statsSection" class="stats hidden">
+        <div class="stat-card">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statActive">0</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statPending">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statInactive">0</div>
+          <div class="stat-label">Inactive</div>
+        </div>
+      </div>
+
+      <div id="tableSection" class="table-wrapper hidden">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Class Level</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="panel hidden">
+        <div class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <p>No users registered yet</p>
+        </div>
+      </div>
+
+      <div id="loadingState" class="panel hidden">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p style="margin-top: 16px;">Loading users...</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="admin-activation.js" defer></script>
